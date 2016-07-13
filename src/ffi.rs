@@ -5,6 +5,7 @@
 
 use std::os::raw::{c_char, c_int, c_long, c_void};
 use libc::{wchar_t, tm, FILE};
+use std::default::Default;
 
 pub type cmsSignature = u32;
 pub type cmsS15Fixed16Number = i32;
@@ -326,9 +327,10 @@ pub struct cmsICCData {
     pub data: [u8; 1usize],
 }
 
-impl ::std::default::Default for cmsICCData {
+impl Default for cmsICCData {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
+
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]
@@ -340,9 +342,11 @@ pub struct cmsDateTimeNumber {
     pub minutes: u16,
     pub seconds: u16,
 }
-impl ::std::default::Default for cmsDateTimeNumber {
+
+impl Default for cmsDateTimeNumber {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
+
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]
@@ -351,15 +355,18 @@ pub struct cmsEncodedXYZNumber {
     pub Y: cmsS15Fixed16Number,
     pub Z: cmsS15Fixed16Number,
 }
-impl ::std::default::Default for cmsEncodedXYZNumber {
+
+impl Default for cmsEncodedXYZNumber {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
+
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]
 pub struct cmsProfileID {
     pub _bindgen_data_: [u32; 4usize],
 }
+
 impl cmsProfileID {
     pub unsafe fn ID8(&mut self) -> *mut [u8; 16usize] {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
@@ -374,9 +381,11 @@ impl cmsProfileID {
         ::std::mem::transmute(raw.offset(0))
     }
 }
-impl ::std::default::Default for cmsProfileID {
+
+impl Default for cmsProfileID {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
+
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]
@@ -400,9 +409,10 @@ pub struct cmsICCHeader {
     pub profileID: cmsProfileID,
     pub reserved: [i8; 28usize],
 }
-impl ::std::default::Default for cmsICCHeader {
+impl Default for cmsICCHeader {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
+
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]
@@ -410,9 +420,10 @@ pub struct cmsTagBase {
     pub sig: cmsTagTypeSignature,
     pub reserved: [i8; 4usize],
 }
-impl ::std::default::Default for cmsTagBase {
+impl Default for cmsTagBase {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
+
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]
@@ -421,12 +432,238 @@ pub struct cmsTagEntry {
     pub offset: u32,
     pub size: u32,
 }
-impl ::std::default::Default for cmsTagEntry {
+impl Default for cmsTagEntry {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
+
 pub type cmsHANDLE = *mut c_void;
 pub type cmsHPROFILE = *mut c_void;
 pub type cmsHTRANSFORM = *mut c_void;
+
+pub const cmsMAXCHANNELS: usize =  16;                // Maximum number of channels in ICC profiles
+
+
+// Format of pixel is defined by one cmsUInt32Number, using bit fields as follows
+//
+//                               2                1          0
+//                          3 2 10987 6 5 4 3 2 1 098 7654 321
+//                          A O TTTTT U Y F P X S EEE CCCC BBB
+//
+//            A: Floating point -- With this flag we can differentiate 16 bits as float and as int
+//            O: Optimized -- previous optimization already returns the final 8-bit value
+//            T: Pixeltype
+//            F: Flavor  0=MinIsBlack(Chocolate) 1=MinIsWhite(Vanilla)
+//            P: Planar? 0=Chunky, 1=Planar
+//            X: swap 16 bps endianess?
+//            S: Do swap? ie, BGR, KYMC
+//            E: Extra samples
+//            C: Channels (Samples per pixel)
+//            B: bytes per sample
+//            Y: Swap first - changes ABGR to BGRA and KCMY to CMYK
+
+
+// Pixel types
+pub const PT_ANY: u32 =       0;    // Don't check colorspace
+                          // 1 & 2 are reserved
+pub const PT_GRAY: u32 =      3;
+pub const PT_RGB: u32 =       4;
+pub const PT_CMY: u32 =       5;
+pub const PT_CMYK: u32 =      6;
+pub const PT_YCbCr: u32 =     7;
+pub const PT_YUV: u32 =       8;      // Lu'v'
+pub const PT_XYZ: u32 =       9;
+pub const PT_Lab: u32 =       10;
+pub const PT_YUVK: u32 =      11;     // Lu'v'K
+pub const PT_HSV: u32 =       12;
+pub const PT_HLS: u32 =       13;
+pub const PT_Yxy: u32 =       14;
+
+pub const PT_MCH1: u32 =      15;
+pub const PT_MCH2: u32 =      16;
+pub const PT_MCH3: u32 =      17;
+pub const PT_MCH4: u32 =      18;
+pub const PT_MCH5: u32 =      19;
+pub const PT_MCH6: u32 =      20;
+pub const PT_MCH7: u32 =      21;
+pub const PT_MCH8: u32 =      22;
+pub const PT_MCH9: u32 =      23;
+pub const PT_MCH10: u32 =     24;
+pub const PT_MCH11: u32 =     25;
+pub const PT_MCH12: u32 =     26;
+pub const PT_MCH13: u32 =     27;
+pub const PT_MCH14: u32 =     28;
+pub const PT_MCH15: u32 =     29;
+
+pub const PT_LabV2: u32 =     30;     // Identical to PT_Lab, but using the V2 old encoding
+
+pub const TYPE_YUVK_8: PixelFormat = PixelFormat::TYPE_CMYK_8_REV;
+pub const TYPE_YUVK_16: PixelFormat = PixelFormat::TYPE_CMYK_16_REV;
+pub const TYPE_ABGR_FLT: PixelFormat = PixelFormat::TYPE_BGR_FLT;
+pub const TYPE_ABGR_HALF_FLT: PixelFormat = PixelFormat::TYPE_BGR_HALF_FLT;
+#[derive(Copy, Clone)]
+#[repr(u32)]
+#[derive(Debug)]
+pub enum PixelFormat {
+    TYPE_GRAY_8 = 196617,
+    TYPE_GRAY_8_REV = 204809,
+    TYPE_GRAY_16 = 196618,
+    TYPE_GRAY_16_REV = 204810,
+    TYPE_GRAY_16_SE = 198666,
+    TYPE_GRAYA_8 = 196745,
+    TYPE_GRAYA_16 = 196746,
+    TYPE_GRAYA_16_SE = 198794,
+    TYPE_GRAYA_8_PLANAR = 200841,
+    TYPE_GRAYA_16_PLANAR = 200842,
+    TYPE_RGB_8 = 262169,
+    TYPE_RGB_8_PLANAR = 266265,
+    TYPE_BGR_8 = 263193,
+    TYPE_BGR_8_PLANAR = 267289,
+    TYPE_RGB_16 = 262170,
+    TYPE_RGB_16_PLANAR = 266266,
+    TYPE_RGB_16_SE = 264218,
+    TYPE_BGR_16 = 263194,
+    TYPE_BGR_16_PLANAR = 267290,
+    TYPE_BGR_16_SE = 265242,
+    TYPE_RGBA_8 = 262297,
+    TYPE_RGBA_8_PLANAR = 266393,
+    TYPE_RGBA_16 = 262298,
+    TYPE_RGBA_16_PLANAR = 266394,
+    TYPE_RGBA_16_SE = 264346,
+    TYPE_ARGB_8 = 278681,
+    TYPE_ARGB_8_PLANAR = 282777,
+    TYPE_ARGB_16 = 278682,
+    TYPE_ABGR_8 = 263321,
+    TYPE_ABGR_8_PLANAR = 267417,
+    TYPE_ABGR_16 = 263322,
+    TYPE_ABGR_16_PLANAR = 267418,
+    TYPE_ABGR_16_SE = 265370,
+    TYPE_BGRA_8 = 279705,
+    TYPE_BGRA_8_PLANAR = 283801,
+    TYPE_BGRA_16 = 279706,
+    TYPE_BGRA_16_SE = 281754,
+    TYPE_CMY_8 = 327705,
+    TYPE_CMY_8_PLANAR = 331801,
+    TYPE_CMY_16 = 327706,
+    TYPE_CMY_16_PLANAR = 331802,
+    TYPE_CMY_16_SE = 329754,
+    TYPE_CMYK_8 = 393249,
+    TYPE_CMYKA_8 = 393377,
+    TYPE_CMYK_8_REV = 401441,
+    TYPE_CMYK_8_PLANAR = 397345,
+    TYPE_CMYK_16 = 393250,
+    TYPE_CMYK_16_REV = 401442,
+    TYPE_CMYK_16_PLANAR = 397346,
+    TYPE_CMYK_16_SE = 395298,
+    TYPE_KYMC_8 = 394273,
+    TYPE_KYMC_16 = 394274,
+    TYPE_KYMC_16_SE = 396322,
+    TYPE_KCMY_8 = 409633,
+    TYPE_KCMY_8_REV = 417825,
+    TYPE_KCMY_16 = 409634,
+    TYPE_KCMY_16_REV = 417826,
+    TYPE_KCMY_16_SE = 411682,
+    TYPE_CMYK5_8 = 1245225,
+    TYPE_CMYK5_16 = 1245226,
+    TYPE_CMYK5_16_SE = 1247274,
+    TYPE_KYMC5_8 = 1246249,
+    TYPE_KYMC5_16 = 1246250,
+    TYPE_KYMC5_16_SE = 1248298,
+    TYPE_CMYK6_8 = 1310769,
+    TYPE_CMYK6_8_PLANAR = 1314865,
+    TYPE_CMYK6_16 = 1310770,
+    TYPE_CMYK6_16_PLANAR = 1314866,
+    TYPE_CMYK6_16_SE = 1312818,
+    TYPE_CMYK7_8 = 1376313,
+    TYPE_CMYK7_16 = 1376314,
+    TYPE_CMYK7_16_SE = 1378362,
+    TYPE_KYMC7_8 = 1377337,
+    TYPE_KYMC7_16 = 1377338,
+    TYPE_KYMC7_16_SE = 1379386,
+    TYPE_CMYK8_8 = 1441857,
+    TYPE_CMYK8_16 = 1441858,
+    TYPE_CMYK8_16_SE = 1443906,
+    TYPE_KYMC8_8 = 1442881,
+    TYPE_KYMC8_16 = 1442882,
+    TYPE_KYMC8_16_SE = 1444930,
+    TYPE_CMYK9_8 = 1507401,
+    TYPE_CMYK9_16 = 1507402,
+    TYPE_CMYK9_16_SE = 1509450,
+    TYPE_KYMC9_8 = 1508425,
+    TYPE_KYMC9_16 = 1508426,
+    TYPE_KYMC9_16_SE = 1510474,
+    TYPE_CMYK10_8 = 1572945,
+    TYPE_CMYK10_16 = 1572946,
+    TYPE_CMYK10_16_SE = 1574994,
+    TYPE_KYMC10_8 = 1573969,
+    TYPE_KYMC10_16 = 1573970,
+    TYPE_KYMC10_16_SE = 1576018,
+    TYPE_CMYK11_8 = 1638489,
+    TYPE_CMYK11_16 = 1638490,
+    TYPE_CMYK11_16_SE = 1640538,
+    TYPE_KYMC11_8 = 1639513,
+    TYPE_KYMC11_16 = 1639514,
+    TYPE_KYMC11_16_SE = 1641562,
+    TYPE_CMYK12_8 = 1704033,
+    TYPE_CMYK12_16 = 1704034,
+    TYPE_CMYK12_16_SE = 1706082,
+    TYPE_KYMC12_8 = 1705057,
+    TYPE_KYMC12_16 = 1705058,
+    TYPE_KYMC12_16_SE = 1707106,
+    TYPE_XYZ_16 = 589850,
+    TYPE_Lab_8 = 655385,
+    TYPE_LabV2_8 = 1966105,
+    TYPE_ALab_8 = 671897,
+    TYPE_ALabV2_8 = 1982617,
+    TYPE_Lab_16 = 655386,
+    TYPE_LabV2_16 = 1966106,
+    TYPE_Yxy_16 = 917530,
+    TYPE_YCbCr_8 = 458777,
+    TYPE_YCbCr_8_PLANAR = 462873,
+    TYPE_YCbCr_16 = 458778,
+    TYPE_YCbCr_16_PLANAR = 462874,
+    TYPE_YCbCr_16_SE = 460826,
+    TYPE_YUV_8 = 524313,
+    TYPE_YUV_8_PLANAR = 528409,
+    TYPE_YUV_16 = 524314,
+    TYPE_YUV_16_PLANAR = 528410,
+    TYPE_YUV_16_SE = 526362,
+    TYPE_HLS_8 = 851993,
+    TYPE_HLS_8_PLANAR = 856089,
+    TYPE_HLS_16 = 851994,
+    TYPE_HLS_16_PLANAR = 856090,
+    TYPE_HLS_16_SE = 854042,
+    TYPE_HSV_8 = 786457,
+    TYPE_HSV_8_PLANAR = 790553,
+    TYPE_HSV_16 = 786458,
+    TYPE_HSV_16_PLANAR = 790554,
+    TYPE_HSV_16_SE = 788506,
+    TYPE_NAMED_COLOR_INDEX = 10,
+    TYPE_XYZ_FLT = 4784156,
+    TYPE_Lab_FLT = 4849692,
+    TYPE_LabA_FLT = 4849820,
+    TYPE_GRAY_FLT = 4390924,
+    TYPE_RGB_FLT = 4456476,
+    TYPE_RGBA_FLT = 4456604,
+    TYPE_ARGB_FLT = 4472988,
+    TYPE_BGR_FLT = 4457500,
+    TYPE_BGRA_FLT = 4474012,
+    TYPE_CMYK_FLT = 4587556,
+    TYPE_XYZ_DBL = 4784152,
+    TYPE_Lab_DBL = 4849688,
+    TYPE_GRAY_DBL = 4390920,
+    TYPE_RGB_DBL = 4456472,
+    TYPE_BGR_DBL = 4457496,
+    TYPE_CMYK_DBL = 4587552,
+    TYPE_GRAY_HALF_FLT = 4390922,
+    TYPE_RGB_HALF_FLT = 4456474,
+    TYPE_RGBA_HALF_FLT = 4456602,
+    TYPE_CMYK_HALF_FLT = 4587554,
+    TYPE_ARGB_HALF_FLT = 4472986,
+    TYPE_BGR_HALF_FLT = 4457498,
+    TYPE_BGRA_HALF_FLT = 4474010,
+}
+pub use self::PixelFormat::*;
+
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]
@@ -435,9 +672,10 @@ pub struct cmsCIEXYZ {
     pub Y: f64,
     pub Z: f64,
 }
-impl ::std::default::Default for cmsCIEXYZ {
+impl Default for cmsCIEXYZ {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
+
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]
@@ -446,9 +684,10 @@ pub struct cmsCIExyY {
     pub y: f64,
     pub Y: f64,
 }
-impl ::std::default::Default for cmsCIExyY {
+impl Default for cmsCIExyY {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
+
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]
@@ -457,9 +696,10 @@ pub struct cmsCIELab {
     pub a: f64,
     pub b: f64,
 }
-impl ::std::default::Default for cmsCIELab {
+impl Default for cmsCIELab {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
+
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]
@@ -468,9 +708,10 @@ pub struct cmsCIELCh {
     pub C: f64,
     pub h: f64,
 }
-impl ::std::default::Default for cmsCIELCh {
+impl Default for cmsCIELCh {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
+
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]
@@ -479,9 +720,10 @@ pub struct cmsJCh {
     pub C: f64,
     pub h: f64,
 }
-impl ::std::default::Default for cmsJCh {
+impl Default for cmsJCh {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
+
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]
@@ -490,9 +732,10 @@ pub struct cmsCIEXYZTRIPLE {
     pub Green: cmsCIEXYZ,
     pub Blue: cmsCIEXYZ,
 }
-impl ::std::default::Default for cmsCIEXYZTRIPLE {
+impl Default for cmsCIEXYZTRIPLE {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
+
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]
@@ -501,9 +744,10 @@ pub struct cmsCIExyYTRIPLE {
     pub Green: cmsCIExyY,
     pub Blue: cmsCIExyY,
 }
-impl ::std::default::Default for cmsCIExyYTRIPLE {
+impl Default for cmsCIExyYTRIPLE {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
+
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]
@@ -515,9 +759,10 @@ pub struct cmsICCMeasurementConditions {
     pub IlluminantType: u32,
     _bindgen_padding_0_: [u8; 4usize],
 }
-impl ::std::default::Default for cmsICCMeasurementConditions {
+impl Default for cmsICCMeasurementConditions {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
+
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]
@@ -527,9 +772,10 @@ pub struct cmsICCViewingConditions {
     pub IlluminantType: u32,
     _bindgen_padding_0_: [u8; 4usize],
 }
-impl ::std::default::Default for cmsICCViewingConditions {
+impl Default for cmsICCViewingConditions {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
+
 pub enum _cmsContext_struct { }
 pub type cmsContext = *mut _cmsContext_struct;
 pub type cmsLogErrorHandlerFunction =
@@ -547,9 +793,10 @@ pub struct cmsViewingConditions {
     pub surround: c_int,
     pub D_value: f64,
 }
-impl ::std::default::Default for cmsViewingConditions {
+impl Default for cmsViewingConditions {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
+
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]
@@ -561,9 +808,10 @@ pub struct cmsCurveSegment {
     pub nGridPoints: u32,
     pub SampledPoints: *mut f32,
 }
-impl ::std::default::Default for cmsCurveSegment {
+impl Default for cmsCurveSegment {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
+
 pub enum _cms_curve_struct { }
 pub type cmsToneCurve = _cms_curve_struct;
 pub enum _cmsPipeline_struct { }
@@ -596,7 +844,7 @@ pub struct cmsUcrBg {
     pub Bg: *mut cmsToneCurve,
     pub Desc: *mut cmsMLU,
 }
-impl ::std::default::Default for cmsUcrBg {
+impl Default for cmsUcrBg {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -608,7 +856,7 @@ pub struct cmsScreeningChannel {
     pub SpotShape: u32,
     _bindgen_padding_0_: [u8; 4usize],
 }
-impl ::std::default::Default for cmsScreeningChannel {
+impl Default for cmsScreeningChannel {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -619,7 +867,7 @@ pub struct cmsScreening {
     pub nChannels: u32,
     pub Channels: [cmsScreeningChannel; 16usize],
 }
-impl ::std::default::Default for cmsScreening {
+impl Default for cmsScreening {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 pub enum _cms_NAMEDCOLORLIST_struct { }
@@ -637,7 +885,7 @@ pub struct cmsPSEQDESC {
     pub Model: *mut cmsMLU,
     pub Description: *mut cmsMLU,
 }
-impl ::std::default::Default for cmsPSEQDESC {
+impl Default for cmsPSEQDESC {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -648,7 +896,7 @@ pub struct cmsSEQ {
     pub ContextID: cmsContext,
     pub seq: *mut cmsPSEQDESC,
 }
-impl ::std::default::Default for cmsSEQ {
+impl Default for cmsSEQ {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -661,7 +909,7 @@ pub struct _cmsDICTentry_struct {
     pub Name: *mut wchar_t,
     pub Value: *mut wchar_t,
 }
-impl ::std::default::Default for _cmsDICTentry_struct {
+impl Default for _cmsDICTentry_struct {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 pub type cmsDICTentry = _cmsDICTentry_struct;
@@ -1190,31 +1438,31 @@ extern "C" {
                                          *mut *mut c_char)
      -> u32;
     pub fn cmsCreateTransformTHR(ContextID: cmsContext, Input: cmsHPROFILE,
-                                 InputFormat: u32,
+                                 InputFormat: PixelFormat,
                                  Output: cmsHPROFILE,
-                                 OutputFormat: u32,
+                                 OutputFormat: PixelFormat,
                                  Intent: u32,
                                  dwFlags: u32) -> cmsHTRANSFORM;
     pub fn cmsCreateTransform(Input: cmsHPROFILE,
-                              InputFormat: u32,
+                              InputFormat: PixelFormat,
                               Output: cmsHPROFILE,
-                              OutputFormat: u32,
+                              OutputFormat: PixelFormat,
                               Intent: u32,
                               dwFlags: u32) -> cmsHTRANSFORM;
     pub fn cmsCreateProofingTransformTHR(ContextID: cmsContext,
                                          Input: cmsHPROFILE,
-                                         InputFormat: u32,
+                                         InputFormat: PixelFormat,
                                          Output: cmsHPROFILE,
-                                         OutputFormat: u32,
+                                         OutputFormat: PixelFormat,
                                          Proofing: cmsHPROFILE,
                                          Intent: u32,
                                          ProofingIntent: u32,
                                          dwFlags: u32)
      -> cmsHTRANSFORM;
     pub fn cmsCreateProofingTransform(Input: cmsHPROFILE,
-                                      InputFormat: u32,
+                                      InputFormat: PixelFormat,
                                       Output: cmsHPROFILE,
-                                      OutputFormat: u32,
+                                      OutputFormat: PixelFormat,
                                       Proofing: cmsHPROFILE,
                                       Intent: u32,
                                       ProofingIntent: u32,
@@ -1223,15 +1471,15 @@ extern "C" {
     pub fn cmsCreateMultiprofileTransformTHR(ContextID: cmsContext,
                                              hProfiles: *mut cmsHPROFILE,
                                              nProfiles: u32,
-                                             InputFormat: u32,
-                                             OutputFormat: u32,
+                                             InputFormat: PixelFormat,
+                                             OutputFormat: PixelFormat,
                                              Intent: u32,
                                              dwFlags: u32)
      -> cmsHTRANSFORM;
     pub fn cmsCreateMultiprofileTransform(hProfiles: *mut cmsHPROFILE,
                                           nProfiles: u32,
-                                          InputFormat: u32,
-                                          OutputFormat: u32,
+                                          InputFormat: PixelFormat,
+                                          OutputFormat: PixelFormat,
                                           Intent: u32,
                                           dwFlags: u32)
      -> cmsHTRANSFORM;
@@ -1243,8 +1491,8 @@ extern "C" {
                                       AdaptationStates: *mut f64,
                                       hGamutProfile: cmsHPROFILE,
                                       nGamutPCSposition: u32,
-                                      InputFormat: u32,
-                                      OutputFormat: u32,
+                                      InputFormat: PixelFormat,
+                                      OutputFormat: PixelFormat,
                                       dwFlags: u32)
      -> cmsHTRANSFORM;
     pub fn cmsDeleteTransform(hTransform: cmsHTRANSFORM);
@@ -1272,8 +1520,8 @@ extern "C" {
     pub fn cmsGetTransformOutputFormat(hTransform: cmsHTRANSFORM)
      -> u32;
     pub fn cmsChangeBuffersFormat(hTransform: cmsHTRANSFORM,
-                                  InputFormat: u32,
-                                  OutputFormat: u32) -> cmsBool;
+                                  InputFormat: PixelFormat,
+                                  OutputFormat: PixelFormat) -> cmsBool;
     pub fn cmsGetPostScriptColorResource(ContextID: cmsContext,
                                          Type: cmsPSResourceType,
                                          hProfile: cmsHPROFILE,

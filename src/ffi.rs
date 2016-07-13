@@ -23,9 +23,8 @@ pub const PERCEPTUAL_BLACK_Y: f64 = 0.0034731;
 pub const PERCEPTUAL_BLACK_Z: f64 = 0.00287;
 
 // Definitions in ICC spec
-pub const MagicNumber:u32 =      0x61637370;     // 'acsp'
-pub const lcmsSignature:u32 =       0x6c636d73;     // 'lcms'
-
+pub const MagicNumber:Signature =   0x61637370; // 'acsp'
+pub const lcmsSignature:Signature = 0x6c636d73; // 'lcms'
 
 #[derive(Copy, Clone)]
 #[repr(u32)]

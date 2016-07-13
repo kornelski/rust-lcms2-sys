@@ -812,12 +812,9 @@ impl Default for cmsCurveSegment {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 
-pub enum _cms_curve_struct { }
-pub type cmsToneCurve = _cms_curve_struct;
-pub enum _cmsPipeline_struct { }
-pub type cmsPipeline = _cmsPipeline_struct;
-pub enum _cmsStage_struct { }
-pub type cmsStage = _cmsStage_struct;
+pub enum cmsToneCurve { }
+pub enum cmsPipeline { }
+pub enum cmsStage { }
 #[derive(Copy, Clone)]
 #[repr(u32)]
 #[derive(Debug)]
@@ -827,8 +824,8 @@ pub enum cmsStageLoc {
 }
 pub type cmsSAMPLER16 = ::std::option::Option<unsafe extern "C" fn(In: *mut u16, Out: *mut u16, Cargo: *mut c_void) -> i32>;
 pub type cmsSAMPLERFLOAT = ::std::option::Option<unsafe extern "C" fn(In: *mut f32, Out: *mut f32, Cargo: *mut c_void) -> i32>;
-pub enum _cms_MLU_struct { }
-pub type cmsMLU = _cms_MLU_struct;
+pub enum cmsMLU { }
+
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]
@@ -863,8 +860,8 @@ pub struct cmsScreening {
 impl Default for cmsScreening {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
-pub enum _cms_NAMEDCOLORLIST_struct { }
-pub type cmsNAMEDCOLORLIST = _cms_NAMEDCOLORLIST_struct;
+pub enum cmsNAMEDCOLORLIST { }
+
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]
@@ -895,17 +892,17 @@ impl Default for cmsSEQ {
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]
-pub struct _cmsDICTentry_struct {
-    pub Next: *mut _cmsDICTentry_struct,
+pub struct cmsDICTentry {
+    pub Next: *mut cmsDICTentry,
     pub DisplayName: *mut cmsMLU,
     pub DisplayValue: *mut cmsMLU,
     pub Name: *mut wchar_t,
     pub Value: *mut wchar_t,
 }
-impl Default for _cmsDICTentry_struct {
+impl Default for cmsDICTentry {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
-pub type cmsDICTentry = _cmsDICTentry_struct;
+
 #[derive(Copy, Clone)]
 #[repr(u32)]
 #[derive(Debug)]
@@ -915,8 +912,8 @@ pub enum cmsInfoType {
     cmsInfoModel = 2,
     cmsInfoCopyright = 3,
 }
-pub enum _cms_io_handler { }
-pub type cmsIOHANDLER = _cms_io_handler;
+pub enum cmsIOHANDLER { }
+
 #[derive(Copy, Clone)]
 #[repr(u32)]
 #[derive(Debug)]

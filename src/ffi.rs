@@ -10,256 +10,313 @@ pub type cmsSignature = u32;
 pub type cmsS15Fixed16Number = i32;
 pub type cmsBool = c_int;
 
+
+// D50 XYZ normalized to Y=1.0
+pub const cmsD50X:f64 =             0.9642;
+pub const cmsD50Y:f64 =             1.0;
+pub const cmsD50Z:f64 =             0.8249;
+
+// V4 perceptual black
+pub const cmsPERCEPTUAL_BLACK_X:f64 =  0.00336;
+pub const cmsPERCEPTUAL_BLACK_Y:f64 =  0.0034731;
+pub const cmsPERCEPTUAL_BLACK_Z:f64 =  0.00287;
+
+// Definitions in ICC spec
+pub const cmsMagicNumber:u32 =      0x61637370;     // 'acsp'
+pub const lcmsSignature:u32 =       0x6c636d73;     // 'lcms'
+
+
 #[derive(Copy, Clone)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum cmsTagTypeSignature {
-    cmsSigChromaticityType = 1667789421,
-    cmsSigColorantOrderType = 1668051567,
-    cmsSigColorantTableType = 1668051572,
-    cmsSigCrdInfoType = 1668441193,
-    cmsSigCurveType = 1668641398,
-    cmsSigDataType = 1684108385,
-    cmsSigDictType = 1684628340,
-    cmsSigDateTimeType = 1685350765,
-    cmsSigDeviceSettingsType = 1684371059,
-    cmsSigLut16Type = 1835430962,
-    cmsSigLut8Type = 1835430961,
-    cmsSigLutAtoBType = 1832993312,
-    cmsSigLutBtoAType = 1833058592,
-    cmsSigMeasurementType = 1835360627,
-    cmsSigMultiLocalizedUnicodeType = 1835824483,
-    cmsSigMultiProcessElementType = 1836082548,
-    cmsSigNamedColorType = 1852010348,
-    cmsSigNamedColor2Type = 1852009522,
-    cmsSigParametricCurveType = 1885434465,
-    cmsSigProfileSequenceDescType = 1886610801,
-    cmsSigProfileSequenceIdType = 1886611812,
-    cmsSigResponseCurveSet16Type = 1919120178,
-    cmsSigS15Fixed16ArrayType = 1936077618,
-    cmsSigScreeningType = 1935897198,
-    cmsSigSignatureType = 1936287520,
-    cmsSigTextType = 1952807028,
-    cmsSigTextDescriptionType = 1684370275,
-    cmsSigU16Fixed16ArrayType = 1969632050,
-    cmsSigUcrBgType = 1650877472,
-    cmsSigUInt16ArrayType = 1969828150,
-    cmsSigUInt32ArrayType = 1969828658,
-    cmsSigUInt64ArrayType = 1969829428,
-    cmsSigUInt8ArrayType = 1969827896,
-    cmsSigVcgtType = 1986226036,
-    cmsSigViewingConditionsType = 1986618743,
-    cmsSigXYZType = 1482250784,
+    cmsSigChromaticityType                  = 0x6368726D,  // 'chrm'
+    cmsSigColorantOrderType                 = 0x636C726F,  // 'clro'
+    cmsSigColorantTableType                 = 0x636C7274,  // 'clrt'
+    cmsSigCrdInfoType                       = 0x63726469,  // 'crdi'
+    cmsSigCurveType                         = 0x63757276,  // 'curv'
+    cmsSigDataType                          = 0x64617461,  // 'data'
+    cmsSigDictType                          = 0x64696374,  // 'dict'
+    cmsSigDateTimeType                      = 0x6474696D,  // 'dtim'
+    cmsSigDeviceSettingsType                = 0x64657673,  // 'devs'
+    cmsSigLut16Type                         = 0x6d667432,  // 'mft2'
+    cmsSigLut8Type                          = 0x6d667431,  // 'mft1'
+    cmsSigLutAtoBType                       = 0x6d414220,  // 'mAB '
+    cmsSigLutBtoAType                       = 0x6d424120,  // 'mBA '
+    cmsSigMeasurementType                   = 0x6D656173,  // 'meas'
+    cmsSigMultiLocalizedUnicodeType         = 0x6D6C7563,  // 'mluc'
+    cmsSigMultiProcessElementType           = 0x6D706574,  // 'mpet'
+    cmsSigNamedColorType                    = 0x6E636f6C,  // 'ncol' -- DEPRECATED!
+    cmsSigNamedColor2Type                   = 0x6E636C32,  // 'ncl2'
+    cmsSigParametricCurveType               = 0x70617261,  // 'para'
+    cmsSigProfileSequenceDescType           = 0x70736571,  // 'pseq'
+    cmsSigProfileSequenceIdType             = 0x70736964,  // 'psid'
+    cmsSigResponseCurveSet16Type            = 0x72637332,  // 'rcs2'
+    cmsSigS15Fixed16ArrayType               = 0x73663332,  // 'sf32'
+    cmsSigScreeningType                     = 0x7363726E,  // 'scrn'
+    cmsSigSignatureType                     = 0x73696720,  // 'sig '
+    cmsSigTextType                          = 0x74657874,  // 'text'
+    cmsSigTextDescriptionType               = 0x64657363,  // 'desc'
+    cmsSigU16Fixed16ArrayType               = 0x75663332,  // 'uf32'
+    cmsSigUcrBgType                         = 0x62666420,  // 'bfd '
+    cmsSigUInt16ArrayType                   = 0x75693136,  // 'ui16'
+    cmsSigUInt32ArrayType                   = 0x75693332,  // 'ui32'
+    cmsSigUInt64ArrayType                   = 0x75693634,  // 'ui64'
+    cmsSigUInt8ArrayType                    = 0x75693038,  // 'ui08'
+    cmsSigVcgtType                          = 0x76636774,  // 'vcgt'
+    cmsSigViewingConditionsType             = 0x76696577,  // 'view'
+    cmsSigXYZType                           = 0x58595A20   // 'XYZ '
 }
-pub const cmsSigBlueMatrixColumnTag: cmsTagSignature =
-    cmsTagSignature::cmsSigBlueColorantTag;
-pub const cmsSigGreenMatrixColumnTag: cmsTagSignature =
-    cmsTagSignature::cmsSigGreenColorantTag;
-pub const cmsSigRedMatrixColumnTag: cmsTagSignature =
-    cmsTagSignature::cmsSigRedColorantTag;
+
+pub const cmsSigBlueMatrixColumnTag: cmsTagSignature = cmsTagSignature::cmsSigBlueColorantTag;
+pub const cmsSigGreenMatrixColumnTag: cmsTagSignature = cmsTagSignature::cmsSigGreenColorantTag;
+pub const cmsSigRedMatrixColumnTag: cmsTagSignature = cmsTagSignature::cmsSigRedColorantTag;
+
 #[derive(Copy, Clone)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum cmsTagSignature {
-    cmsSigAToB0Tag = 1093812784,
-    cmsSigAToB1Tag = 1093812785,
-    cmsSigAToB2Tag = 1093812786,
-    cmsSigBlueColorantTag = 1649957210,
-    cmsSigBlueTRCTag = 1649693251,
-    cmsSigBToA0Tag = 1110589744,
-    cmsSigBToA1Tag = 1110589745,
-    cmsSigBToA2Tag = 1110589746,
-    cmsSigCalibrationDateTimeTag = 1667329140,
-    cmsSigCharTargetTag = 1952543335,
-    cmsSigChromaticAdaptationTag = 1667785060,
-    cmsSigChromaticityTag = 1667789421,
-    cmsSigColorantOrderTag = 1668051567,
-    cmsSigColorantTableTag = 1668051572,
-    cmsSigColorantTableOutTag = 1668050804,
-    cmsSigColorimetricIntentImageStateTag = 1667852659,
-    cmsSigCopyrightTag = 1668313716,
-    cmsSigCrdInfoTag = 1668441193,
-    cmsSigDataTag = 1684108385,
-    cmsSigDateTimeTag = 1685350765,
-    cmsSigDeviceMfgDescTag = 1684893284,
-    cmsSigDeviceModelDescTag = 1684890724,
-    cmsSigDeviceSettingsTag = 1684371059,
-    cmsSigDToB0Tag = 1144144432,
-    cmsSigDToB1Tag = 1144144433,
-    cmsSigDToB2Tag = 1144144434,
-    cmsSigDToB3Tag = 1144144435,
-    cmsSigBToD0Tag = 1110590512,
-    cmsSigBToD1Tag = 1110590513,
-    cmsSigBToD2Tag = 1110590514,
-    cmsSigBToD3Tag = 1110590515,
-    cmsSigGamutTag = 1734438260,
-    cmsSigGrayTRCTag = 1800688195,
-    cmsSigGreenColorantTag = 1733843290,
-    cmsSigGreenTRCTag = 1733579331,
-    cmsSigLuminanceTag = 1819635049,
-    cmsSigMeasurementTag = 1835360627,
-    cmsSigMediaBlackPointTag = 1651208308,
-    cmsSigMediaWhitePointTag = 2004119668,
-    cmsSigNamedColorTag = 1852010348,
-    cmsSigNamedColor2Tag = 1852009522,
-    cmsSigOutputResponseTag = 1919251312,
-    cmsSigPerceptualRenderingIntentGamutTag = 1919510320,
-    cmsSigPreview0Tag = 1886545200,
-    cmsSigPreview1Tag = 1886545201,
-    cmsSigPreview2Tag = 1886545202,
-    cmsSigProfileDescriptionTag = 1684370275,
-    cmsSigProfileDescriptionMLTag = 1685283693,
-    cmsSigProfileSequenceDescTag = 1886610801,
-    cmsSigProfileSequenceIdTag = 1886611812,
-    cmsSigPs2CRD0Tag = 1886610480,
-    cmsSigPs2CRD1Tag = 1886610481,
-    cmsSigPs2CRD2Tag = 1886610482,
-    cmsSigPs2CRD3Tag = 1886610483,
-    cmsSigPs2CSATag = 1886597747,
-    cmsSigPs2RenderingIntentTag = 1886597737,
-    cmsSigRedColorantTag = 1918392666,
-    cmsSigRedTRCTag = 1918128707,
-    cmsSigSaturationRenderingIntentGamutTag = 1919510322,
-    cmsSigScreeningDescTag = 1935897188,
-    cmsSigScreeningTag = 1935897198,
-    cmsSigTechnologyTag = 1952801640,
-    cmsSigUcrBgTag = 1650877472,
-    cmsSigViewingCondDescTag = 1987405156,
-    cmsSigViewingConditionsTag = 1986618743,
-    cmsSigVcgtTag = 1986226036,
-    cmsSigMetaTag = 1835365473,
+    cmsSigAToB0Tag                          = 0x41324230,  // 'A2B0'
+    cmsSigAToB1Tag                          = 0x41324231,  // 'A2B1'
+    cmsSigAToB2Tag                          = 0x41324232,  // 'A2B2'
+    cmsSigBlueColorantTag                   = 0x6258595A,  // 'bXYZ'
+    // cmsSigBlueMatrixColumnTag               = 0x6258595A,  // 'bXYZ'
+    cmsSigBlueTRCTag                        = 0x62545243,  // 'bTRC'
+    cmsSigBToA0Tag                          = 0x42324130,  // 'B2A0'
+    cmsSigBToA1Tag                          = 0x42324131,  // 'B2A1'
+    cmsSigBToA2Tag                          = 0x42324132,  // 'B2A2'
+    cmsSigCalibrationDateTimeTag            = 0x63616C74,  // 'calt'
+    cmsSigCharTargetTag                     = 0x74617267,  // 'targ'
+    cmsSigChromaticAdaptationTag            = 0x63686164,  // 'chad'
+    cmsSigChromaticityTag                   = 0x6368726D,  // 'chrm'
+    cmsSigColorantOrderTag                  = 0x636C726F,  // 'clro'
+    cmsSigColorantTableTag                  = 0x636C7274,  // 'clrt'
+    cmsSigColorantTableOutTag               = 0x636C6F74,  // 'clot'
+    cmsSigColorimetricIntentImageStateTag   = 0x63696973,  // 'ciis'
+    cmsSigCopyrightTag                      = 0x63707274,  // 'cprt'
+    cmsSigCrdInfoTag                        = 0x63726469,  // 'crdi'
+    cmsSigDataTag                           = 0x64617461,  // 'data'
+    cmsSigDateTimeTag                       = 0x6474696D,  // 'dtim'
+    cmsSigDeviceMfgDescTag                  = 0x646D6E64,  // 'dmnd'
+    cmsSigDeviceModelDescTag                = 0x646D6464,  // 'dmdd'
+    cmsSigDeviceSettingsTag                 = 0x64657673,  // 'devs'
+    cmsSigDToB0Tag                          = 0x44324230,  // 'D2B0'
+    cmsSigDToB1Tag                          = 0x44324231,  // 'D2B1'
+    cmsSigDToB2Tag                          = 0x44324232,  // 'D2B2'
+    cmsSigDToB3Tag                          = 0x44324233,  // 'D2B3'
+    cmsSigBToD0Tag                          = 0x42324430,  // 'B2D0'
+    cmsSigBToD1Tag                          = 0x42324431,  // 'B2D1'
+    cmsSigBToD2Tag                          = 0x42324432,  // 'B2D2'
+    cmsSigBToD3Tag                          = 0x42324433,  // 'B2D3'
+    cmsSigGamutTag                          = 0x67616D74,  // 'gamt'
+    cmsSigGrayTRCTag                        = 0x6b545243,  // 'kTRC'
+    cmsSigGreenColorantTag                  = 0x6758595A,  // 'gXYZ'
+    // cmsSigGreenMatrixColumnTag              = 0x6758595A,  // 'gXYZ'
+    cmsSigGreenTRCTag                       = 0x67545243,  // 'gTRC'
+    cmsSigLuminanceTag                      = 0x6C756d69,  // 'lumi'
+    cmsSigMeasurementTag                    = 0x6D656173,  // 'meas'
+    cmsSigMediaBlackPointTag                = 0x626B7074,  // 'bkpt'
+    cmsSigMediaWhitePointTag                = 0x77747074,  // 'wtpt'
+    cmsSigNamedColorTag                     = 0x6E636f6C,  // 'ncol' // Deprecated by the ICC
+    cmsSigNamedColor2Tag                    = 0x6E636C32,  // 'ncl2'
+    cmsSigOutputResponseTag                 = 0x72657370,  // 'resp'
+    cmsSigPerceptualRenderingIntentGamutTag = 0x72696730,  // 'rig0'
+    cmsSigPreview0Tag                       = 0x70726530,  // 'pre0'
+    cmsSigPreview1Tag                       = 0x70726531,  // 'pre1'
+    cmsSigPreview2Tag                       = 0x70726532,  // 'pre2'
+    cmsSigProfileDescriptionTag             = 0x64657363,  // 'desc'
+    cmsSigProfileDescriptionMLTag           = 0x6473636d,  // 'dscm'
+    cmsSigProfileSequenceDescTag            = 0x70736571,  // 'pseq'
+    cmsSigProfileSequenceIdTag              = 0x70736964,  // 'psid'
+    cmsSigPs2CRD0Tag                        = 0x70736430,  // 'psd0'
+    cmsSigPs2CRD1Tag                        = 0x70736431,  // 'psd1'
+    cmsSigPs2CRD2Tag                        = 0x70736432,  // 'psd2'
+    cmsSigPs2CRD3Tag                        = 0x70736433,  // 'psd3'
+    cmsSigPs2CSATag                         = 0x70733273,  // 'ps2s'
+    cmsSigPs2RenderingIntentTag             = 0x70733269,  // 'ps2i'
+    cmsSigRedColorantTag                    = 0x7258595A,  // 'rXYZ'
+    // cmsSigRedMatrixColumnTag                = 0x7258595A,  // 'rXYZ'
+    cmsSigRedTRCTag                         = 0x72545243,  // 'rTRC'
+    cmsSigSaturationRenderingIntentGamutTag = 0x72696732,  // 'rig2'
+    cmsSigScreeningDescTag                  = 0x73637264,  // 'scrd'
+    cmsSigScreeningTag                      = 0x7363726E,  // 'scrn'
+    cmsSigTechnologyTag                     = 0x74656368,  // 'tech'
+    cmsSigUcrBgTag                          = 0x62666420,  // 'bfd '
+    cmsSigViewingCondDescTag                = 0x76756564,  // 'vued'
+    cmsSigViewingConditionsTag              = 0x76696577,  // 'view'
+    cmsSigVcgtTag                           = 0x76636774,  // 'vcgt'
+    cmsSigMetaTag                           = 0x6D657461   // 'meta'
 }
+
 #[derive(Copy, Clone)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum cmsTechnologySignature {
-    cmsSigDigitalCamera = 1684234605,
-    cmsSigFilmScanner = 1718838126,
-    cmsSigReflectiveScanner = 1920164718,
-    cmsSigInkJetPrinter = 1768580468,
-    cmsSigThermalWaxPrinter = 1953980792,
-    cmsSigElectrophotographicPrinter = 1701865583,
-    cmsSigElectrostaticPrinter = 1702065249,
-    cmsSigDyeSublimationPrinter = 1685288290,
-    cmsSigPhotographicPaperPrinter = 1919969391,
-    cmsSigFilmWriter = 1718645358,
-    cmsSigVideoMonitor = 1986618477,
-    cmsSigVideoCamera = 1986618467,
-    cmsSigProjectionTelevision = 1886024822,
-    cmsSigCRTDisplay = 1129468960,
-    cmsSigPMDisplay = 1347240992,
-    cmsSigAMDisplay = 1095582752,
-    cmsSigPhotoCD = 1263551300,
-    cmsSigPhotoImageSetter = 1768777587,
-    cmsSigGravure = 1735549302,
-    cmsSigOffsetLithography = 1868981875,
-    cmsSigSilkscreen = 1936288875,
-    cmsSigFlexography = 1718379896,
-    cmsSigMotionPictureFilmScanner = 1836082803,
-    cmsSigMotionPictureFilmRecorder = 1836082802,
-    cmsSigDigitalMotionPictureCamera = 1684893795,
-    cmsSigDigitalCinemaProjector = 1684236912,
+    cmsSigDigitalCamera                     = 0x6463616D,  // 'dcam'
+    cmsSigFilmScanner                       = 0x6673636E,  // 'fscn'
+    cmsSigReflectiveScanner                 = 0x7273636E,  // 'rscn'
+    cmsSigInkJetPrinter                     = 0x696A6574,  // 'ijet'
+    cmsSigThermalWaxPrinter                 = 0x74776178,  // 'twax'
+    cmsSigElectrophotographicPrinter        = 0x6570686F,  // 'epho'
+    cmsSigElectrostaticPrinter              = 0x65737461,  // 'esta'
+    cmsSigDyeSublimationPrinter             = 0x64737562,  // 'dsub'
+    cmsSigPhotographicPaperPrinter          = 0x7270686F,  // 'rpho'
+    cmsSigFilmWriter                        = 0x6670726E,  // 'fprn'
+    cmsSigVideoMonitor                      = 0x7669646D,  // 'vidm'
+    cmsSigVideoCamera                       = 0x76696463,  // 'vidc'
+    cmsSigProjectionTelevision              = 0x706A7476,  // 'pjtv'
+    cmsSigCRTDisplay                        = 0x43525420,  // 'CRT '
+    cmsSigPMDisplay                         = 0x504D4420,  // 'PMD '
+    cmsSigAMDisplay                         = 0x414D4420,  // 'AMD '
+    cmsSigPhotoCD                           = 0x4B504344,  // 'KPCD'
+    cmsSigPhotoImageSetter                  = 0x696D6773,  // 'imgs'
+    cmsSigGravure                           = 0x67726176,  // 'grav'
+    cmsSigOffsetLithography                 = 0x6F666673,  // 'offs'
+    cmsSigSilkscreen                        = 0x73696C6B,  // 'silk'
+    cmsSigFlexography                       = 0x666C6578,  // 'flex'
+    cmsSigMotionPictureFilmScanner          = 0x6D706673,  // 'mpfs'
+    cmsSigMotionPictureFilmRecorder         = 0x6D706672,  // 'mpfr'
+    cmsSigDigitalMotionPictureCamera        = 0x646D7063,  // 'dmpc'
+    cmsSigDigitalCinemaProjector            = 0x64636A70   // 'dcpj'
 }
+
 #[derive(Copy, Clone)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum cmsColorSpaceSignature {
-    cmsSigXYZData = 1482250784,
-    cmsSigLabData = 1281450528,
-    cmsSigLuvData = 1282766368,
-    cmsSigYCbCrData = 1497588338,
-    cmsSigYxyData = 1501067552,
-    cmsSigRgbData = 1380401696,
-    cmsSigGrayData = 1196573017,
-    cmsSigHsvData = 1213421088,
-    cmsSigHlsData = 1212961568,
-    cmsSigCmykData = 1129142603,
-    cmsSigCmyData = 1129142560,
-    cmsSigMCH1Data = 1296255025,
-    cmsSigMCH2Data = 1296255026,
-    cmsSigMCH3Data = 1296255027,
-    cmsSigMCH4Data = 1296255028,
-    cmsSigMCH5Data = 1296255029,
-    cmsSigMCH6Data = 1296255030,
-    cmsSigMCH7Data = 1296255031,
-    cmsSigMCH8Data = 1296255032,
-    cmsSigMCH9Data = 1296255033,
-    cmsSigMCHAData = 1296255041,
-    cmsSigMCHBData = 1296255042,
-    cmsSigMCHCData = 1296255043,
-    cmsSigMCHDData = 1296255044,
-    cmsSigMCHEData = 1296255045,
-    cmsSigMCHFData = 1296255046,
-    cmsSigNamedData = 1852662636,
-    cmsSig1colorData = 826494034,
-    cmsSig2colorData = 843271250,
-    cmsSig3colorData = 860048466,
-    cmsSig4colorData = 876825682,
-    cmsSig5colorData = 893602898,
-    cmsSig6colorData = 910380114,
-    cmsSig7colorData = 927157330,
-    cmsSig8colorData = 943934546,
-    cmsSig9colorData = 960711762,
-    cmsSig10colorData = 1094929490,
-    cmsSig11colorData = 1111706706,
-    cmsSig12colorData = 1128483922,
-    cmsSig13colorData = 1145261138,
-    cmsSig14colorData = 1162038354,
-    cmsSig15colorData = 1178815570,
-    cmsSigLuvKData = 1282766411,
+    cmsSigXYZData                           = 0x58595A20,  // 'XYZ '
+    cmsSigLabData                           = 0x4C616220,  // 'Lab '
+    cmsSigLuvData                           = 0x4C757620,  // 'Luv '
+    cmsSigYCbCrData                         = 0x59436272,  // 'YCbr'
+    cmsSigYxyData                           = 0x59787920,  // 'Yxy '
+    cmsSigRgbData                           = 0x52474220,  // 'RGB '
+    cmsSigGrayData                          = 0x47524159,  // 'GRAY'
+    cmsSigHsvData                           = 0x48535620,  // 'HSV '
+    cmsSigHlsData                           = 0x484C5320,  // 'HLS '
+    cmsSigCmykData                          = 0x434D594B,  // 'CMYK'
+    cmsSigCmyData                           = 0x434D5920,  // 'CMY '
+    cmsSigMCH1Data                          = 0x4D434831,  // 'MCH1'
+    cmsSigMCH2Data                          = 0x4D434832,  // 'MCH2'
+    cmsSigMCH3Data                          = 0x4D434833,  // 'MCH3'
+    cmsSigMCH4Data                          = 0x4D434834,  // 'MCH4'
+    cmsSigMCH5Data                          = 0x4D434835,  // 'MCH5'
+    cmsSigMCH6Data                          = 0x4D434836,  // 'MCH6'
+    cmsSigMCH7Data                          = 0x4D434837,  // 'MCH7'
+    cmsSigMCH8Data                          = 0x4D434838,  // 'MCH8'
+    cmsSigMCH9Data                          = 0x4D434839,  // 'MCH9'
+    cmsSigMCHAData                          = 0x4D434841,  // 'MCHA'
+    cmsSigMCHBData                          = 0x4D434842,  // 'MCHB'
+    cmsSigMCHCData                          = 0x4D434843,  // 'MCHC'
+    cmsSigMCHDData                          = 0x4D434844,  // 'MCHD'
+    cmsSigMCHEData                          = 0x4D434845,  // 'MCHE'
+    cmsSigMCHFData                          = 0x4D434846,  // 'MCHF'
+    cmsSigNamedData                         = 0x6e6d636c,  // 'nmcl'
+    cmsSig1colorData                        = 0x31434C52,  // '1CLR'
+    cmsSig2colorData                        = 0x32434C52,  // '2CLR'
+    cmsSig3colorData                        = 0x33434C52,  // '3CLR'
+    cmsSig4colorData                        = 0x34434C52,  // '4CLR'
+    cmsSig5colorData                        = 0x35434C52,  // '5CLR'
+    cmsSig6colorData                        = 0x36434C52,  // '6CLR'
+    cmsSig7colorData                        = 0x37434C52,  // '7CLR'
+    cmsSig8colorData                        = 0x38434C52,  // '8CLR'
+    cmsSig9colorData                        = 0x39434C52,  // '9CLR'
+    cmsSig10colorData                       = 0x41434C52,  // 'ACLR'
+    cmsSig11colorData                       = 0x42434C52,  // 'BCLR'
+    cmsSig12colorData                       = 0x43434C52,  // 'CCLR'
+    cmsSig13colorData                       = 0x44434C52,  // 'DCLR'
+    cmsSig14colorData                       = 0x45434C52,  // 'ECLR'
+    cmsSig15colorData                       = 0x46434C52,  // 'FCLR'
+    cmsSigLuvKData                          = 0x4C75764B   // 'LuvK'
 }
 #[derive(Copy, Clone)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum cmsProfileClassSignature {
-    cmsSigInputClass = 1935896178,
-    cmsSigDisplayClass = 1835955314,
-    cmsSigOutputClass = 1886549106,
-    cmsSigLinkClass = 1818848875,
-    cmsSigAbstractClass = 1633842036,
-    cmsSigColorSpaceClass = 1936744803,
-    cmsSigNamedColorClass = 1852662636,
+    cmsSigInputClass                        = 0x73636E72,  // 'scnr'
+    cmsSigDisplayClass                      = 0x6D6E7472,  // 'mntr'
+    cmsSigOutputClass                       = 0x70727472,  // 'prtr'
+    cmsSigLinkClass                         = 0x6C696E6B,  // 'link'
+    cmsSigAbstractClass                     = 0x61627374,  // 'abst'
+    cmsSigColorSpaceClass                   = 0x73706163,  // 'spac'
+    cmsSigNamedColorClass                   = 0x6e6d636c   // 'nmcl'
 }
+
 #[derive(Copy, Clone)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum cmsPlatformSignature {
-    cmsSigMacintosh = 1095782476,
-    cmsSigMicrosoft = 1297303124,
-    cmsSigSolaris = 1398099543,
-    cmsSigSGI = 1397180704,
-    cmsSigTaligent = 1413959252,
-    cmsSigUnices = 711879032,
+    cmsSigMacintosh                         = 0x4150504C,  // 'APPL'
+    cmsSigMicrosoft                         = 0x4D534654,  // 'MSFT'
+    cmsSigSolaris                           = 0x53554E57,  // 'SUNW'
+    cmsSigSGI                               = 0x53474920,  // 'SGI '
+    cmsSigTaligent                          = 0x54474E54,  // 'TGNT'
+    cmsSigUnices                            = 0x2A6E6978   // '*nix'   // From argyll -- Not official
 }
+
+pub const cmsSigPerceptualReferenceMediumGamut:u32 =         0x70726d67;  //'prmg'
+
+// For cmsSigColorimetricIntentImageStateTag
+pub const cmsSigSceneColorimetryEstimates:u32 =              0x73636F65;  //'scoe'
+pub const cmsSigSceneAppearanceEstimates:u32 =               0x73617065;  //'sape'
+pub const cmsSigFocalPlaneColorimetryEstimates:u32 =         0x66706365;  //'fpce'
+pub const cmsSigReflectionHardcopyOriginalColorimetry:u32 =  0x72686F63;  //'rhoc'
+pub const cmsSigReflectionPrintOutputColorimetry:u32 =       0x72706F63;  //'rpoc'
+
 #[derive(Copy, Clone)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum cmsStageSignature {
-    cmsSigCurveSetElemType = 1668707188,
-    cmsSigMatrixElemType = 1835103334,
-    cmsSigCLutElemType = 1668052340,
-    cmsSigBAcsElemType = 1648444243,
-    cmsSigEAcsElemType = 1698775891,
-    cmsSigXYZ2LabElemType = 1815246880,
-    cmsSigLab2XYZElemType = 2016570400,
-    cmsSigNamedColorElemType = 1852009504,
-    cmsSigLabV2toV4 = 840971296,
-    cmsSigLabV4toV2 = 874525216,
-    cmsSigIdentityElemType = 1768189472,
-    cmsSigLab2FloatPCS = 1681026080,
-    cmsSigFloatPCS2Lab = 1815241760,
-    cmsSigXYZ2FloatPCS = 1681029152,
-    cmsSigFloatPCS2XYZ = 2016568352,
-    cmsSigClipNegativesElemType = 1668050976,
+    cmsSigCurveSetElemType              = 0x63767374,  //'cvst'
+    cmsSigMatrixElemType                = 0x6D617466,  //'matf'
+    cmsSigCLutElemType                  = 0x636C7574,  //'clut'
+
+    cmsSigBAcsElemType                  = 0x62414353,  // 'bACS'
+    cmsSigEAcsElemType                  = 0x65414353,  // 'eACS'
+
+    // Custom from here, not in the ICC Spec
+    cmsSigXYZ2LabElemType               = 0x6C327820,  // 'l2x '
+    cmsSigLab2XYZElemType               = 0x78326C20,  // 'x2l '
+    cmsSigNamedColorElemType            = 0x6E636C20,  // 'ncl '
+    cmsSigLabV2toV4                     = 0x32203420,  // '2 4 '
+    cmsSigLabV4toV2                     = 0x34203220,  // '4 2 '
+
+    // Identities
+    cmsSigIdentityElemType              = 0x69646E20,  // 'idn '
+
+    // Float to floatPCS
+    cmsSigLab2FloatPCS                  = 0x64326C20,  // 'd2l '
+    cmsSigFloatPCS2Lab                  = 0x6C326420,  // 'l2d '
+    cmsSigXYZ2FloatPCS                  = 0x64327820,  // 'd2x '
+    cmsSigFloatPCS2XYZ                  = 0x78326420,  // 'x2d '
+    cmsSigClipNegativesElemType         = 0x636c7020   // 'clp '
 }
+
 #[derive(Copy, Clone)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum cmsCurveSegSignature {
-    cmsSigFormulaCurveSeg = 1885434470,
-    cmsSigSampledCurveSeg = 1935764838,
-    cmsSigSegmentedCurve = 1668641382,
+    cmsSigFormulaCurveSeg               = 0x70617266, // 'parf'
+    cmsSigSampledCurveSeg               = 0x73616D66, // 'samf'
+    cmsSigSegmentedCurve                = 0x63757266  // 'curf'
 }
+
+pub const cmsSigStatusA:u32 =                    0x53746141; //'StaA'
+pub const cmsSigStatusE:u32 =                    0x53746145; //'StaE'
+pub const cmsSigStatusI:u32 =                    0x53746149; //'StaI'
+pub const cmsSigStatusT:u32 =                    0x53746154; //'StaT'
+pub const cmsSigStatusM:u32 =                    0x5374614D; //'StaM'
+pub const cmsSigDN:u32 =                         0x444E2020; //'DN  '
+pub const cmsSigDNP:u32 =                        0x444E2050; //'DN P'
+pub const cmsSigDNN:u32 =                        0x444E4E20; //'DNN '
+pub const cmsSigDNNP:u32 =                       0x444E4E50; //'DNNP'
+
+// Device attributes, currently defined values correspond to the low 4 bytes
+// of the 8 byte attribute quantity
+pub const cmsReflective:u32 =     0;
+pub const cmsTransparency:u32 =   1;
+pub const cmsGlossy:u32 =         0;
+pub const cmsMatte:u32 =          2;
+
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]
@@ -267,8 +324,8 @@ pub struct cmsICCData {
     pub len: u32,
     pub flag: u32,
     pub data: [u8; 1usize],
-    _bindgen_padding_0_: [u8; 3usize],
 }
+
 impl ::std::default::Default for cmsICCData {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }

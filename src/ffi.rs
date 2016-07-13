@@ -13,14 +13,14 @@ pub type cmsBool = c_int;
 
 
 // D50 XYZ normalized to Y=1.0
-pub const cmsD50X:f64 =             0.9642;
-pub const cmsD50Y:f64 =             1.0;
-pub const cmsD50Z:f64 =             0.8249;
+pub const cmsD50X: f64 = 0.9642;
+pub const cmsD50Y: f64 = 1.0;
+pub const cmsD50Z: f64 = 0.8249;
 
 // V4 perceptual black
-pub const cmsPERCEPTUAL_BLACK_X:f64 =  0.00336;
-pub const cmsPERCEPTUAL_BLACK_Y:f64 =  0.0034731;
-pub const cmsPERCEPTUAL_BLACK_Z:f64 =  0.00287;
+pub const cmsPERCEPTUAL_BLACK_X: f64 = 0.00336;
+pub const cmsPERCEPTUAL_BLACK_Y: f64 = 0.0034731;
+pub const cmsPERCEPTUAL_BLACK_Z: f64 = 0.00287;
 
 // Definitions in ICC spec
 pub const cmsMagicNumber:u32 =      0x61637370;     // 'acsp'
@@ -821,19 +821,12 @@ pub type cmsStage = _cmsStage_struct;
 #[derive(Copy, Clone)]
 #[repr(u32)]
 #[derive(Debug)]
-pub enum cmsStageLoc { cmsAT_BEGIN = 0, cmsAT_END = 1, }
-pub type cmsSAMPLER16 =
-    ::std::option::Option<unsafe extern "C" fn(In: *mut u16,
-                                               Out: *mut u16,
-                                               Cargo:
-                                                   *mut c_void)
-                              -> i32>;
-pub type cmsSAMPLERFLOAT =
-    ::std::option::Option<unsafe extern "C" fn(In: *mut f32,
-                                               Out: *mut f32,
-                                               Cargo:
-                                                   *mut c_void)
-                              -> i32>;
+pub enum cmsStageLoc {
+    cmsAT_BEGIN = 0,
+    cmsAT_END = 1,
+}
+pub type cmsSAMPLER16 = ::std::option::Option<unsafe extern "C" fn(In: *mut u16, Out: *mut u16, Cargo: *mut c_void) -> i32>;
+pub type cmsSAMPLERFLOAT = ::std::option::Option<unsafe extern "C" fn(In: *mut f32, Out: *mut f32, Cargo: *mut c_void) -> i32>;
 pub enum _cms_MLU_struct { }
 pub type cmsMLU = _cms_MLU_struct;
 #[repr(C)]
@@ -927,200 +920,96 @@ pub type cmsIOHANDLER = _cms_io_handler;
 #[derive(Copy, Clone)]
 #[repr(u32)]
 #[derive(Debug)]
-pub enum cmsPSResourceType { cmsPS_RESOURCE_CSA = 0, cmsPS_RESOURCE_CRD = 1, }
+pub enum cmsPSResourceType {
+    cmsPS_RESOURCE_CSA = 0,
+    cmsPS_RESOURCE_CRD = 1,
+}
 extern "C" {
     pub fn cmsGetEncodedCMMversion() -> c_int;
-    pub fn cmsstrcasecmp(s1: *const c_char,
-                         s2: *const c_char)
-     -> c_int;
+    pub fn cmsstrcasecmp(s1: *const c_char, s2: *const c_char) -> c_int;
     pub fn cmsfilelength(f: *mut FILE) -> c_long;
-    pub fn cmsCreateContext(Plugin: *mut c_void,
-                            UserData: *mut c_void)
-     -> cmsContext;
+    pub fn cmsCreateContext(Plugin: *mut c_void, UserData: *mut c_void) -> cmsContext;
     pub fn cmsDeleteContext(ContexID: cmsContext);
-    pub fn cmsDupContext(ContextID: cmsContext,
-                         NewUserData: *mut c_void)
-     -> cmsContext;
-    pub fn cmsGetContextUserData(ContextID: cmsContext)
-     -> *mut c_void;
+    pub fn cmsDupContext(ContextID: cmsContext, NewUserData: *mut c_void) -> cmsContext;
+    pub fn cmsGetContextUserData(ContextID: cmsContext) -> *mut c_void;
     pub fn cmsPlugin(Plugin: *mut c_void) -> cmsBool;
-    pub fn cmsPluginTHR(ContextID: cmsContext,
-                        Plugin: *mut c_void) -> cmsBool;
+    pub fn cmsPluginTHR(ContextID: cmsContext, Plugin: *mut c_void) -> cmsBool;
     pub fn cmsUnregisterPlugins();
     pub fn cmsUnregisterPluginsTHR(ContextID: cmsContext);
     pub fn cmsSetLogErrorHandler(Fn: cmsLogErrorHandlerFunction);
-    pub fn cmsSetLogErrorHandlerTHR(ContextID: cmsContext,
-                                    Fn: cmsLogErrorHandlerFunction);
+    pub fn cmsSetLogErrorHandlerTHR(ContextID: cmsContext, Fn: cmsLogErrorHandlerFunction);
     pub fn cmsD50_XYZ() -> *const cmsCIEXYZ;
     pub fn cmsD50_xyY() -> *const cmsCIExyY;
     pub fn cmsXYZ2xyY(Dest: *mut cmsCIExyY, Source: *const cmsCIEXYZ);
     pub fn cmsxyY2XYZ(Dest: *mut cmsCIEXYZ, Source: *const cmsCIExyY);
-    pub fn cmsXYZ2Lab(WhitePoint: *const cmsCIEXYZ, Lab: *mut cmsCIELab,
-                      xyz: *const cmsCIEXYZ);
-    pub fn cmsLab2XYZ(WhitePoint: *const cmsCIEXYZ, xyz: *mut cmsCIEXYZ,
-                      Lab: *const cmsCIELab);
+    pub fn cmsXYZ2Lab(WhitePoint: *const cmsCIEXYZ, Lab: *mut cmsCIELab, xyz: *const cmsCIEXYZ);
+    pub fn cmsLab2XYZ(WhitePoint: *const cmsCIEXYZ, xyz: *mut cmsCIEXYZ, Lab: *const cmsCIELab);
     pub fn cmsLab2LCh(LCh: *mut cmsCIELCh, Lab: *const cmsCIELab);
     pub fn cmsLCh2Lab(Lab: *mut cmsCIELab, LCh: *const cmsCIELCh);
-    pub fn cmsLabEncoded2Float(Lab: *mut cmsCIELab,
-                               wLab: *mut u16);
-    pub fn cmsLabEncoded2FloatV2(Lab: *mut cmsCIELab,
-                                 wLab: *mut u16);
-    pub fn cmsFloat2LabEncoded(wLab: *mut u16,
-                               Lab: *const cmsCIELab);
-    pub fn cmsFloat2LabEncodedV2(wLab: *mut u16,
-                                 Lab: *const cmsCIELab);
-    pub fn cmsXYZEncoded2Float(fxyz: *mut cmsCIEXYZ,
-                               XYZ: *mut u16);
-    pub fn cmsFloat2XYZEncoded(XYZ: *mut u16,
-                               fXYZ: *const cmsCIEXYZ);
-    pub fn cmsDeltaE(Lab1: *const cmsCIELab, Lab2: *const cmsCIELab)
-     -> f64;
-    pub fn cmsCIE94DeltaE(Lab1: *const cmsCIELab, Lab2: *const cmsCIELab)
-     -> f64;
-    pub fn cmsBFDdeltaE(Lab1: *const cmsCIELab, Lab2: *const cmsCIELab)
-     -> f64;
-    pub fn cmsCMCdeltaE(Lab1: *const cmsCIELab, Lab2: *const cmsCIELab,
-                        l: f64, c: f64)
-     -> f64;
-    pub fn cmsCIE2000DeltaE(Lab1: *const cmsCIELab, Lab2: *const cmsCIELab,
-                            Kl: f64, Kc: f64,
-                            Kh: f64) -> f64;
-    pub fn cmsWhitePointFromTemp(WhitePoint: *mut cmsCIExyY,
-                                 TempK: f64) -> cmsBool;
-    pub fn cmsTempFromWhitePoint(TempK: *mut f64,
-                                 WhitePoint: *const cmsCIExyY) -> cmsBool;
-    pub fn cmsAdaptToIlluminant(Result: *mut cmsCIEXYZ,
-                                SourceWhitePt: *const cmsCIEXYZ,
-                                Illuminant: *const cmsCIEXYZ,
-                                Value: *const cmsCIEXYZ) -> cmsBool;
-    pub fn cmsCIECAM02Init(ContextID: cmsContext,
-                           pVC: *const cmsViewingConditions) -> cmsHANDLE;
+    pub fn cmsLabEncoded2Float(Lab: *mut cmsCIELab, wLab: *mut u16);
+    pub fn cmsLabEncoded2FloatV2(Lab: *mut cmsCIELab, wLab: *mut u16);
+    pub fn cmsFloat2LabEncoded(wLab: *mut u16, Lab: *const cmsCIELab);
+    pub fn cmsFloat2LabEncodedV2(wLab: *mut u16, Lab: *const cmsCIELab);
+    pub fn cmsXYZEncoded2Float(fxyz: *mut cmsCIEXYZ, XYZ: *mut u16);
+    pub fn cmsFloat2XYZEncoded(XYZ: *mut u16, fXYZ: *const cmsCIEXYZ);
+    pub fn cmsDeltaE(Lab1: *const cmsCIELab, Lab2: *const cmsCIELab) -> f64;
+    pub fn cmsCIE94DeltaE(Lab1: *const cmsCIELab, Lab2: *const cmsCIELab) -> f64;
+    pub fn cmsBFDdeltaE(Lab1: *const cmsCIELab, Lab2: *const cmsCIELab) -> f64;
+    pub fn cmsCMCdeltaE(Lab1: *const cmsCIELab, Lab2: *const cmsCIELab, l: f64, c: f64) -> f64;
+    pub fn cmsCIE2000DeltaE(Lab1: *const cmsCIELab, Lab2: *const cmsCIELab, Kl: f64, Kc: f64, Kh: f64) -> f64;
+    pub fn cmsWhitePointFromTemp(WhitePoint: *mut cmsCIExyY, TempK: f64) -> cmsBool;
+    pub fn cmsTempFromWhitePoint(TempK: *mut f64, WhitePoint: *const cmsCIExyY) -> cmsBool;
+    pub fn cmsAdaptToIlluminant(Result: *mut cmsCIEXYZ, SourceWhitePt: *const cmsCIEXYZ, Illuminant: *const cmsCIEXYZ, Value: *const cmsCIEXYZ) -> cmsBool;
+    pub fn cmsCIECAM02Init(ContextID: cmsContext, pVC: *const cmsViewingConditions) -> cmsHANDLE;
     pub fn cmsCIECAM02Done(hModel: cmsHANDLE);
-    pub fn cmsCIECAM02Forward(hModel: cmsHANDLE, pIn: *const cmsCIEXYZ,
-                              pOut: *mut cmsJCh);
-    pub fn cmsCIECAM02Reverse(hModel: cmsHANDLE, pIn: *const cmsJCh,
-                              pOut: *mut cmsCIEXYZ);
-    pub fn cmsBuildSegmentedToneCurve(ContextID: cmsContext,
-                                      nSegments: i32,
-                                      Segments: *mut cmsCurveSegment)
-     -> *mut cmsToneCurve;
-    pub fn cmsBuildParametricToneCurve(ContextID: cmsContext,
-                                       Type: i32,
-                                       Params: *mut f64)
-     -> *mut cmsToneCurve;
-    pub fn cmsBuildGamma(ContextID: cmsContext, Gamma: f64)
-     -> *mut cmsToneCurve;
-    pub fn cmsBuildTabulatedToneCurve16(ContextID: cmsContext,
-                                        nEntries: i32,
-                                        values: *mut u16)
-     -> *mut cmsToneCurve;
-    pub fn cmsBuildTabulatedToneCurveFloat(ContextID: cmsContext,
-                                           nEntries: u32,
-                                           values: *mut f32)
-     -> *mut cmsToneCurve;
+    pub fn cmsCIECAM02Forward(hModel: cmsHANDLE, pIn: *const cmsCIEXYZ, pOut: *mut cmsJCh);
+    pub fn cmsCIECAM02Reverse(hModel: cmsHANDLE, pIn: *const cmsJCh, pOut: *mut cmsCIEXYZ);
+    pub fn cmsBuildSegmentedToneCurve(ContextID: cmsContext, nSegments: i32, Segments: *mut cmsCurveSegment) -> *mut cmsToneCurve;
+    pub fn cmsBuildParametricToneCurve(ContextID: cmsContext, Type: i32, Params: *mut f64) -> *mut cmsToneCurve;
+    pub fn cmsBuildGamma(ContextID: cmsContext, Gamma: f64) -> *mut cmsToneCurve;
+    pub fn cmsBuildTabulatedToneCurve16(ContextID: cmsContext, nEntries: i32, values: *mut u16) -> *mut cmsToneCurve;
+    pub fn cmsBuildTabulatedToneCurveFloat(ContextID: cmsContext, nEntries: u32, values: *mut f32) -> *mut cmsToneCurve;
     pub fn cmsFreeToneCurve(Curve: *mut cmsToneCurve);
     pub fn cmsFreeToneCurveTriple(Curve: *mut *mut cmsToneCurve);
     pub fn cmsDupToneCurve(Src: *const cmsToneCurve) -> *mut cmsToneCurve;
-    pub fn cmsReverseToneCurve(InGamma: *const cmsToneCurve)
-     -> *mut cmsToneCurve;
-    pub fn cmsReverseToneCurveEx(nResultSamples: i32,
-                                 InGamma: *const cmsToneCurve)
-     -> *mut cmsToneCurve;
-    pub fn cmsJoinToneCurve(ContextID: cmsContext, X: *const cmsToneCurve,
-                            Y: *const cmsToneCurve, nPoints: u32)
-     -> *mut cmsToneCurve;
-    pub fn cmsSmoothToneCurve(Tab: *mut cmsToneCurve,
-                              lambda: f64) -> cmsBool;
-    pub fn cmsEvalToneCurveFloat(Curve: *const cmsToneCurve,
-                                 v: f32) -> f32;
-    pub fn cmsEvalToneCurve16(Curve: *const cmsToneCurve, v: u16)
-     -> u16;
-    pub fn cmsIsToneCurveMultisegment(InGamma: *const cmsToneCurve)
-     -> cmsBool;
+    pub fn cmsReverseToneCurve(InGamma: *const cmsToneCurve) -> *mut cmsToneCurve;
+    pub fn cmsReverseToneCurveEx(nResultSamples: i32, InGamma: *const cmsToneCurve) -> *mut cmsToneCurve;
+    pub fn cmsJoinToneCurve(ContextID: cmsContext, X: *const cmsToneCurve, Y: *const cmsToneCurve, nPoints: u32) -> *mut cmsToneCurve;
+    pub fn cmsSmoothToneCurve(Tab: *mut cmsToneCurve, lambda: f64) -> cmsBool;
+    pub fn cmsEvalToneCurveFloat(Curve: *const cmsToneCurve, v: f32) -> f32;
+    pub fn cmsEvalToneCurve16(Curve: *const cmsToneCurve, v: u16) -> u16;
+    pub fn cmsIsToneCurveMultisegment(InGamma: *const cmsToneCurve) -> cmsBool;
     pub fn cmsIsToneCurveLinear(Curve: *const cmsToneCurve) -> cmsBool;
     pub fn cmsIsToneCurveMonotonic(t: *const cmsToneCurve) -> cmsBool;
     pub fn cmsIsToneCurveDescending(t: *const cmsToneCurve) -> cmsBool;
-    pub fn cmsGetToneCurveParametricType(t: *const cmsToneCurve)
-     -> i32;
-    pub fn cmsEstimateGamma(t: *const cmsToneCurve,
-                            Precision: f64) -> f64;
-    pub fn cmsGetToneCurveEstimatedTableEntries(t: *const cmsToneCurve)
-     -> u32;
-    pub fn cmsGetToneCurveEstimatedTable(t: *const cmsToneCurve)
-     -> *const u16;
-    pub fn cmsPipelineAlloc(ContextID: cmsContext,
-                            InputChannels: u32,
-                            OutputChannels: u32)
-     -> *mut cmsPipeline;
+    pub fn cmsGetToneCurveParametricType(t: *const cmsToneCurve) -> i32;
+    pub fn cmsEstimateGamma(t: *const cmsToneCurve, Precision: f64) -> f64;
+    pub fn cmsGetToneCurveEstimatedTableEntries(t: *const cmsToneCurve) -> u32;
+    pub fn cmsGetToneCurveEstimatedTable(t: *const cmsToneCurve) -> *const u16;
+    pub fn cmsPipelineAlloc(ContextID: cmsContext, InputChannels: u32, OutputChannels: u32) -> *mut cmsPipeline;
     pub fn cmsPipelineFree(lut: *mut cmsPipeline);
     pub fn cmsPipelineDup(Orig: *const cmsPipeline) -> *mut cmsPipeline;
     pub fn cmsGetPipelineContextID(lut: *const cmsPipeline) -> cmsContext;
-    pub fn cmsPipelineInputChannels(lut: *const cmsPipeline)
-     -> u32;
-    pub fn cmsPipelineOutputChannels(lut: *const cmsPipeline)
-     -> u32;
+    pub fn cmsPipelineInputChannels(lut: *const cmsPipeline) -> u32;
+    pub fn cmsPipelineOutputChannels(lut: *const cmsPipeline) -> u32;
     pub fn cmsPipelineStageCount(lut: *const cmsPipeline) -> u32;
-    pub fn cmsPipelineGetPtrToFirstStage(lut: *const cmsPipeline)
-     -> *mut cmsStage;
-    pub fn cmsPipelineGetPtrToLastStage(lut: *const cmsPipeline)
-     -> *mut cmsStage;
-    pub fn cmsPipelineEval16(In: *mut u16,
-                             Out: *mut u16,
-                             lut: *const cmsPipeline);
-    pub fn cmsPipelineEvalFloat(In: *mut f32,
-                                Out: *mut f32,
-                                lut: *const cmsPipeline);
-    pub fn cmsPipelineEvalReverseFloat(Target: *mut f32,
-                                       Result: *mut f32,
-                                       Hint: *mut f32,
-                                       lut: *const cmsPipeline) -> cmsBool;
-    pub fn cmsPipelineCat(l1: *mut cmsPipeline, l2: *const cmsPipeline)
-     -> cmsBool;
-    pub fn cmsPipelineSetSaveAs8bitsFlag(lut: *mut cmsPipeline, On: cmsBool)
-     -> cmsBool;
-    pub fn cmsPipelineInsertStage(lut: *mut cmsPipeline, loc: cmsStageLoc,
-                                  mpe: *mut cmsStage)
-     -> c_int;
-    pub fn cmsPipelineUnlinkStage(lut: *mut cmsPipeline, loc: cmsStageLoc,
-                                  mpe: *mut *mut cmsStage);
-    pub fn cmsPipelineCheckAndRetreiveStages(Lut: *const cmsPipeline,
-                                             n: u32, ...)
-     -> cmsBool;
-    pub fn cmsStageAllocIdentity(ContextID: cmsContext,
-                                 nChannels: u32) -> *mut cmsStage;
-    pub fn cmsStageAllocToneCurves(ContextID: cmsContext,
-                                   nChannels: u32,
-                                   Curves: *mut *mut cmsToneCurve)
-     -> *mut cmsStage;
-    pub fn cmsStageAllocMatrix(ContextID: cmsContext, Rows: u32,
-                               Cols: u32,
-                               Matrix: *const f64,
-                               Offset: *const f64)
-     -> *mut cmsStage;
-    pub fn cmsStageAllocCLut16bit(ContextID: cmsContext,
-                                  nGridPoints: u32,
-                                  inputChan: u32,
-                                  outputChan: u32,
-                                  Table: *const u16)
-     -> *mut cmsStage;
-    pub fn cmsStageAllocCLutFloat(ContextID: cmsContext,
-                                  nGridPoints: u32,
-                                  inputChan: u32,
-                                  outputChan: u32,
-                                  Table: *const f32)
-     -> *mut cmsStage;
-    pub fn cmsStageAllocCLut16bitGranular(ContextID: cmsContext,
-                                          clutPoints: *mut u32,
-                                          inputChan: u32,
-                                          outputChan: u32,
-                                          Table: *const u16)
-     -> *mut cmsStage;
-    pub fn cmsStageAllocCLutFloatGranular(ContextID: cmsContext,
-                                          clutPoints: *mut u32,
-                                          inputChan: u32,
-                                          outputChan: u32,
-                                          Table: *const f32)
-     -> *mut cmsStage;
+    pub fn cmsPipelineGetPtrToFirstStage(lut: *const cmsPipeline) -> *mut cmsStage;
+    pub fn cmsPipelineGetPtrToLastStage(lut: *const cmsPipeline) -> *mut cmsStage;
+    pub fn cmsPipelineEval16(In: *mut u16, Out: *mut u16, lut: *const cmsPipeline);
+    pub fn cmsPipelineEvalFloat(In: *mut f32, Out: *mut f32, lut: *const cmsPipeline);
+    pub fn cmsPipelineEvalReverseFloat(Target: *mut f32, Result: *mut f32, Hint: *mut f32, lut: *const cmsPipeline) -> cmsBool;
+    pub fn cmsPipelineCat(l1: *mut cmsPipeline, l2: *const cmsPipeline) -> cmsBool;
+    pub fn cmsPipelineSetSaveAs8bitsFlag(lut: *mut cmsPipeline, On: cmsBool) -> cmsBool;
+    pub fn cmsPipelineInsertStage(lut: *mut cmsPipeline, loc: cmsStageLoc, mpe: *mut cmsStage) -> c_int;
+    pub fn cmsPipelineUnlinkStage(lut: *mut cmsPipeline, loc: cmsStageLoc, mpe: *mut *mut cmsStage);
+    pub fn cmsPipelineCheckAndRetreiveStages(Lut: *const cmsPipeline, n: u32, ...) -> cmsBool;
+    pub fn cmsStageAllocIdentity(ContextID: cmsContext, nChannels: u32) -> *mut cmsStage;
+    pub fn cmsStageAllocToneCurves(ContextID: cmsContext, nChannels: u32, Curves: *mut *mut cmsToneCurve) -> *mut cmsStage;
+    pub fn cmsStageAllocMatrix(ContextID: cmsContext, Rows: u32, Cols: u32, Matrix: *const f64, Offset: *const f64) -> *mut cmsStage;
+    pub fn cmsStageAllocCLut16bit(ContextID: cmsContext, nGridPoints: u32, inputChan: u32, outputChan: u32, Table: *const u16) -> *mut cmsStage;
+    pub fn cmsStageAllocCLutFloat(ContextID: cmsContext, nGridPoints: u32, inputChan: u32, outputChan: u32, Table: *const f32) -> *mut cmsStage;
+    pub fn cmsStageAllocCLut16bitGranular(ContextID: cmsContext, clutPoints: *mut u32, inputChan: u32, outputChan: u32, Table: *const u16) -> *mut cmsStage;
+    pub fn cmsStageAllocCLutFloatGranular(ContextID: cmsContext, clutPoints: *mut u32, inputChan: u32, outputChan: u32, Table: *const f32) -> *mut cmsStage;
     pub fn cmsStageDup(mpe: *mut cmsStage) -> *mut cmsStage;
     pub fn cmsStageFree(mpe: *mut cmsStage);
     pub fn cmsStageNext(mpe: *const cmsStage) -> *mut cmsStage;
@@ -1128,327 +1017,127 @@ extern "C" {
     pub fn cmsStageOutputChannels(mpe: *const cmsStage) -> u32;
     pub fn cmsStageType(mpe: *const cmsStage) -> cmsStageSignature;
     pub fn cmsStageData(mpe: *const cmsStage) -> *mut c_void;
-    pub fn cmsStageSampleCLut16bit(mpe: *mut cmsStage, Sampler: cmsSAMPLER16,
-                                   Cargo: *mut c_void,
-                                   dwFlags: u32) -> cmsBool;
-    pub fn cmsStageSampleCLutFloat(mpe: *mut cmsStage,
-                                   Sampler: cmsSAMPLERFLOAT,
-                                   Cargo: *mut c_void,
-                                   dwFlags: u32) -> cmsBool;
-    pub fn cmsSliceSpace16(nInputs: u32,
-                           clutPoints: *mut u32,
-                           Sampler: cmsSAMPLER16,
-                           Cargo: *mut c_void) -> cmsBool;
-    pub fn cmsSliceSpaceFloat(nInputs: u32,
-                              clutPoints: *mut u32,
-                              Sampler: cmsSAMPLERFLOAT,
-                              Cargo: *mut c_void) -> cmsBool;
-    pub fn cmsMLUalloc(ContextID: cmsContext, nItems: u32)
-     -> *mut cmsMLU;
+    pub fn cmsStageSampleCLut16bit(mpe: *mut cmsStage, Sampler: cmsSAMPLER16, Cargo: *mut c_void, dwFlags: u32) -> cmsBool;
+    pub fn cmsStageSampleCLutFloat(mpe: *mut cmsStage, Sampler: cmsSAMPLERFLOAT, Cargo: *mut c_void, dwFlags: u32) -> cmsBool;
+    pub fn cmsSliceSpace16(nInputs: u32, clutPoints: *mut u32, Sampler: cmsSAMPLER16, Cargo: *mut c_void) -> cmsBool;
+    pub fn cmsSliceSpaceFloat(nInputs: u32, clutPoints: *mut u32, Sampler: cmsSAMPLERFLOAT, Cargo: *mut c_void) -> cmsBool;
+    pub fn cmsMLUalloc(ContextID: cmsContext, nItems: u32) -> *mut cmsMLU;
     pub fn cmsMLUfree(mlu: *mut cmsMLU);
     pub fn cmsMLUdup(mlu: *const cmsMLU) -> *mut cmsMLU;
-    pub fn cmsMLUsetASCII(mlu: *mut cmsMLU,
-                          LanguageCode: *mut c_char,
-                          CountryCode: *mut c_char,
-                          ASCIIString: *const c_char)
-     -> cmsBool;
-    pub fn cmsMLUsetWide(mlu: *mut cmsMLU,
-                         LanguageCode: *mut c_char,
-                         CountryCode: *mut c_char,
-                         WideString: *const wchar_t) -> cmsBool;
-    pub fn cmsMLUgetASCII(mlu: *const cmsMLU,
-                          LanguageCode: *mut c_char,
-                          CountryCode: *mut c_char,
-                          Buffer: *mut c_char,
-                          BufferSize: u32) -> u32;
-    pub fn cmsMLUgetWide(mlu: *const cmsMLU,
-                         LanguageCode: *mut c_char,
-                         CountryCode: *mut c_char,
-                         Buffer: *mut wchar_t, BufferSize: u32)
-     -> u32;
-    pub fn cmsMLUgetTranslation(mlu: *const cmsMLU,
-                                LanguageCode: *mut c_char,
-                                CountryCode: *mut c_char,
-                                ObtainedLanguage: *mut c_char,
-                                ObtainedCountry: *mut c_char)
-     -> cmsBool;
+    pub fn cmsMLUsetASCII(mlu: *mut cmsMLU, LanguageCode: *mut c_char, CountryCode: *mut c_char, ASCIIString: *const c_char) -> cmsBool;
+    pub fn cmsMLUsetWide(mlu: *mut cmsMLU, LanguageCode: *mut c_char, CountryCode: *mut c_char, WideString: *const wchar_t) -> cmsBool;
+    pub fn cmsMLUgetASCII(mlu: *const cmsMLU, LanguageCode: *mut c_char, CountryCode: *mut c_char, Buffer: *mut c_char, BufferSize: u32) -> u32;
+    pub fn cmsMLUgetWide(mlu: *const cmsMLU, LanguageCode: *mut c_char, CountryCode: *mut c_char, Buffer: *mut wchar_t, BufferSize: u32) -> u32;
+    pub fn cmsMLUgetTranslation(mlu: *const cmsMLU, LanguageCode: *mut c_char, CountryCode: *mut c_char, ObtainedLanguage: *mut c_char, ObtainedCountry: *mut c_char) -> cmsBool;
     pub fn cmsMLUtranslationsCount(mlu: *const cmsMLU) -> u32;
-    pub fn cmsMLUtranslationsCodes(mlu: *const cmsMLU, idx: u32,
-                                   LanguageCode: *mut c_char,
-                                   CountryCode: *mut c_char)
-     -> cmsBool;
-    pub fn cmsAllocNamedColorList(ContextID: cmsContext, n: u32,
-                                  ColorantCount: u32,
-                                  Prefix: *const c_char,
-                                  Suffix: *const c_char)
-     -> *mut cmsNAMEDCOLORLIST;
+    pub fn cmsMLUtranslationsCodes(mlu: *const cmsMLU, idx: u32, LanguageCode: *mut c_char, CountryCode: *mut c_char) -> cmsBool;
+    pub fn cmsAllocNamedColorList(ContextID: cmsContext, n: u32, ColorantCount: u32, Prefix: *const c_char, Suffix: *const c_char) -> *mut cmsNAMEDCOLORLIST;
     pub fn cmsFreeNamedColorList(v: *mut cmsNAMEDCOLORLIST);
-    pub fn cmsDupNamedColorList(v: *const cmsNAMEDCOLORLIST)
-     -> *mut cmsNAMEDCOLORLIST;
-    pub fn cmsAppendNamedColor(v: *mut cmsNAMEDCOLORLIST,
-                               Name: *const c_char,
-                               PCS: *mut u16,
-                               Colorant: *mut u16) -> cmsBool;
+    pub fn cmsDupNamedColorList(v: *const cmsNAMEDCOLORLIST) -> *mut cmsNAMEDCOLORLIST;
+    pub fn cmsAppendNamedColor(v: *mut cmsNAMEDCOLORLIST, Name: *const c_char, PCS: *mut u16, Colorant: *mut u16) -> cmsBool;
     pub fn cmsNamedColorCount(v: *const cmsNAMEDCOLORLIST) -> u32;
-    pub fn cmsNamedColorIndex(v: *const cmsNAMEDCOLORLIST,
-                              Name: *const c_char)
-     -> i32;
-    pub fn cmsNamedColorInfo(NamedColorList: *const cmsNAMEDCOLORLIST,
-                             nColor: u32,
-                             Name: *mut c_char,
-                             Prefix: *mut c_char,
-                             Suffix: *mut c_char,
-                             PCS: *mut u16,
-                             Colorant: *mut u16) -> cmsBool;
-    pub fn cmsGetNamedColorList(xform: cmsHTRANSFORM)
-     -> *mut cmsNAMEDCOLORLIST;
-    pub fn cmsAllocProfileSequenceDescription(ContextID: cmsContext,
-                                              n: u32)
-     -> *mut cmsSEQ;
-    pub fn cmsDupProfileSequenceDescription(pseq: *const cmsSEQ)
-     -> *mut cmsSEQ;
+    pub fn cmsNamedColorIndex(v: *const cmsNAMEDCOLORLIST, Name: *const c_char) -> i32;
+    pub fn cmsNamedColorInfo(NamedColorList: *const cmsNAMEDCOLORLIST, nColor: u32, Name: *mut c_char, Prefix: *mut c_char, Suffix: *mut c_char, PCS: *mut u16, Colorant: *mut u16) -> cmsBool;
+    pub fn cmsGetNamedColorList(xform: cmsHTRANSFORM) -> *mut cmsNAMEDCOLORLIST;
+    pub fn cmsAllocProfileSequenceDescription(ContextID: cmsContext, n: u32) -> *mut cmsSEQ;
+    pub fn cmsDupProfileSequenceDescription(pseq: *const cmsSEQ) -> *mut cmsSEQ;
     pub fn cmsFreeProfileSequenceDescription(pseq: *mut cmsSEQ);
     pub fn cmsDictAlloc(ContextID: cmsContext) -> cmsHANDLE;
     pub fn cmsDictFree(hDict: cmsHANDLE);
     pub fn cmsDictDup(hDict: cmsHANDLE) -> cmsHANDLE;
-    pub fn cmsDictAddEntry(hDict: cmsHANDLE, Name: *const wchar_t,
-                           Value: *const wchar_t, DisplayName: *const cmsMLU,
-                           DisplayValue: *const cmsMLU) -> cmsBool;
+    pub fn cmsDictAddEntry(hDict: cmsHANDLE, Name: *const wchar_t, Value: *const wchar_t, DisplayName: *const cmsMLU, DisplayValue: *const cmsMLU) -> cmsBool;
     pub fn cmsDictGetEntryList(hDict: cmsHANDLE) -> *const cmsDICTentry;
     pub fn cmsDictNextEntry(e: *const cmsDICTentry) -> *const cmsDICTentry;
     pub fn cmsCreateProfilePlaceholder(ContextID: cmsContext) -> cmsHPROFILE;
     pub fn cmsGetProfileContextID(hProfile: cmsHPROFILE) -> cmsContext;
     pub fn cmsGetTagCount(hProfile: cmsHPROFILE) -> i32;
-    pub fn cmsGetTagSignature(hProfile: cmsHPROFILE, n: u32)
-     -> cmsTagSignature;
+    pub fn cmsGetTagSignature(hProfile: cmsHPROFILE, n: u32) -> cmsTagSignature;
     pub fn cmsIsTag(hProfile: cmsHPROFILE, sig: cmsTagSignature) -> cmsBool;
-    pub fn cmsReadTag(hProfile: cmsHPROFILE, sig: cmsTagSignature)
-     -> *mut c_void;
-    pub fn cmsWriteTag(hProfile: cmsHPROFILE, sig: cmsTagSignature,
-                       data: *const c_void) -> cmsBool;
-    pub fn cmsLinkTag(hProfile: cmsHPROFILE, sig: cmsTagSignature,
-                      dest: cmsTagSignature) -> cmsBool;
-    pub fn cmsTagLinkedTo(hProfile: cmsHPROFILE, sig: cmsTagSignature)
-     -> cmsTagSignature;
-    pub fn cmsReadRawTag(hProfile: cmsHPROFILE, sig: cmsTagSignature,
-                         Buffer: *mut c_void,
-                         BufferSize: u32) -> i32;
-    pub fn cmsWriteRawTag(hProfile: cmsHPROFILE, sig: cmsTagSignature,
-                          data: *const c_void,
-                          Size: u32) -> cmsBool;
+    pub fn cmsReadTag(hProfile: cmsHPROFILE, sig: cmsTagSignature) -> *mut c_void;
+    pub fn cmsWriteTag(hProfile: cmsHPROFILE, sig: cmsTagSignature, data: *const c_void) -> cmsBool;
+    pub fn cmsLinkTag(hProfile: cmsHPROFILE, sig: cmsTagSignature, dest: cmsTagSignature) -> cmsBool;
+    pub fn cmsTagLinkedTo(hProfile: cmsHPROFILE, sig: cmsTagSignature) -> cmsTagSignature;
+    pub fn cmsReadRawTag(hProfile: cmsHPROFILE, sig: cmsTagSignature, Buffer: *mut c_void, BufferSize: u32) -> i32;
+    pub fn cmsWriteRawTag(hProfile: cmsHPROFILE, sig: cmsTagSignature, data: *const c_void, Size: u32) -> cmsBool;
     pub fn cmsGetHeaderFlags(hProfile: cmsHPROFILE) -> u32;
-    pub fn cmsGetHeaderAttributes(hProfile: cmsHPROFILE,
-                                  Flags: *mut u64);
-    pub fn cmsGetHeaderProfileID(hProfile: cmsHPROFILE,
-                                 ProfileID: *mut u8);
-    pub fn cmsGetHeaderCreationDateTime(hProfile: cmsHPROFILE, Dest: *mut tm)
-     -> cmsBool;
-    pub fn cmsGetHeaderRenderingIntent(hProfile: cmsHPROFILE)
-     -> u32;
+    pub fn cmsGetHeaderAttributes(hProfile: cmsHPROFILE, Flags: *mut u64);
+    pub fn cmsGetHeaderProfileID(hProfile: cmsHPROFILE, ProfileID: *mut u8);
+    pub fn cmsGetHeaderCreationDateTime(hProfile: cmsHPROFILE, Dest: *mut tm) -> cmsBool;
+    pub fn cmsGetHeaderRenderingIntent(hProfile: cmsHPROFILE) -> u32;
     pub fn cmsSetHeaderFlags(hProfile: cmsHPROFILE, Flags: u32);
     pub fn cmsGetHeaderManufacturer(hProfile: cmsHPROFILE) -> u32;
-    pub fn cmsSetHeaderManufacturer(hProfile: cmsHPROFILE,
-                                    manufacturer: u32);
+    pub fn cmsSetHeaderManufacturer(hProfile: cmsHPROFILE, manufacturer: u32);
     pub fn cmsGetHeaderCreator(hProfile: cmsHPROFILE) -> u32;
     pub fn cmsGetHeaderModel(hProfile: cmsHPROFILE) -> u32;
     pub fn cmsSetHeaderModel(hProfile: cmsHPROFILE, model: u32);
-    pub fn cmsSetHeaderAttributes(hProfile: cmsHPROFILE,
-                                  Flags: u64);
-    pub fn cmsSetHeaderProfileID(hProfile: cmsHPROFILE,
-                                 ProfileID: *mut u8);
-    pub fn cmsSetHeaderRenderingIntent(hProfile: cmsHPROFILE,
-                                       RenderingIntent: u32);
+    pub fn cmsSetHeaderAttributes(hProfile: cmsHPROFILE, Flags: u64);
+    pub fn cmsSetHeaderProfileID(hProfile: cmsHPROFILE, ProfileID: *mut u8);
+    pub fn cmsSetHeaderRenderingIntent(hProfile: cmsHPROFILE, RenderingIntent: u32);
     pub fn cmsGetPCS(hProfile: cmsHPROFILE) -> cmsColorSpaceSignature;
     pub fn cmsSetPCS(hProfile: cmsHPROFILE, pcs: cmsColorSpaceSignature);
     pub fn cmsGetColorSpace(hProfile: cmsHPROFILE) -> cmsColorSpaceSignature;
-    pub fn cmsSetColorSpace(hProfile: cmsHPROFILE,
-                            sig: cmsColorSpaceSignature);
-    pub fn cmsGetDeviceClass(hProfile: cmsHPROFILE)
-     -> cmsProfileClassSignature;
-    pub fn cmsSetDeviceClass(hProfile: cmsHPROFILE,
-                             sig: cmsProfileClassSignature);
-    pub fn cmsSetProfileVersion(hProfile: cmsHPROFILE,
-                                Version: f64);
+    pub fn cmsSetColorSpace(hProfile: cmsHPROFILE, sig: cmsColorSpaceSignature);
+    pub fn cmsGetDeviceClass(hProfile: cmsHPROFILE) -> cmsProfileClassSignature;
+    pub fn cmsSetDeviceClass(hProfile: cmsHPROFILE, sig: cmsProfileClassSignature);
+    pub fn cmsSetProfileVersion(hProfile: cmsHPROFILE, Version: f64);
     pub fn cmsGetProfileVersion(hProfile: cmsHPROFILE) -> f64;
     pub fn cmsGetEncodedICCversion(hProfile: cmsHPROFILE) -> u32;
-    pub fn cmsSetEncodedICCversion(hProfile: cmsHPROFILE,
-                                   Version: u32);
-    pub fn cmsIsIntentSupported(hProfile: cmsHPROFILE,
-                                Intent: u32,
-                                UsedDirection: u32) -> cmsBool;
+    pub fn cmsSetEncodedICCversion(hProfile: cmsHPROFILE, Version: u32);
+    pub fn cmsIsIntentSupported(hProfile: cmsHPROFILE, Intent: u32, UsedDirection: u32) -> cmsBool;
     pub fn cmsIsMatrixShaper(hProfile: cmsHPROFILE) -> cmsBool;
-    pub fn cmsIsCLUT(hProfile: cmsHPROFILE, Intent: u32,
-                     UsedDirection: u32) -> cmsBool;
-    pub fn _cmsICCcolorSpace(OurNotation: c_int)
-     -> cmsColorSpaceSignature;
-    pub fn _cmsLCMScolorSpace(ProfileSpace: cmsColorSpaceSignature)
-     -> c_int;
-    pub fn cmsChannelsOf(ColorSpace: cmsColorSpaceSignature)
-     -> u32;
-    pub fn cmsFormatterForColorspaceOfProfile(hProfile: cmsHPROFILE,
-                                              nBytes: u32,
-                                              lIsFloat: cmsBool)
-     -> u32;
-    pub fn cmsFormatterForPCSOfProfile(hProfile: cmsHPROFILE,
-                                       nBytes: u32,
-                                       lIsFloat: cmsBool) -> u32;
-    pub fn cmsGetProfileInfo(hProfile: cmsHPROFILE, Info: cmsInfoType,
-                             LanguageCode: *mut c_char,
-                             CountryCode: *mut c_char,
-                             Buffer: *mut wchar_t,
-                             BufferSize: u32) -> u32;
-    pub fn cmsGetProfileInfoASCII(hProfile: cmsHPROFILE, Info: cmsInfoType,
-                                  LanguageCode: *mut c_char,
-                                  CountryCode: *mut c_char,
-                                  Buffer: *mut c_char,
-                                  BufferSize: u32)
-     -> u32;
-    pub fn cmsOpenIOhandlerFromFile(ContextID: cmsContext,
-                                    FileName: *const c_char,
-                                    AccessMode: *const c_char)
-     -> *mut cmsIOHANDLER;
-    pub fn cmsOpenIOhandlerFromStream(ContextID: cmsContext,
-                                      Stream: *mut FILE) -> *mut cmsIOHANDLER;
-    pub fn cmsOpenIOhandlerFromMem(ContextID: cmsContext,
-                                   Buffer: *mut c_void,
-                                   size: u32,
-                                   AccessMode: *const c_char)
-     -> *mut cmsIOHANDLER;
-    pub fn cmsOpenIOhandlerFromNULL(ContextID: cmsContext)
-     -> *mut cmsIOHANDLER;
+    pub fn cmsIsCLUT(hProfile: cmsHPROFILE, Intent: u32, UsedDirection: u32) -> cmsBool;
+    pub fn _cmsICCcolorSpace(OurNotation: c_int) -> cmsColorSpaceSignature;
+    pub fn _cmsLCMScolorSpace(ProfileSpace: cmsColorSpaceSignature) -> c_int;
+    pub fn cmsChannelsOf(ColorSpace: cmsColorSpaceSignature) -> u32;
+    pub fn cmsFormatterForColorspaceOfProfile(hProfile: cmsHPROFILE, nBytes: u32, lIsFloat: cmsBool) -> u32;
+    pub fn cmsFormatterForPCSOfProfile(hProfile: cmsHPROFILE, nBytes: u32, lIsFloat: cmsBool) -> u32;
+    pub fn cmsGetProfileInfo(hProfile: cmsHPROFILE, Info: cmsInfoType, LanguageCode: *mut c_char, CountryCode: *mut c_char, Buffer: *mut wchar_t, BufferSize: u32) -> u32;
+    pub fn cmsGetProfileInfoASCII(hProfile: cmsHPROFILE, Info: cmsInfoType, LanguageCode: *mut c_char, CountryCode: *mut c_char, Buffer: *mut c_char, BufferSize: u32) -> u32;
+    pub fn cmsOpenIOhandlerFromFile(ContextID: cmsContext, FileName: *const c_char, AccessMode: *const c_char) -> *mut cmsIOHANDLER;
+    pub fn cmsOpenIOhandlerFromStream(ContextID: cmsContext, Stream: *mut FILE) -> *mut cmsIOHANDLER;
+    pub fn cmsOpenIOhandlerFromMem(ContextID: cmsContext, Buffer: *mut c_void, size: u32, AccessMode: *const c_char) -> *mut cmsIOHANDLER;
+    pub fn cmsOpenIOhandlerFromNULL(ContextID: cmsContext) -> *mut cmsIOHANDLER;
     pub fn cmsGetProfileIOhandler(hProfile: cmsHPROFILE) -> *mut cmsIOHANDLER;
     pub fn cmsCloseIOhandler(io: *mut cmsIOHANDLER) -> cmsBool;
     pub fn cmsMD5computeID(hProfile: cmsHPROFILE) -> cmsBool;
-    pub fn cmsOpenProfileFromFile(ICCProfile: *const c_char,
-                                  sAccess: *const c_char)
-     -> cmsHPROFILE;
-    pub fn cmsOpenProfileFromFileTHR(ContextID: cmsContext,
-                                     ICCProfile:
-                                         *const c_char,
-                                     sAccess: *const c_char)
-     -> cmsHPROFILE;
-    pub fn cmsOpenProfileFromStream(ICCProfile: *mut FILE,
-                                    sAccess: *const c_char)
-     -> cmsHPROFILE;
-    pub fn cmsOpenProfileFromStreamTHR(ContextID: cmsContext,
-                                       ICCProfile: *mut FILE,
-                                       sAccess: *const c_char)
-     -> cmsHPROFILE;
-    pub fn cmsOpenProfileFromMem(MemPtr: *const c_void,
-                                 dwSize: u32) -> cmsHPROFILE;
-    pub fn cmsOpenProfileFromMemTHR(ContextID: cmsContext,
-                                    MemPtr: *const c_void,
-                                    dwSize: u32) -> cmsHPROFILE;
-    pub fn cmsOpenProfileFromIOhandlerTHR(ContextID: cmsContext,
-                                          io: *mut cmsIOHANDLER)
-     -> cmsHPROFILE;
-    pub fn cmsOpenProfileFromIOhandler2THR(ContextID: cmsContext,
-                                           io: *mut cmsIOHANDLER,
-                                           write: cmsBool) -> cmsHPROFILE;
+    pub fn cmsOpenProfileFromFile(ICCProfile: *const c_char, sAccess: *const c_char) -> cmsHPROFILE;
+    pub fn cmsOpenProfileFromFileTHR(ContextID: cmsContext, ICCProfile: *const c_char, sAccess: *const c_char) -> cmsHPROFILE;
+    pub fn cmsOpenProfileFromStream(ICCProfile: *mut FILE, sAccess: *const c_char) -> cmsHPROFILE;
+    pub fn cmsOpenProfileFromStreamTHR(ContextID: cmsContext, ICCProfile: *mut FILE, sAccess: *const c_char) -> cmsHPROFILE;
+    pub fn cmsOpenProfileFromMem(MemPtr: *const c_void, dwSize: u32) -> cmsHPROFILE;
+    pub fn cmsOpenProfileFromMemTHR(ContextID: cmsContext, MemPtr: *const c_void, dwSize: u32) -> cmsHPROFILE;
+    pub fn cmsOpenProfileFromIOhandlerTHR(ContextID: cmsContext, io: *mut cmsIOHANDLER) -> cmsHPROFILE;
+    pub fn cmsOpenProfileFromIOhandler2THR(ContextID: cmsContext, io: *mut cmsIOHANDLER, write: cmsBool) -> cmsHPROFILE;
     pub fn cmsCloseProfile(hProfile: cmsHPROFILE) -> cmsBool;
-    pub fn cmsSaveProfileToFile(hProfile: cmsHPROFILE,
-                                FileName: *const c_char)
-     -> cmsBool;
-    pub fn cmsSaveProfileToStream(hProfile: cmsHPROFILE, Stream: *mut FILE)
-     -> cmsBool;
-    pub fn cmsSaveProfileToMem(hProfile: cmsHPROFILE,
-                               MemPtr: *mut c_void,
-                               BytesNeeded: *mut u32) -> cmsBool;
-    pub fn cmsSaveProfileToIOhandler(hProfile: cmsHPROFILE,
-                                     io: *mut cmsIOHANDLER)
-     -> u32;
-    pub fn cmsCreateRGBProfileTHR(ContextID: cmsContext,
-                                  WhitePoint: *const cmsCIExyY,
-                                  Primaries: *const cmsCIExyYTRIPLE,
-                                  TransferFunction: *mut *mut cmsToneCurve)
-     -> cmsHPROFILE;
-    pub fn cmsCreateRGBProfile(WhitePoint: *const cmsCIExyY,
-                               Primaries: *const cmsCIExyYTRIPLE,
-                               TransferFunction: *mut *mut cmsToneCurve)
-     -> cmsHPROFILE;
-    pub fn cmsCreateGrayProfileTHR(ContextID: cmsContext,
-                                   WhitePoint: *const cmsCIExyY,
-                                   TransferFunction: *const cmsToneCurve)
-     -> cmsHPROFILE;
-    pub fn cmsCreateGrayProfile(WhitePoint: *const cmsCIExyY,
-                                TransferFunction: *const cmsToneCurve)
-     -> cmsHPROFILE;
-    pub fn cmsCreateLinearizationDeviceLinkTHR(ContextID: cmsContext,
-                                               ColorSpace:
-                                                   cmsColorSpaceSignature,
-                                               TransferFunctions:
-                                                   *mut *mut cmsToneCurve)
-     -> cmsHPROFILE;
-    pub fn cmsCreateLinearizationDeviceLink(ColorSpace:
-                                                cmsColorSpaceSignature,
-                                            TransferFunctions:
-                                                *mut *mut cmsToneCurve)
-     -> cmsHPROFILE;
-    pub fn cmsCreateInkLimitingDeviceLinkTHR(ContextID: cmsContext,
-                                             ColorSpace:
-                                                 cmsColorSpaceSignature,
-                                             Limit: f64)
-     -> cmsHPROFILE;
-    pub fn cmsCreateInkLimitingDeviceLink(ColorSpace: cmsColorSpaceSignature,
-                                          Limit: f64)
-     -> cmsHPROFILE;
-    pub fn cmsCreateLab2ProfileTHR(ContextID: cmsContext,
-                                   WhitePoint: *const cmsCIExyY)
-     -> cmsHPROFILE;
+    pub fn cmsSaveProfileToFile(hProfile: cmsHPROFILE, FileName: *const c_char) -> cmsBool;
+    pub fn cmsSaveProfileToStream(hProfile: cmsHPROFILE, Stream: *mut FILE) -> cmsBool;
+    pub fn cmsSaveProfileToMem(hProfile: cmsHPROFILE, MemPtr: *mut c_void, BytesNeeded: *mut u32) -> cmsBool;
+    pub fn cmsSaveProfileToIOhandler(hProfile: cmsHPROFILE, io: *mut cmsIOHANDLER) -> u32;
+    pub fn cmsCreateRGBProfileTHR(ContextID: cmsContext, WhitePoint: *const cmsCIExyY, Primaries: *const cmsCIExyYTRIPLE, TransferFunction: *mut *mut cmsToneCurve) -> cmsHPROFILE;
+    pub fn cmsCreateRGBProfile(WhitePoint: *const cmsCIExyY, Primaries: *const cmsCIExyYTRIPLE, TransferFunction: *mut *mut cmsToneCurve) -> cmsHPROFILE;
+    pub fn cmsCreateGrayProfileTHR(ContextID: cmsContext, WhitePoint: *const cmsCIExyY, TransferFunction: *const cmsToneCurve) -> cmsHPROFILE;
+    pub fn cmsCreateGrayProfile(WhitePoint: *const cmsCIExyY, TransferFunction: *const cmsToneCurve) -> cmsHPROFILE;
+    pub fn cmsCreateLinearizationDeviceLinkTHR(ContextID: cmsContext, ColorSpace: cmsColorSpaceSignature, TransferFunctions: *mut *mut cmsToneCurve) -> cmsHPROFILE;
+    pub fn cmsCreateLinearizationDeviceLink(ColorSpace: cmsColorSpaceSignature, TransferFunctions: *mut *mut cmsToneCurve) -> cmsHPROFILE;
+    pub fn cmsCreateInkLimitingDeviceLinkTHR(ContextID: cmsContext, ColorSpace: cmsColorSpaceSignature, Limit: f64) -> cmsHPROFILE;
+    pub fn cmsCreateInkLimitingDeviceLink(ColorSpace: cmsColorSpaceSignature, Limit: f64) -> cmsHPROFILE;
+    pub fn cmsCreateLab2ProfileTHR(ContextID: cmsContext, WhitePoint: *const cmsCIExyY) -> cmsHPROFILE;
     pub fn cmsCreateLab2Profile(WhitePoint: *const cmsCIExyY) -> cmsHPROFILE;
-    pub fn cmsCreateLab4ProfileTHR(ContextID: cmsContext,
-                                   WhitePoint: *const cmsCIExyY)
-     -> cmsHPROFILE;
+    pub fn cmsCreateLab4ProfileTHR(ContextID: cmsContext, WhitePoint: *const cmsCIExyY) -> cmsHPROFILE;
     pub fn cmsCreateLab4Profile(WhitePoint: *const cmsCIExyY) -> cmsHPROFILE;
     pub fn cmsCreateXYZProfileTHR(ContextID: cmsContext) -> cmsHPROFILE;
     pub fn cmsCreateXYZProfile() -> cmsHPROFILE;
     pub fn cmsCreate_sRGBProfileTHR(ContextID: cmsContext) -> cmsHPROFILE;
     pub fn cmsCreate_sRGBProfile() -> cmsHPROFILE;
-    pub fn cmsCreateBCHSWabstractProfileTHR(ContextID: cmsContext,
-                                            nLUTPoints: c_int,
-                                            Bright: f64,
-                                            Contrast: f64,
-                                            Hue: f64,
-                                            Saturation: f64,
-                                            TempSrc: c_int,
-                                            TempDest: c_int)
-     -> cmsHPROFILE;
-    pub fn cmsCreateBCHSWabstractProfile(nLUTPoints: c_int,
-                                         Bright: f64,
-                                         Contrast: f64,
-                                         Hue: f64,
-                                         Saturation: f64,
-                                         TempSrc: c_int,
-                                         TempDest: c_int)
-     -> cmsHPROFILE;
+    pub fn cmsCreateBCHSWabstractProfileTHR(ContextID: cmsContext, nLUTPoints: c_int, Bright: f64, Contrast: f64, Hue: f64, Saturation: f64, TempSrc: c_int, TempDest: c_int) -> cmsHPROFILE;
+    pub fn cmsCreateBCHSWabstractProfile(nLUTPoints: c_int, Bright: f64, Contrast: f64, Hue: f64, Saturation: f64, TempSrc: c_int, TempDest: c_int) -> cmsHPROFILE;
     pub fn cmsCreateNULLProfileTHR(ContextID: cmsContext) -> cmsHPROFILE;
     pub fn cmsCreateNULLProfile() -> cmsHPROFILE;
-    pub fn cmsTransform2DeviceLink(hTransform: cmsHTRANSFORM,
-                                   Version: f64,
-                                   dwFlags: u32) -> cmsHPROFILE;
-    pub fn cmsGetSupportedIntents(nMax: u32,
-                                  Codes: *mut u32,
-                                  Descriptions:
-                                      *mut *mut c_char)
-     -> u32;
-    pub fn cmsGetSupportedIntentsTHR(ContextID: cmsContext,
-                                     nMax: u32,
-                                     Codes: *mut u32,
-                                     Descriptions:
-                                         *mut *mut c_char)
-     -> u32;
-    pub fn cmsCreateTransformTHR(ContextID: cmsContext, Input: cmsHPROFILE,
-                                 InputFormat: PixelFormat,
-                                 Output: cmsHPROFILE,
-                                 OutputFormat: PixelFormat,
-                                 Intent: u32,
-                                 dwFlags: u32) -> cmsHTRANSFORM;
-    pub fn cmsCreateTransform(Input: cmsHPROFILE,
-                              InputFormat: PixelFormat,
-                              Output: cmsHPROFILE,
-                              OutputFormat: PixelFormat,
-                              Intent: u32,
-                              dwFlags: u32) -> cmsHTRANSFORM;
+    pub fn cmsTransform2DeviceLink(hTransform: cmsHTRANSFORM, Version: f64, dwFlags: u32) -> cmsHPROFILE;
+    pub fn cmsGetSupportedIntents(nMax: u32, Codes: *mut u32, Descriptions: *mut *mut c_char) -> u32;
+    pub fn cmsGetSupportedIntentsTHR(ContextID: cmsContext, nMax: u32, Codes: *mut u32, Descriptions: *mut *mut c_char) -> u32;
+    pub fn cmsCreateTransformTHR(ContextID: cmsContext, Input: cmsHPROFILE, InputFormat: PixelFormat, Output: cmsHPROFILE, OutputFormat: PixelFormat, Intent: u32, dwFlags: u32) -> cmsHTRANSFORM;
+    pub fn cmsCreateTransform(Input: cmsHPROFILE, InputFormat: PixelFormat, Output: cmsHPROFILE, OutputFormat: PixelFormat, Intent: u32, dwFlags: u32) -> cmsHTRANSFORM;
     pub fn cmsCreateProofingTransformTHR(ContextID: cmsContext,
                                          Input: cmsHPROFILE,
                                          InputFormat: PixelFormat,
@@ -1458,7 +1147,7 @@ extern "C" {
                                          Intent: u32,
                                          ProofingIntent: u32,
                                          dwFlags: u32)
-     -> cmsHTRANSFORM;
+                                         -> cmsHTRANSFORM;
     pub fn cmsCreateProofingTransform(Input: cmsHPROFILE,
                                       InputFormat: PixelFormat,
                                       Output: cmsHPROFILE,
@@ -1467,7 +1156,7 @@ extern "C" {
                                       Intent: u32,
                                       ProofingIntent: u32,
                                       dwFlags: u32)
-     -> cmsHTRANSFORM;
+                                      -> cmsHTRANSFORM;
     pub fn cmsCreateMultiprofileTransformTHR(ContextID: cmsContext,
                                              hProfiles: *mut cmsHPROFILE,
                                              nProfiles: u32,
@@ -1475,14 +1164,8 @@ extern "C" {
                                              OutputFormat: PixelFormat,
                                              Intent: u32,
                                              dwFlags: u32)
-     -> cmsHTRANSFORM;
-    pub fn cmsCreateMultiprofileTransform(hProfiles: *mut cmsHPROFILE,
-                                          nProfiles: u32,
-                                          InputFormat: PixelFormat,
-                                          OutputFormat: PixelFormat,
-                                          Intent: u32,
-                                          dwFlags: u32)
-     -> cmsHTRANSFORM;
+                                             -> cmsHTRANSFORM;
+    pub fn cmsCreateMultiprofileTransform(hProfiles: *mut cmsHPROFILE, nProfiles: u32, InputFormat: PixelFormat, OutputFormat: PixelFormat, Intent: u32, dwFlags: u32) -> cmsHTRANSFORM;
     pub fn cmsCreateExtendedTransform(ContextID: cmsContext,
                                       nProfiles: u32,
                                       hProfiles: *mut cmsHPROFILE,
@@ -1494,185 +1177,67 @@ extern "C" {
                                       InputFormat: PixelFormat,
                                       OutputFormat: PixelFormat,
                                       dwFlags: u32)
-     -> cmsHTRANSFORM;
+                                      -> cmsHTRANSFORM;
     pub fn cmsDeleteTransform(hTransform: cmsHTRANSFORM);
-    pub fn cmsDoTransform(Transform: cmsHTRANSFORM,
-                          InputBuffer: *const c_void,
-                          OutputBuffer: *mut c_void,
-                          Size: u32);
-    pub fn cmsDoTransformStride(Transform: cmsHTRANSFORM,
-                                InputBuffer: *const c_void,
-                                OutputBuffer: *mut c_void,
-                                Size: u32,
-                                Stride: u32);
+    pub fn cmsDoTransform(Transform: cmsHTRANSFORM, InputBuffer: *const c_void, OutputBuffer: *mut c_void, Size: u32);
+    pub fn cmsDoTransformStride(Transform: cmsHTRANSFORM, InputBuffer: *const c_void, OutputBuffer: *mut c_void, Size: u32, Stride: u32);
     pub fn cmsSetAlarmCodes(NewAlarm: *mut u16);
     pub fn cmsGetAlarmCodes(NewAlarm: *mut u16);
-    pub fn cmsSetAlarmCodesTHR(ContextID: cmsContext,
-                               AlarmCodes: *mut u16);
-    pub fn cmsGetAlarmCodesTHR(ContextID: cmsContext,
-                               AlarmCodes: *mut u16);
+    pub fn cmsSetAlarmCodesTHR(ContextID: cmsContext, AlarmCodes: *mut u16);
+    pub fn cmsGetAlarmCodesTHR(ContextID: cmsContext, AlarmCodes: *mut u16);
     pub fn cmsSetAdaptationState(d: f64) -> f64;
-    pub fn cmsSetAdaptationStateTHR(ContextID: cmsContext,
-                                    d: f64) -> f64;
+    pub fn cmsSetAdaptationStateTHR(ContextID: cmsContext, d: f64) -> f64;
     pub fn cmsGetTransformContextID(hTransform: cmsHTRANSFORM) -> cmsContext;
-    pub fn cmsGetTransformInputFormat(hTransform: cmsHTRANSFORM)
-     -> u32;
-    pub fn cmsGetTransformOutputFormat(hTransform: cmsHTRANSFORM)
-     -> u32;
-    pub fn cmsChangeBuffersFormat(hTransform: cmsHTRANSFORM,
-                                  InputFormat: PixelFormat,
-                                  OutputFormat: PixelFormat) -> cmsBool;
-    pub fn cmsGetPostScriptColorResource(ContextID: cmsContext,
-                                         Type: cmsPSResourceType,
-                                         hProfile: cmsHPROFILE,
-                                         Intent: u32,
-                                         dwFlags: u32,
-                                         io: *mut cmsIOHANDLER)
-     -> u32;
-    pub fn cmsGetPostScriptCSA(ContextID: cmsContext, hProfile: cmsHPROFILE,
-                               Intent: u32,
-                               dwFlags: u32,
-                               Buffer: *mut c_void,
-                               dwBufferLen: u32)
-     -> u32;
-    pub fn cmsGetPostScriptCRD(ContextID: cmsContext, hProfile: cmsHPROFILE,
-                               Intent: u32,
-                               dwFlags: u32,
-                               Buffer: *mut c_void,
-                               dwBufferLen: u32)
-     -> u32;
+    pub fn cmsGetTransformInputFormat(hTransform: cmsHTRANSFORM) -> u32;
+    pub fn cmsGetTransformOutputFormat(hTransform: cmsHTRANSFORM) -> u32;
+    pub fn cmsChangeBuffersFormat(hTransform: cmsHTRANSFORM, InputFormat: PixelFormat, OutputFormat: PixelFormat) -> cmsBool;
+    pub fn cmsGetPostScriptColorResource(ContextID: cmsContext, Type: cmsPSResourceType, hProfile: cmsHPROFILE, Intent: u32, dwFlags: u32, io: *mut cmsIOHANDLER) -> u32;
+    pub fn cmsGetPostScriptCSA(ContextID: cmsContext, hProfile: cmsHPROFILE, Intent: u32, dwFlags: u32, Buffer: *mut c_void, dwBufferLen: u32) -> u32;
+    pub fn cmsGetPostScriptCRD(ContextID: cmsContext, hProfile: cmsHPROFILE, Intent: u32, dwFlags: u32, Buffer: *mut c_void, dwBufferLen: u32) -> u32;
     pub fn cmsIT8Alloc(ContextID: cmsContext) -> cmsHANDLE;
     pub fn cmsIT8Free(hIT8: cmsHANDLE);
     pub fn cmsIT8TableCount(hIT8: cmsHANDLE) -> u32;
-    pub fn cmsIT8SetTable(hIT8: cmsHANDLE, nTable: u32)
-     -> i32;
-    pub fn cmsIT8LoadFromFile(ContextID: cmsContext,
-                              cFileName: *const c_char)
-     -> cmsHANDLE;
-    pub fn cmsIT8LoadFromMem(ContextID: cmsContext,
-                             Ptr: *mut c_void,
-                             len: u32) -> cmsHANDLE;
-    pub fn cmsIT8SaveToFile(hIT8: cmsHANDLE,
-                            cFileName: *const c_char)
-     -> cmsBool;
-    pub fn cmsIT8SaveToMem(hIT8: cmsHANDLE,
-                           MemPtr: *mut c_void,
-                           BytesNeeded: *mut u32) -> cmsBool;
-    pub fn cmsIT8GetSheetType(hIT8: cmsHANDLE)
-     -> *const c_char;
-    pub fn cmsIT8SetSheetType(hIT8: cmsHANDLE,
-                              Type: *const c_char) -> cmsBool;
-    pub fn cmsIT8SetComment(hIT8: cmsHANDLE,
-                            cComment: *const c_char)
-     -> cmsBool;
-    pub fn cmsIT8SetPropertyStr(hIT8: cmsHANDLE,
-                                cProp: *const c_char,
-                                Str: *const c_char)
-     -> cmsBool;
-    pub fn cmsIT8SetPropertyDbl(hIT8: cmsHANDLE,
-                                cProp: *const c_char,
-                                Val: f64) -> cmsBool;
-    pub fn cmsIT8SetPropertyHex(hIT8: cmsHANDLE,
-                                cProp: *const c_char,
-                                Val: u32) -> cmsBool;
-    pub fn cmsIT8SetPropertyMulti(hIT8: cmsHANDLE,
-                                  Key: *const c_char,
-                                  SubKey: *const c_char,
-                                  Buffer: *const c_char)
-     -> cmsBool;
-    pub fn cmsIT8SetPropertyUncooked(hIT8: cmsHANDLE,
-                                     Key: *const c_char,
-                                     Buffer: *const c_char)
-     -> cmsBool;
-    pub fn cmsIT8GetProperty(hIT8: cmsHANDLE,
-                             cProp: *const c_char)
-     -> *const c_char;
-    pub fn cmsIT8GetPropertyDbl(hIT8: cmsHANDLE,
-                                cProp: *const c_char)
-     -> f64;
-    pub fn cmsIT8GetPropertyMulti(hIT8: cmsHANDLE,
-                                  Key: *const c_char,
-                                  SubKey: *const c_char)
-     -> *const c_char;
-    pub fn cmsIT8EnumProperties(hIT8: cmsHANDLE,
-                                PropertyNames:
-                                    *mut *mut *mut c_char)
-     -> u32;
-    pub fn cmsIT8EnumPropertyMulti(hIT8: cmsHANDLE,
-                                   cProp: *const c_char,
-                                   SubpropertyNames:
-                                       *mut *mut *const c_char)
-     -> u32;
-    pub fn cmsIT8GetDataRowCol(hIT8: cmsHANDLE, row: c_int,
-                               col: c_int)
-     -> *const c_char;
-    pub fn cmsIT8GetDataRowColDbl(hIT8: cmsHANDLE, row: c_int,
-                                  col: c_int)
-     -> f64;
-    pub fn cmsIT8SetDataRowCol(hIT8: cmsHANDLE, row: c_int,
-                               col: c_int,
-                               Val: *const c_char) -> cmsBool;
-    pub fn cmsIT8SetDataRowColDbl(hIT8: cmsHANDLE, row: c_int,
-                                  col: c_int,
-                                  Val: f64) -> cmsBool;
-    pub fn cmsIT8GetData(hIT8: cmsHANDLE,
-                         cPatch: *const c_char,
-                         cSample: *const c_char)
-     -> *const c_char;
-    pub fn cmsIT8GetDataDbl(hIT8: cmsHANDLE,
-                            cPatch: *const c_char,
-                            cSample: *const c_char)
-     -> f64;
-    pub fn cmsIT8SetData(hIT8: cmsHANDLE,
-                         cPatch: *const c_char,
-                         cSample: *const c_char,
-                         Val: *const c_char) -> cmsBool;
-    pub fn cmsIT8SetDataDbl(hIT8: cmsHANDLE,
-                            cPatch: *const c_char,
-                            cSample: *const c_char,
-                            Val: f64) -> cmsBool;
-    pub fn cmsIT8FindDataFormat(hIT8: cmsHANDLE,
-                                cSample: *const c_char)
-     -> c_int;
-    pub fn cmsIT8SetDataFormat(hIT8: cmsHANDLE, n: c_int,
-                               Sample: *const c_char)
-     -> cmsBool;
-    pub fn cmsIT8EnumDataFormat(hIT8: cmsHANDLE,
-                                SampleNames:
-                                    *mut *mut *mut c_char)
-     -> c_int;
-    pub fn cmsIT8GetPatchName(hIT8: cmsHANDLE, nPatch: c_int,
-                              buffer: *mut c_char)
-     -> *const c_char;
-    pub fn cmsIT8GetPatchByName(hIT8: cmsHANDLE,
-                                cPatch: *const c_char)
-     -> c_int;
-    pub fn cmsIT8SetTableByLabel(hIT8: cmsHANDLE,
-                                 cSet: *const c_char,
-                                 cField: *const c_char,
-                                 ExpectedType: *const c_char)
-     -> c_int;
-    pub fn cmsIT8SetIndexColumn(hIT8: cmsHANDLE,
-                                cSample: *const c_char)
-     -> cmsBool;
-    pub fn cmsIT8DefineDblFormat(hIT8: cmsHANDLE,
-                                 Formatter: *const c_char);
+    pub fn cmsIT8SetTable(hIT8: cmsHANDLE, nTable: u32) -> i32;
+    pub fn cmsIT8LoadFromFile(ContextID: cmsContext, cFileName: *const c_char) -> cmsHANDLE;
+    pub fn cmsIT8LoadFromMem(ContextID: cmsContext, Ptr: *mut c_void, len: u32) -> cmsHANDLE;
+    pub fn cmsIT8SaveToFile(hIT8: cmsHANDLE, cFileName: *const c_char) -> cmsBool;
+    pub fn cmsIT8SaveToMem(hIT8: cmsHANDLE, MemPtr: *mut c_void, BytesNeeded: *mut u32) -> cmsBool;
+    pub fn cmsIT8GetSheetType(hIT8: cmsHANDLE) -> *const c_char;
+    pub fn cmsIT8SetSheetType(hIT8: cmsHANDLE, Type: *const c_char) -> cmsBool;
+    pub fn cmsIT8SetComment(hIT8: cmsHANDLE, cComment: *const c_char) -> cmsBool;
+    pub fn cmsIT8SetPropertyStr(hIT8: cmsHANDLE, cProp: *const c_char, Str: *const c_char) -> cmsBool;
+    pub fn cmsIT8SetPropertyDbl(hIT8: cmsHANDLE, cProp: *const c_char, Val: f64) -> cmsBool;
+    pub fn cmsIT8SetPropertyHex(hIT8: cmsHANDLE, cProp: *const c_char, Val: u32) -> cmsBool;
+    pub fn cmsIT8SetPropertyMulti(hIT8: cmsHANDLE, Key: *const c_char, SubKey: *const c_char, Buffer: *const c_char) -> cmsBool;
+    pub fn cmsIT8SetPropertyUncooked(hIT8: cmsHANDLE, Key: *const c_char, Buffer: *const c_char) -> cmsBool;
+    pub fn cmsIT8GetProperty(hIT8: cmsHANDLE, cProp: *const c_char) -> *const c_char;
+    pub fn cmsIT8GetPropertyDbl(hIT8: cmsHANDLE, cProp: *const c_char) -> f64;
+    pub fn cmsIT8GetPropertyMulti(hIT8: cmsHANDLE, Key: *const c_char, SubKey: *const c_char) -> *const c_char;
+    pub fn cmsIT8EnumProperties(hIT8: cmsHANDLE, PropertyNames: *mut *mut *mut c_char) -> u32;
+    pub fn cmsIT8EnumPropertyMulti(hIT8: cmsHANDLE, cProp: *const c_char, SubpropertyNames: *mut *mut *const c_char) -> u32;
+    pub fn cmsIT8GetDataRowCol(hIT8: cmsHANDLE, row: c_int, col: c_int) -> *const c_char;
+    pub fn cmsIT8GetDataRowColDbl(hIT8: cmsHANDLE, row: c_int, col: c_int) -> f64;
+    pub fn cmsIT8SetDataRowCol(hIT8: cmsHANDLE, row: c_int, col: c_int, Val: *const c_char) -> cmsBool;
+    pub fn cmsIT8SetDataRowColDbl(hIT8: cmsHANDLE, row: c_int, col: c_int, Val: f64) -> cmsBool;
+    pub fn cmsIT8GetData(hIT8: cmsHANDLE, cPatch: *const c_char, cSample: *const c_char) -> *const c_char;
+    pub fn cmsIT8GetDataDbl(hIT8: cmsHANDLE, cPatch: *const c_char, cSample: *const c_char) -> f64;
+    pub fn cmsIT8SetData(hIT8: cmsHANDLE, cPatch: *const c_char, cSample: *const c_char, Val: *const c_char) -> cmsBool;
+    pub fn cmsIT8SetDataDbl(hIT8: cmsHANDLE, cPatch: *const c_char, cSample: *const c_char, Val: f64) -> cmsBool;
+    pub fn cmsIT8FindDataFormat(hIT8: cmsHANDLE, cSample: *const c_char) -> c_int;
+    pub fn cmsIT8SetDataFormat(hIT8: cmsHANDLE, n: c_int, Sample: *const c_char) -> cmsBool;
+    pub fn cmsIT8EnumDataFormat(hIT8: cmsHANDLE, SampleNames: *mut *mut *mut c_char) -> c_int;
+    pub fn cmsIT8GetPatchName(hIT8: cmsHANDLE, nPatch: c_int, buffer: *mut c_char) -> *const c_char;
+    pub fn cmsIT8GetPatchByName(hIT8: cmsHANDLE, cPatch: *const c_char) -> c_int;
+    pub fn cmsIT8SetTableByLabel(hIT8: cmsHANDLE, cSet: *const c_char, cField: *const c_char, ExpectedType: *const c_char) -> c_int;
+    pub fn cmsIT8SetIndexColumn(hIT8: cmsHANDLE, cSample: *const c_char) -> cmsBool;
+    pub fn cmsIT8DefineDblFormat(hIT8: cmsHANDLE, Formatter: *const c_char);
     pub fn cmsGBDAlloc(ContextID: cmsContext) -> cmsHANDLE;
     pub fn cmsGBDFree(hGBD: cmsHANDLE);
     pub fn cmsGDBAddPoint(hGBD: cmsHANDLE, Lab: *const cmsCIELab) -> cmsBool;
-    pub fn cmsGDBCompute(hGDB: cmsHANDLE, dwFlags: u32)
-     -> cmsBool;
-    pub fn cmsGDBCheckPoint(hGBD: cmsHANDLE, Lab: *const cmsCIELab)
-     -> cmsBool;
-    pub fn cmsDetectBlackPoint(BlackPoint: *mut cmsCIEXYZ,
-                               hProfile: cmsHPROFILE, Intent: u32,
-                               dwFlags: u32) -> cmsBool;
-    pub fn cmsDetectDestinationBlackPoint(BlackPoint: *mut cmsCIEXYZ,
-                                          hProfile: cmsHPROFILE,
-                                          Intent: u32,
-                                          dwFlags: u32)
-     -> cmsBool;
+    pub fn cmsGDBCompute(hGDB: cmsHANDLE, dwFlags: u32) -> cmsBool;
+    pub fn cmsGDBCheckPoint(hGBD: cmsHANDLE, Lab: *const cmsCIELab) -> cmsBool;
+    pub fn cmsDetectBlackPoint(BlackPoint: *mut cmsCIEXYZ, hProfile: cmsHPROFILE, Intent: u32, dwFlags: u32) -> cmsBool;
+    pub fn cmsDetectDestinationBlackPoint(BlackPoint: *mut cmsCIEXYZ, hProfile: cmsHPROFILE, Intent: u32, dwFlags: u32) -> cmsBool;
     pub fn cmsDetectTAC(hProfile: cmsHPROFILE) -> f64;
-    pub fn cmsDesaturateLab(Lab: *mut cmsCIELab, amax: f64, amin: f64,
-                            bmax: f64, bmin: f64) -> cmsBool;
+    pub fn cmsDesaturateLab(Lab: *mut cmsCIELab, amax: f64, amin: f64, bmax: f64, bmin: f64) -> cmsBool;
 }

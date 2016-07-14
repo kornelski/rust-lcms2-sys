@@ -955,13 +955,13 @@ pub enum InfoType {
 pub enum IOHANDLER { }
 
 impl CIEXYZ {
-    pub fn new_d50() -> &'static CIEXYZ {
+    pub fn d50() -> &'static CIEXYZ {
         unsafe { cmsD50_XYZ() }
     }
 }
 
 impl CIExyY {
-    pub fn new_d50() -> &'static CIExyY {
+    pub fn d50() -> &'static CIExyY {
         unsafe { cmsD50_xyY() }
     }
 }

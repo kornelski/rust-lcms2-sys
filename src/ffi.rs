@@ -5,6 +5,7 @@
 
 use std::os::raw::{c_char, c_int, c_long, c_void};
 use libc;
+use std::mem;
 use libc::{tm, FILE};
 use std::default::Default;
 
@@ -347,7 +348,7 @@ pub struct ICCData {
 }
 
 impl Default for ICCData {
-    fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+    fn default() -> Self { unsafe { mem::zeroed() } }
 }
 
 #[repr(C)]
@@ -363,7 +364,7 @@ pub struct DateTimeNumber {
 }
 
 impl Default for DateTimeNumber {
-    fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+    fn default() -> Self { unsafe { mem::zeroed() } }
 }
 
 #[repr(C)]
@@ -376,7 +377,7 @@ pub struct EncodedXYZNumber {
 }
 
 impl Default for EncodedXYZNumber {
-    fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+    fn default() -> Self { unsafe { mem::zeroed() } }
 }
 
 #[repr(C)]
@@ -388,21 +389,21 @@ pub struct ProfileID {
 
 impl ProfileID {
     pub unsafe fn ID8(&mut self) -> *mut [u8; 16] {
-        let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
-        ::std::mem::transmute(raw.offset(0))
+        let raw: *mut u8 = mem::transmute(&self._bindgen_data_);
+        mem::transmute(raw.offset(0))
     }
     pub unsafe fn ID16(&mut self) -> *mut [u16; 8] {
-        let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
-        ::std::mem::transmute(raw.offset(0))
+        let raw: *mut u8 = mem::transmute(&self._bindgen_data_);
+        mem::transmute(raw.offset(0))
     }
     pub unsafe fn ID32(&mut self) -> *mut [u32; 4] {
-        let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
-        ::std::mem::transmute(raw.offset(0))
+        let raw: *mut u8 = mem::transmute(&self._bindgen_data_);
+        mem::transmute(raw.offset(0))
     }
 }
 
 impl Default for ProfileID {
-    fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+    fn default() -> Self { unsafe { mem::zeroed() } }
 }
 
 #[repr(C)]
@@ -429,7 +430,7 @@ pub struct ICCHeader {
     pub reserved: [i8; 28],
 }
 impl Default for ICCHeader {
-    fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+    fn default() -> Self { unsafe { mem::zeroed() } }
 }
 
 #[repr(C)]
@@ -440,7 +441,7 @@ pub struct TagBase {
     pub reserved: [i8; 4],
 }
 impl Default for TagBase {
-    fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+    fn default() -> Self { unsafe { mem::zeroed() } }
 }
 
 #[repr(C)]
@@ -452,7 +453,7 @@ pub struct TagEntry {
     pub size: u32,
 }
 impl Default for TagEntry {
-    fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+    fn default() -> Self { unsafe { mem::zeroed() } }
 }
 
 pub type HANDLE = *mut c_void;
@@ -734,7 +735,7 @@ pub struct CIEXYZ {
     pub Z: f64,
 }
 impl Default for CIEXYZ {
-    fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+    fn default() -> Self { unsafe { mem::zeroed() } }
 }
 
 #[repr(C)]
@@ -746,7 +747,7 @@ pub struct CIExyY {
     pub Y: f64,
 }
 impl Default for CIExyY {
-    fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+    fn default() -> Self { unsafe { mem::zeroed() } }
 }
 
 #[repr(C)]
@@ -758,7 +759,7 @@ pub struct CIELab {
     pub b: f64,
 }
 impl Default for CIELab {
-    fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+    fn default() -> Self { unsafe { mem::zeroed() } }
 }
 
 #[repr(C)]
@@ -770,7 +771,7 @@ pub struct CIELCh {
     pub h: f64,
 }
 impl Default for CIELCh {
-    fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+    fn default() -> Self { unsafe { mem::zeroed() } }
 }
 
 #[repr(C)]
@@ -782,7 +783,7 @@ pub struct JCh {
     pub h: f64,
 }
 impl Default for JCh {
-    fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+    fn default() -> Self { unsafe { mem::zeroed() } }
 }
 
 #[repr(C)]
@@ -794,7 +795,7 @@ pub struct CIEXYZTRIPLE {
     pub Blue: CIEXYZ,
 }
 impl Default for CIEXYZTRIPLE {
-    fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+    fn default() -> Self { unsafe { mem::zeroed() } }
 }
 
 #[repr(C)]
@@ -806,7 +807,7 @@ pub struct CIExyYTRIPLE {
     pub Blue: CIExyY,
 }
 impl Default for CIExyYTRIPLE {
-    fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+    fn default() -> Self { unsafe { mem::zeroed() } }
 }
 
 #[repr(C)]
@@ -821,7 +822,7 @@ pub struct ICCMeasurementConditions {
     _bindgen_padding_0_: [u8; 4],
 }
 impl Default for ICCMeasurementConditions {
-    fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+    fn default() -> Self { unsafe { mem::zeroed() } }
 }
 
 #[repr(C)]
@@ -834,7 +835,7 @@ pub struct ICCViewingConditions {
     _bindgen_padding_0_: [u8; 4],
 }
 impl Default for ICCViewingConditions {
-    fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+    fn default() -> Self { unsafe { mem::zeroed() } }
 }
 
 pub enum _cmsContext_struct { }
@@ -851,7 +852,7 @@ pub struct ViewingConditions {
     pub D_value: f64,
 }
 impl Default for ViewingConditions {
-    fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+    fn default() -> Self { unsafe { mem::zeroed() } }
 }
 
 #[repr(C)]
@@ -866,7 +867,7 @@ pub struct CurveSegment {
     pub SampledPoints: *mut f32,
 }
 impl Default for CurveSegment {
-    fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+    fn default() -> Self { unsafe { mem::zeroed() } }
 }
 
 pub enum ToneCurve { }
@@ -892,7 +893,7 @@ pub struct UcrBg {
     pub Desc: *mut MLU,
 }
 impl Default for UcrBg {
-    fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+    fn default() -> Self { unsafe { mem::zeroed() } }
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -904,7 +905,7 @@ pub struct ScreeningChannel {
     _bindgen_padding_0_: [u8; 4],
 }
 impl Default for ScreeningChannel {
-    fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+    fn default() -> Self { unsafe { mem::zeroed() } }
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -915,7 +916,7 @@ pub struct Screening {
     pub Channels: [ScreeningChannel; 16],
 }
 impl Default for Screening {
-    fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+    fn default() -> Self { unsafe { mem::zeroed() } }
 }
 pub enum NAMEDCOLORLIST { }
 
@@ -933,7 +934,7 @@ pub struct PSEQDESC {
     pub Description: *mut MLU,
 }
 impl Default for PSEQDESC {
-    fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+    fn default() -> Self { unsafe { mem::zeroed() } }
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -944,7 +945,7 @@ pub struct SEQ {
     pub seq: *mut PSEQDESC,
 }
 impl Default for SEQ {
-    fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+    fn default() -> Self { unsafe { mem::zeroed() } }
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -957,7 +958,7 @@ pub struct DICTentry {
     pub Value: *mut wchar_t,
 }
 impl Default for DICTentry {
-    fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+    fn default() -> Self { unsafe { mem::zeroed() } }
 }
 
 #[derive(Copy, Clone, PartialEq, Eq)]
@@ -980,6 +981,46 @@ impl CIEXYZ {
 impl CIExyY {
     pub fn new_d50() -> &'static CIExyY {
         unsafe { cmsD50_xyY() }
+    }
+}
+
+impl From<CIEXYZ> for CIExyY {
+    fn from(f: CIEXYZ) -> Self {
+        unsafe {
+            let mut new = mem::uninitialized();
+            cmsXYZ2xyY(&mut new, &f);
+            new
+        }
+    }
+}
+
+impl From<CIExyY> for CIEXYZ {
+    fn from(f: CIExyY) -> Self {
+        unsafe {
+            let mut new = mem::uninitialized();
+            cmsxyY2XYZ(&mut new, &f);
+            new
+        }
+    }
+}
+
+impl From<CIELab> for CIELCh {
+    fn from(f: CIELab) -> Self {
+        unsafe {
+            let mut new = mem::uninitialized();
+            cmsLab2LCh(&mut new, &f);
+            new
+        }
+    }
+}
+
+impl From<CIELCh> for CIELab {
+    fn from(f: CIELCh) -> Self {
+        unsafe {
+            let mut new = mem::uninitialized();
+            cmsLCh2Lab(&mut new, &f);
+            new
+        }
     }
 }
 

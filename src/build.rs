@@ -3,8 +3,6 @@ extern crate pkg_config;
 use std::env;
 
 fn main() {
-    let target = env::var("TARGET").unwrap();
-
     if let Ok(lib_dir) = env::var("LCMS2_LIB_DIR") {
         println!("cargo:rustc-link-search=native={}", lib_dir);
     }
@@ -20,5 +18,5 @@ fn main() {
         }
     }
 
-    println!("cargo:rustc-link-lib=static=lcms2");
+    println!("cargo:rustc-link-lib=lcms2");
 }

@@ -4,9 +4,11 @@
          non_snake_case)]
 
 use std::os::raw::{c_char, c_int, c_long, c_void};
-use libc::{wchar_t, tm, FILE};
+use libc;
+use libc::{tm, FILE};
 use std::default::Default;
 
+pub type wchar_t = libc::wchar_t;
 pub type Signature = u32;
 pub type S15Fixed16Number = i32;
 pub type Bool = c_int;

@@ -747,7 +747,7 @@ pub struct CIExyY {
     pub Y: f64,
 }
 impl Default for CIExyY {
-    fn default() -> Self { unsafe { mem::zeroed() } }
+    fn default() -> Self { CIExyY{x:0., y:0., Y:1.} }
 }
 
 #[repr(C)]
@@ -794,9 +794,6 @@ pub struct CIEXYZTRIPLE {
     pub Green: CIEXYZ,
     pub Blue: CIEXYZ,
 }
-impl Default for CIEXYZTRIPLE {
-    fn default() -> Self { unsafe { mem::zeroed() } }
-}
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -805,9 +802,6 @@ pub struct CIExyYTRIPLE {
     pub Red: CIExyY,
     pub Green: CIExyY,
     pub Blue: CIExyY,
-}
-impl Default for CIExyYTRIPLE {
-    fn default() -> Self { unsafe { mem::zeroed() } }
 }
 
 #[repr(C)]
@@ -819,7 +813,6 @@ pub struct ICCMeasurementConditions {
     pub Geometry: u32,
     pub Flare: f64,
     pub IlluminantType: u32,
-    _bindgen_padding_0_: [u8; 4],
 }
 impl Default for ICCMeasurementConditions {
     fn default() -> Self { unsafe { mem::zeroed() } }
@@ -832,7 +825,6 @@ pub struct ICCViewingConditions {
     pub IlluminantXYZ: CIEXYZ,
     pub SurroundXYZ: CIEXYZ,
     pub IlluminantType: u32,
-    _bindgen_padding_0_: [u8; 4],
 }
 impl Default for ICCViewingConditions {
     fn default() -> Self { unsafe { mem::zeroed() } }
@@ -892,9 +884,7 @@ pub struct UcrBg {
     pub Bg: *mut ToneCurve,
     pub Desc: *mut MLU,
 }
-impl Default for UcrBg {
-    fn default() -> Self { unsafe { mem::zeroed() } }
-}
+
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]
@@ -902,7 +892,6 @@ pub struct ScreeningChannel {
     pub Frequency: f64,
     pub ScreenAngle: f64,
     pub SpotShape: u32,
-    _bindgen_padding_0_: [u8; 4],
 }
 impl Default for ScreeningChannel {
     fn default() -> Self { unsafe { mem::zeroed() } }
@@ -933,9 +922,7 @@ pub struct PSEQDESC {
     pub Model: *mut MLU,
     pub Description: *mut MLU,
 }
-impl Default for PSEQDESC {
-    fn default() -> Self { unsafe { mem::zeroed() } }
-}
+
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]
@@ -944,9 +931,7 @@ pub struct SEQ {
     pub ContextID: Context,
     pub seq: *mut PSEQDESC,
 }
-impl Default for SEQ {
-    fn default() -> Self { unsafe { mem::zeroed() } }
-}
+
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]
@@ -956,9 +941,6 @@ pub struct DICTentry {
     pub DisplayValue: *mut MLU,
     pub Name: *mut wchar_t,
     pub Value: *mut wchar_t,
-}
-impl Default for DICTentry {
-    fn default() -> Self { unsafe { mem::zeroed() } }
 }
 
 #[derive(Copy, Clone, PartialEq, Eq)]

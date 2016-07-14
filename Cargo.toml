@@ -1,6 +1,6 @@
 [package]
 name = "lcms2-sys"
-version = "0.3.0"
+version = "0.4.0"
 authors = ["Kornel Lesiński <kornel@geekhood.net>"]
 build = "src/build.rs"
 repository="https://github.com/pornel/rust-lcms2-sys.git"
@@ -8,7 +8,7 @@ include = ["src/**/*", "Cargo.toml", "README.md"]
 description = "Bindings for liblcms2 (Little CMS)"
 readme = "README.md"
 license = "MIT"
-keywords = ["icc", "color", "profile", "lcms"]
+keywords = ["icc", "color", "profile", "lcms", "sys"]
 
 [lib]
 doctest = false

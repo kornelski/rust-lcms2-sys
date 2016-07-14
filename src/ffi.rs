@@ -904,10 +904,10 @@ impl Default for DICTentry {
 #[repr(u32)]
 #[derive(Debug)]
 pub enum InfoType {
-    InfoDescription = 0,
-    InfoManufacturer = 1,
-    InfoModel = 2,
-    InfoCopyright = 3,
+    Description = 0,
+    Manufacturer = 1,
+    Model = 2,
+    Copyright = 3,
 }
 pub enum IOHANDLER { }
 

@@ -971,6 +971,18 @@ pub enum InfoType {
 }
 pub enum IOHANDLER { }
 
+impl CIEXYZ {
+    pub fn new_d50() -> &'static CIEXYZ {
+        unsafe { cmsD50_XYZ() }
+    }
+}
+
+impl CIExyY {
+    pub fn new_d50() -> &'static CIExyY {
+        unsafe { cmsD50_xyY() }
+    }
+}
+
 #[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]
 #[derive(Debug)]
@@ -992,8 +1004,8 @@ extern "C" {
     pub fn cmsUnregisterPluginsTHR(ContextID: Context);
     pub fn cmsSetLogErrorHandler(Fn: LogErrorHandlerFunction);
     pub fn cmsSetLogErrorHandlerTHR(ContextID: Context, Fn: LogErrorHandlerFunction);
-    pub fn cmsD50_XYZ() -> *const CIEXYZ;
-    pub fn cmsD50_xyY() -> *const CIExyY;
+    pub fn cmsD50_XYZ() -> &'static CIEXYZ;
+    pub fn cmsD50_xyY() -> &'static CIExyY;
     pub fn cmsXYZ2xyY(Dest: *mut CIExyY, Source: *const CIEXYZ);
     pub fn cmsxyY2XYZ(Dest: *mut CIEXYZ, Source: *const CIExyY);
     pub fn cmsXYZ2Lab(WhitePoint: *const CIEXYZ, Lab: *mut CIELab, xyz: *const CIEXYZ);

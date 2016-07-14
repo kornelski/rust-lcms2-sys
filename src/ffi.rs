@@ -1074,8 +1074,8 @@ extern "C" {
     pub fn cmsBuildSegmentedToneCurve(ContextID: Context, nSegments: i32, Segments: *mut CurveSegment) -> *mut ToneCurve;
     pub fn cmsBuildParametricToneCurve(ContextID: Context, Type: i32, Params: *mut f64) -> *mut ToneCurve;
     pub fn cmsBuildGamma(ContextID: Context, Gamma: f64) -> *mut ToneCurve;
-    pub fn cmsBuildTabulatedToneCurve16(ContextID: Context, nEntries: i32, values: *mut u16) -> *mut ToneCurve;
-    pub fn cmsBuildTabulatedToneCurveFloat(ContextID: Context, nEntries: u32, values: *mut f32) -> *mut ToneCurve;
+    pub fn cmsBuildTabulatedToneCurve16(ContextID: Context, nEntries: i32, values: *const u16) -> *mut ToneCurve;
+    pub fn cmsBuildTabulatedToneCurveFloat(ContextID: Context, nEntries: u32, values: *const f32) -> *mut ToneCurve;
     pub fn cmsFreeToneCurve(Curve: *mut ToneCurve);
     pub fn cmsFreeToneCurveTriple(Curve: *mut *mut ToneCurve);
     pub fn cmsDupToneCurve(Src: *const ToneCurve) -> *mut ToneCurve;

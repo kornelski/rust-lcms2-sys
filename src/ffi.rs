@@ -24,9 +24,28 @@ pub const PERCEPTUAL_BLACK_X: f64 = 0.00336;
 pub const PERCEPTUAL_BLACK_Y: f64 = 0.0034731;
 pub const PERCEPTUAL_BLACK_Z: f64 = 0.00287;
 
+#[derive(Copy, Clone, PartialEq, Eq)]
+#[repr(u32)]
+#[derive(Debug)]
+pub enum Intent {
+    // ICC Intents
+    Perceptual = 0,
+    RelativeColorimetric = 1,
+    Saturation = 2,
+    AbsoluteColorimetric = 3,
+
+    // non-icc intents
+    PreserveKOnlyPerceptual = 10,
+    PreserveKOnlyRelativeColorimetric = 11,
+    PreserveKOnlySaturation = 12,
+    PreserveKPlanePerceptual = 13,
+    PreserveKPlaneRelativeColorimetric = 14,
+    PreserveKPlaneSaturation = 15,
+}
+
 // Definitions in ICC spec
-pub const MagicNumber:Signature =   0x61637370; // 'acsp'
-pub const lcmsSignature:Signature = 0x6c636d73; // 'lcms'
+pub const MagicNumber: Signature = 0x61637370; // 'acsp'
+pub const lcmsSignature: Signature = 0x6c636d73; // 'lcms'
 
 #[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]
@@ -403,7 +422,7 @@ pub struct ICCHeader {
     pub manufacturer: Signature,
     pub model: u32,
     pub attributes: u64,
-    pub renderingIntent: u32,
+    pub renderingIntent: Intent,
     pub illuminant: EncodedXYZNumber,
     pub creator: Signature,
     pub profileID: ProfileID,
@@ -437,8 +456,10 @@ impl Default for TagEntry {
 }
 
 pub type HANDLE = *mut c_void;
-pub type HPROFILE = *mut c_void;
-pub type HTRANSFORM = *mut c_void;
+pub enum _HPROFILE {}
+pub type HPROFILE = *mut _HPROFILE;
+pub enum _HTRANSFORM {}
+pub type HTRANSFORM = *mut _HTRANSFORM;
 
 pub const MAXCHANNELS: usize =  16;                // Maximum number of channels in ICC profiles
 
@@ -1068,7 +1089,7 @@ extern "C" {
     pub fn cmsSetHeaderModel(hProfile: HPROFILE, model: u32);
     pub fn cmsSetHeaderAttributes(hProfile: HPROFILE, Flags: u64);
     pub fn cmsSetHeaderProfileID(hProfile: HPROFILE, ProfileID: *mut u8);
-    pub fn cmsSetHeaderRenderingIntent(hProfile: HPROFILE, RenderingIntent: u32);
+    pub fn cmsSetHeaderRenderingIntent(hProfile: HPROFILE, RenderingIntent: Intent);
     pub fn cmsGetPCS(hProfile: HPROFILE) -> ColorSpaceSignature;
     pub fn cmsSetPCS(hProfile: HPROFILE, pcs: ColorSpaceSignature);
     pub fn cmsGetColorSpace(hProfile: HPROFILE) -> ColorSpaceSignature;
@@ -1079,9 +1100,9 @@ extern "C" {
     pub fn cmsGetProfileVersion(hProfile: HPROFILE) -> f64;
     pub fn cmsGetEncodedICCversion(hProfile: HPROFILE) -> u32;
     pub fn cmsSetEncodedICCversion(hProfile: HPROFILE, Version: u32);
-    pub fn cmsIsIntentSupported(hProfile: HPROFILE, Intent: u32, UsedDirection: u32) -> Bool;
+    pub fn cmsIsIntentSupported(hProfile: HPROFILE, Intent: Intent, UsedDirection: u32) -> Bool;
     pub fn cmsIsMatrixShaper(hProfile: HPROFILE) -> Bool;
-    pub fn cmsIsCLUT(hProfile: HPROFILE, Intent: u32, UsedDirection: u32) -> Bool;
+    pub fn cmsIsCLUT(hProfile: HPROFILE, Intent: Intent, UsedDirection: u32) -> Bool;
     pub fn _cmsICCcolorSpace(OurNotation: c_int) -> ColorSpaceSignature;
     pub fn _cmsLCMScolorSpace(ProfileSpace: ColorSpaceSignature) -> c_int;
     pub fn cmsChannelsOf(ColorSpace: ColorSpaceSignature) -> u32;
@@ -1132,16 +1153,16 @@ extern "C" {
     pub fn cmsTransform2DeviceLink(hTransform: HTRANSFORM, Version: f64, dwFlags: u32) -> HPROFILE;
     pub fn cmsGetSupportedIntents(nMax: u32, Codes: *mut u32, Descriptions: *mut *mut c_char) -> u32;
     pub fn cmsGetSupportedIntentsTHR(ContextID: Context, nMax: u32, Codes: *mut u32, Descriptions: *mut *mut c_char) -> u32;
-    pub fn cmsCreateTransformTHR(ContextID: Context, Input: HPROFILE, InputFormat: PixelFormat, Output: HPROFILE, OutputFormat: PixelFormat, Intent: u32, dwFlags: u32) -> HTRANSFORM;
-    pub fn cmsCreateTransform(Input: HPROFILE, InputFormat: PixelFormat, Output: HPROFILE, OutputFormat: PixelFormat, Intent: u32, dwFlags: u32) -> HTRANSFORM;
+    pub fn cmsCreateTransformTHR(ContextID: Context, Input: HPROFILE, InputFormat: PixelFormat, Output: HPROFILE, OutputFormat: PixelFormat, Intent: Intent, dwFlags: u32) -> HTRANSFORM;
+    pub fn cmsCreateTransform(Input: HPROFILE, InputFormat: PixelFormat, Output: HPROFILE, OutputFormat: PixelFormat, Intent: Intent, dwFlags: u32) -> HTRANSFORM;
     pub fn cmsCreateProofingTransformTHR(ContextID: Context,
                                          Input: HPROFILE,
                                          InputFormat: PixelFormat,
                                          Output: HPROFILE,
                                          OutputFormat: PixelFormat,
                                          Proofing: HPROFILE,
-                                         Intent: u32,
-                                         ProofingIntent: u32,
+                                         Intent: Intent,
+                                         ProofingIntent: Intent,
                                          dwFlags: u32)
                                          -> HTRANSFORM;
     pub fn cmsCreateProofingTransform(Input: HPROFILE,
@@ -1149,8 +1170,8 @@ extern "C" {
                                       Output: HPROFILE,
                                       OutputFormat: PixelFormat,
                                       Proofing: HPROFILE,
-                                      Intent: u32,
-                                      ProofingIntent: u32,
+                                      Intent: Intent,
+                                      ProofingIntent: Intent,
                                       dwFlags: u32)
                                       -> HTRANSFORM;
     pub fn cmsCreateMultiprofileTransformTHR(ContextID: Context,
@@ -1158,10 +1179,10 @@ extern "C" {
                                              nProfiles: u32,
                                              InputFormat: PixelFormat,
                                              OutputFormat: PixelFormat,
-                                             Intent: u32,
+                                             Intent: Intent,
                                              dwFlags: u32)
                                              -> HTRANSFORM;
-    pub fn cmsCreateMultiprofileTransform(hProfiles: *mut HPROFILE, nProfiles: u32, InputFormat: PixelFormat, OutputFormat: PixelFormat, Intent: u32, dwFlags: u32) -> HTRANSFORM;
+    pub fn cmsCreateMultiprofileTransform(hProfiles: *mut HPROFILE, nProfiles: u32, InputFormat: PixelFormat, OutputFormat: PixelFormat, Intent: Intent, dwFlags: u32) -> HTRANSFORM;
     pub fn cmsCreateExtendedTransform(ContextID: Context,
                                       nProfiles: u32,
                                       hProfiles: *mut HPROFILE,
@@ -1187,9 +1208,9 @@ extern "C" {
     pub fn cmsGetTransformInputFormat(hTransform: HTRANSFORM) -> u32;
     pub fn cmsGetTransformOutputFormat(hTransform: HTRANSFORM) -> u32;
     pub fn cmsChangeBuffersFormat(hTransform: HTRANSFORM, InputFormat: PixelFormat, OutputFormat: PixelFormat) -> Bool;
-    pub fn cmsGetPostScriptColorResource(ContextID: Context, Type: PSResourceType, hProfile: HPROFILE, Intent: u32, dwFlags: u32, io: *mut IOHANDLER) -> u32;
-    pub fn cmsGetPostScriptCSA(ContextID: Context, hProfile: HPROFILE, Intent: u32, dwFlags: u32, Buffer: *mut c_void, dwBufferLen: u32) -> u32;
-    pub fn cmsGetPostScriptCRD(ContextID: Context, hProfile: HPROFILE, Intent: u32, dwFlags: u32, Buffer: *mut c_void, dwBufferLen: u32) -> u32;
+    pub fn cmsGetPostScriptColorResource(ContextID: Context, Type: PSResourceType, hProfile: HPROFILE, Intent: Intent, dwFlags: u32, io: *mut IOHANDLER) -> u32;
+    pub fn cmsGetPostScriptCSA(ContextID: Context, hProfile: HPROFILE, Intent: Intent, dwFlags: u32, Buffer: *mut c_void, dwBufferLen: u32) -> u32;
+    pub fn cmsGetPostScriptCRD(ContextID: Context, hProfile: HPROFILE, Intent: Intent, dwFlags: u32, Buffer: *mut c_void, dwBufferLen: u32) -> u32;
     pub fn cmsIT8Alloc(ContextID: Context) -> HANDLE;
     pub fn cmsIT8Free(hIT8: HANDLE);
     pub fn cmsIT8TableCount(hIT8: HANDLE) -> u32;
@@ -1232,8 +1253,8 @@ extern "C" {
     pub fn cmsGDBAddPoint(hGBD: HANDLE, Lab: *const CIELab) -> Bool;
     pub fn cmsGDBCompute(hGDB: HANDLE, dwFlags: u32) -> Bool;
     pub fn cmsGDBCheckPoint(hGBD: HANDLE, Lab: *const CIELab) -> Bool;
-    pub fn cmsDetectBlackPoint(BlackPoint: *mut CIEXYZ, hProfile: HPROFILE, Intent: u32, dwFlags: u32) -> Bool;
-    pub fn cmsDetectDestinationBlackPoint(BlackPoint: *mut CIEXYZ, hProfile: HPROFILE, Intent: u32, dwFlags: u32) -> Bool;
+    pub fn cmsDetectBlackPoint(BlackPoint: *mut CIEXYZ, hProfile: HPROFILE, Intent: Intent, dwFlags: u32) -> Bool;
+    pub fn cmsDetectDestinationBlackPoint(BlackPoint: *mut CIEXYZ, hProfile: HPROFILE, Intent: Intent, dwFlags: u32) -> Bool;
     pub fn cmsDetectTAC(hProfile: HPROFILE) -> f64;
     pub fn cmsDesaturateLab(Lab: *mut CIELab, amax: f64, amin: f64, bmax: f64, bmin: f64) -> Bool;
 }

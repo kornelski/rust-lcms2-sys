@@ -28,7 +28,7 @@ pub const PERCEPTUAL_BLACK_Z: f64 = 0.00287;
 pub const MagicNumber:Signature =   0x61637370; // 'acsp'
 pub const lcmsSignature:Signature = 0x6c636d73; // 'lcms'
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum TagTypeSignature {
@@ -74,7 +74,7 @@ pub const SigBlueMatrixColumnTag: TagSignature = TagSignature::SigBlueColorantTa
 pub const SigGreenMatrixColumnTag: TagSignature = TagSignature::SigGreenColorantTag;
 pub const SigRedMatrixColumnTag: TagSignature = TagSignature::SigRedColorantTag;
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum TagSignature {
@@ -148,7 +148,7 @@ pub enum TagSignature {
 }
 pub use self::TagSignature::*;
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum TechnologySignature {
@@ -180,7 +180,7 @@ pub enum TechnologySignature {
     SigDigitalCinemaProjector            = 0x64636A70   // 'dcpj'
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum ColorSpaceSignature {
@@ -229,7 +229,7 @@ pub enum ColorSpaceSignature {
     SigLuvKData                          = 0x4C75764B   // 'LuvK'
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum ProfileClassSignature {
@@ -242,7 +242,7 @@ pub enum ProfileClassSignature {
     SigNamedColorClass                   = 0x6e6d636c   // 'nmcl'
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum PlatformSignature {
@@ -263,7 +263,7 @@ pub const SigFocalPlaneColorimetryEstimates:u32 =         0x66706365;  //'fpce'
 pub const SigReflectionHardcopyOriginalColorimetry:u32 =  0x72686F63;  //'rhoc'
 pub const SigReflectionPrintOutputColorimetry:u32 =       0x72706F63;  //'rpoc'
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum StageSignature {
@@ -292,7 +292,7 @@ pub enum StageSignature {
     SigClipNegativesElemType         = 0x636c7020   // 'clp '
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum CurveSegSignature {
@@ -361,7 +361,7 @@ impl Default for EncodedXYZNumber {
 }
 
 #[repr(C)]
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq, Eq)]
 #[derive(Debug)]
 pub struct ProfileID {
     pub _bindgen_data_: [u32; 4],
@@ -500,7 +500,7 @@ pub const TYPE_YUVK_8: PixelFormat = PixelFormat::TYPE_CMYK_8_REV;
 pub const TYPE_YUVK_16: PixelFormat = PixelFormat::TYPE_CMYK_16_REV;
 pub const TYPE_ABGR_FLT: PixelFormat = PixelFormat::TYPE_BGR_FLT;
 pub const TYPE_ABGR_HALF_FLT: PixelFormat = PixelFormat::TYPE_BGR_HALF_FLT;
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum PixelFormat {
@@ -814,7 +814,7 @@ impl Default for CurveSegment {
 pub enum ToneCurve { }
 pub enum Pipeline { }
 pub enum Stage { }
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum StageLoc {
@@ -902,7 +902,7 @@ impl Default for DICTentry {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum InfoType {
@@ -913,7 +913,7 @@ pub enum InfoType {
 }
 pub enum IOHANDLER { }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum PSResourceType {

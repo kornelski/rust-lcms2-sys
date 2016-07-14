@@ -1085,8 +1085,8 @@ extern "C" {
     pub fn cmsChannelsOf(ColorSpace: ColorSpaceSignature) -> u32;
     pub fn cmsFormatterForColorspaceOfProfile(hProfile: HPROFILE, nBytes: u32, lIsFloat: Bool) -> u32;
     pub fn cmsFormatterForPCSOfProfile(hProfile: HPROFILE, nBytes: u32, lIsFloat: Bool) -> u32;
-    pub fn cmsGetProfileInfo(hProfile: HPROFILE, Info: InfoType, LanguageCode: *mut c_char, CountryCode: *mut c_char, Buffer: *mut wchar_t, BufferSize: u32) -> u32;
-    pub fn cmsGetProfileInfoASCII(hProfile: HPROFILE, Info: InfoType, LanguageCode: *mut c_char, CountryCode: *mut c_char, Buffer: *mut c_char, BufferSize: u32) -> u32;
+    pub fn cmsGetProfileInfo(hProfile: HPROFILE, Info: InfoType, LanguageCode: *const c_char, CountryCode: *const c_char, Buffer: *mut wchar_t, BufferSize: u32) -> u32;
+    pub fn cmsGetProfileInfoASCII(hProfile: HPROFILE, Info: InfoType, LanguageCode: *const c_char, CountryCode: *const c_char, Buffer: *mut c_char, BufferSize: u32) -> u32;
     pub fn cmsOpenIOhandlerFromFile(ContextID: Context, FileName: *const c_char, AccessMode: *const c_char) -> *mut IOHANDLER;
     pub fn cmsOpenIOhandlerFromStream(ContextID: Context, Stream: *mut FILE) -> *mut IOHANDLER;
     pub fn cmsOpenIOhandlerFromMem(ContextID: Context, Buffer: *mut c_void, size: u32, AccessMode: *const c_char) -> *mut IOHANDLER;

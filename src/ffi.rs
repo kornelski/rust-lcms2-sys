@@ -1167,12 +1167,12 @@ extern "C" {
     pub fn cmsSaveProfileToStream(hProfile: HPROFILE, Stream: *mut FILE) -> Bool;
     pub fn cmsSaveProfileToMem(hProfile: HPROFILE, MemPtr: *mut c_void, BytesNeeded: *mut u32) -> Bool;
     pub fn cmsSaveProfileToIOhandler(hProfile: HPROFILE, io: *mut IOHANDLER) -> u32;
-    pub fn cmsCreateRGBProfileTHR(ContextID: Context, WhitePoint: *const CIExyY, Primaries: *const CIExyYTRIPLE, TransferFunction: *mut *mut ToneCurve) -> HPROFILE;
-    pub fn cmsCreateRGBProfile(WhitePoint: *const CIExyY, Primaries: *const CIExyYTRIPLE, TransferFunction: *mut *mut ToneCurve) -> HPROFILE;
+    pub fn cmsCreateRGBProfileTHR(ContextID: Context, WhitePoint: *const CIExyY, Primaries: *const CIExyYTRIPLE, TransferFunction: *const *const ToneCurve) -> HPROFILE;
+    pub fn cmsCreateRGBProfile(WhitePoint: *const CIExyY, Primaries: *const CIExyYTRIPLE, TransferFunction: *const *const ToneCurve) -> HPROFILE;
     pub fn cmsCreateGrayProfileTHR(ContextID: Context, WhitePoint: *const CIExyY, TransferFunction: *const ToneCurve) -> HPROFILE;
     pub fn cmsCreateGrayProfile(WhitePoint: *const CIExyY, TransferFunction: *const ToneCurve) -> HPROFILE;
-    pub fn cmsCreateLinearizationDeviceLinkTHR(ContextID: Context, ColorSpace: ColorSpaceSignature, TransferFunctions: *mut *mut ToneCurve) -> HPROFILE;
-    pub fn cmsCreateLinearizationDeviceLink(ColorSpace: ColorSpaceSignature, TransferFunctions: *mut *mut ToneCurve) -> HPROFILE;
+    pub fn cmsCreateLinearizationDeviceLinkTHR(ContextID: Context, ColorSpace: ColorSpaceSignature, TransferFunctions: *const *const ToneCurve) -> HPROFILE;
+    pub fn cmsCreateLinearizationDeviceLink(ColorSpace: ColorSpaceSignature, TransferFunctions: *const *const ToneCurve) -> HPROFILE;
     pub fn cmsCreateInkLimitingDeviceLinkTHR(ContextID: Context, ColorSpace: ColorSpaceSignature, Limit: f64) -> HPROFILE;
     pub fn cmsCreateInkLimitingDeviceLink(ColorSpace: ColorSpaceSignature, Limit: f64) -> HPROFILE;
     pub fn cmsCreateLab2ProfileTHR(ContextID: Context, WhitePoint: *const CIExyY) -> HPROFILE;
@@ -1242,8 +1242,8 @@ extern "C" {
     pub fn cmsSetAdaptationState(d: f64) -> f64;
     pub fn cmsSetAdaptationStateTHR(ContextID: Context, d: f64) -> f64;
     pub fn cmsGetTransformContextID(hTransform: HTRANSFORM) -> Context;
-    pub fn cmsGetTransformInputFormat(hTransform: HTRANSFORM) -> u32;
-    pub fn cmsGetTransformOutputFormat(hTransform: HTRANSFORM) -> u32;
+    pub fn cmsGetTransformInputFormat(hTransform: HTRANSFORM) -> PixelFormat;
+    pub fn cmsGetTransformOutputFormat(hTransform: HTRANSFORM) -> PixelFormat;
     pub fn cmsChangeBuffersFormat(hTransform: HTRANSFORM, InputFormat: PixelFormat, OutputFormat: PixelFormat) -> Bool;
     pub fn cmsGetPostScriptColorResource(ContextID: Context, Type: PSResourceType, hProfile: HPROFILE, Intent: Intent, dwFlags: u32, io: *mut IOHANDLER) -> u32;
     pub fn cmsGetPostScriptCSA(ContextID: Context, hProfile: HPROFILE, Intent: Intent, dwFlags: u32, Buffer: *mut c_void, dwBufferLen: u32) -> u32;

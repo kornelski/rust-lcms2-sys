@@ -685,6 +685,46 @@ pub enum PixelFormat {
 }
 pub use self::PixelFormat::*;
 
+impl PixelFormat {
+    pub fn float(&self) -> usize {
+        (((*self as u32) >> 22) & 1) as usize
+    }
+    pub fn optimized(&self) -> usize {
+        (((*self as u32) >> 21) & 1) as usize
+    }
+    pub fn colorspace(&self) -> usize {
+        (((*self as u32) >> 16) & 31) as usize
+    }
+    pub fn swapfirst(&self) -> usize {
+        (((*self as u32) >> 14) & 1) as usize
+    }
+    pub fn flavor(&self) -> usize {
+        (((*self as u32) >> 13) & 1) as usize
+    }
+    pub fn planar(&self) -> bool {
+        (((*self as u32) >> 12) & 1) != 0
+    }
+    pub fn endian16(&self) -> usize {
+        (((*self as u32) >> 11) & 1) as usize
+    }
+    pub fn doswap(&self) -> usize {
+        (((*self as u32) >> 10) & 1) as usize
+    }
+    pub fn extra(&self) -> usize {
+        (((*self as u32) >> 7) & 7) as usize
+    }
+    pub fn channels(&self) -> usize {
+        (((*self as u32) >> 3) & 15) as usize
+    }
+    pub fn bytes_per_channel(&self) -> usize {
+        ((*self as u32) & 7) as usize
+    }
+
+    pub fn bytes_per_pixel(&self) -> usize {
+        self.bytes_per_channel() * (self.extra() + self.channels())
+    }
+}
+
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]
@@ -799,10 +839,7 @@ impl Default for ICCViewingConditions {
 
 pub enum _cmsContext_struct { }
 pub type Context = *mut _cmsContext_struct;
-pub type LogErrorHandlerFunction =
-    ::std::option::Option<unsafe extern "C" fn(ContextID: Context,
-                                               ErrorCode: u32,
-                                               Text: *const c_char)>;
+pub type LogErrorHandlerFunction = ::std::option::Option<unsafe extern "C" fn(ContextID: Context, ErrorCode: u32, Text: *const c_char)>;
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]

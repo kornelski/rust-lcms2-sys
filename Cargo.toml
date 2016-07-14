@@ -4,6 +4,11 @@ version = "0.1.0"
 authors = ["Kornel Lesiński <kornel@geekhood.net>"]
 build = "src/build.rs"
 repository="https://github.com/pornel/rust-lcms2-sys.git"
+include = ["src/**/*", "Cargo.toml", "README.md"]
+description = "Bindings for liblcms2 (Little CMS)"
+readme = "README.md"
+license = "MIT"
+keywords = ["icc", "color", "profile", "lcms"]
 
 [dependencies]
 libc = "0.2"

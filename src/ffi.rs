@@ -807,6 +807,22 @@ pub struct CIExyYTRIPLE {
     pub Blue: CIExyY,
 }
 
+// Illuminant types for structs below
+#[derive(Copy, Clone, PartialEq, Eq)]
+#[repr(u32)]
+#[derive(Debug)]
+pub enum IlluminantType {
+    UNKNOWN = 0x0000000,
+    D50 =     0x0000001,
+    D65 =     0x0000002,
+    D93 =     0x0000003,
+    F2 =      0x0000004,
+    D55 =     0x0000005,
+    A =       0x0000006,
+    E =       0x0000007,
+    F8 =      0x0000008,
+}
+
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]
@@ -815,7 +831,7 @@ pub struct ICCMeasurementConditions {
     pub Backing: CIEXYZ,
     pub Geometry: u32,
     pub Flare: f64,
-    pub IlluminantType: u32,
+    pub IlluminantType: IlluminantType,
 }
 impl Default for ICCMeasurementConditions {
     fn default() -> Self { unsafe { mem::zeroed() } }
@@ -827,15 +843,29 @@ impl Default for ICCMeasurementConditions {
 pub struct ICCViewingConditions {
     pub IlluminantXYZ: CIEXYZ,
     pub SurroundXYZ: CIEXYZ,
-    pub IlluminantType: u32,
+    pub IlluminantType: IlluminantType,
 }
 impl Default for ICCViewingConditions {
     fn default() -> Self { unsafe { mem::zeroed() } }
 }
 
+
+#[repr(C)]
+#[derive(Copy, Clone, Eq, PartialEq)]
+#[derive(Debug)]
+pub enum Surround {
+    Avg       = 1,
+    Dim       = 2,
+    Dark      = 3,
+    Cutsheet  = 4,
+}
+
+pub const D_CALCULATE: f64 = -1.;
+
 pub enum _cmsContext_struct { }
 pub type Context = *mut _cmsContext_struct;
 pub type LogErrorHandlerFunction = ::std::option::Option<unsafe extern "C" fn(ContextID: Context, ErrorCode: u32, Text: *const c_char)>;
+
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]
@@ -843,7 +873,7 @@ pub struct ViewingConditions {
     pub whitePoint: CIEXYZ,
     pub Yb: f64,
     pub La: f64,
-    pub surround: c_int,
+    pub surround: Surround,
     pub D_value: f64,
 }
 impl Default for ViewingConditions {
@@ -868,6 +898,7 @@ impl Default for CurveSegment {
 pub enum ToneCurve { }
 pub enum Pipeline { }
 pub enum Stage { }
+
 #[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]
 #[derive(Debug)]
@@ -888,17 +919,36 @@ pub struct UcrBg {
     pub Desc: *mut MLU,
 }
 
+pub const PRINTER_DEFAULT_SCREENS: u32 =     0x0001;
+pub const FREQUENCE_UNITS_LINES_CM: u32 =    0x0000;
+pub const FREQUENCE_UNITS_LINES_INCH: u32 =  0x0002;
+
+#[repr(C)]
+#[derive(Copy, Clone)]
+#[derive(Debug)]
+pub enum SpotShape {
+    UNKNOWN         = 0,
+    PRINTER_DEFAULT = 1,
+    ROUND           = 2,
+    DIAMOND         = 3,
+    ELLIPSE         = 4,
+    LINE            = 5,
+    SQUARE          = 6,
+    CROSS           = 7,
+}
+
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]
 pub struct ScreeningChannel {
     pub Frequency: f64,
     pub ScreenAngle: f64,
-    pub SpotShape: u32,
+    pub SpotShape: SpotShape,
 }
 impl Default for ScreeningChannel {
     fn default() -> Self { unsafe { mem::zeroed() } }
 }
+
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]
@@ -934,6 +984,11 @@ pub struct SEQ {
     pub ContextID: Context,
     pub seq: *mut PSEQDESC,
 }
+
+pub const EmbeddedProfileFalse: u32 =    0x00000000;
+pub const EmbeddedProfileTrue: u32 =     0x00000001;
+pub const UseAnywhere: u32 =             0x00000000;
+pub const UseWithEmbeddedDataOnly: u32 = 0x00000002;
 
 #[repr(C)]
 #[derive(Copy, Clone)]

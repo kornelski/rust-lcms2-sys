@@ -1,6 +1,6 @@
 [package]
 name = "lcms2-sys"
-version = "0.4.0"
+version = "0.5.0"
 authors = ["Kornel Lesiński <kornel@geekhood.net>"]
 build = "src/build.rs"
 repository="https://github.com/pornel/rust-lcms2-sys.git"

@@ -25,25 +25,6 @@ pub const PERCEPTUAL_BLACK_X: f64 = 0.00336;
 pub const PERCEPTUAL_BLACK_Y: f64 = 0.0034731;
 pub const PERCEPTUAL_BLACK_Z: f64 = 0.00287;
 
-#[derive(Copy, Clone, PartialEq, Eq)]
-#[repr(u32)]
-#[derive(Debug)]
-pub enum Intent {
-    // ICC Intents
-    Perceptual = 0,
-    RelativeColorimetric = 1,
-    Saturation = 2,
-    AbsoluteColorimetric = 3,
-
-    // non-icc intents
-    PreserveKOnlyPerceptual = 10,
-    PreserveKOnlyRelativeColorimetric = 11,
-    PreserveKOnlySaturation = 12,
-    PreserveKPlanePerceptual = 13,
-    PreserveKPlaneRelativeColorimetric = 14,
-    PreserveKPlaneSaturation = 15,
-}
-
 // Definitions in ICC spec
 pub const MagicNumber: Signature = 0x61637370; // 'acsp'
 pub const lcmsSignature: Signature = 0x6c636d73; // 'lcms'
@@ -949,6 +930,61 @@ pub enum InfoType {
 }
 pub enum IOHANDLER { }
 
+
+#[derive(Copy, Clone, PartialEq, Eq)]
+#[repr(u32)]
+#[derive(Debug)]
+pub enum Intent {
+    // ICC Intents
+    Perceptual = 0,
+    RelativeColorimetric = 1,
+    Saturation = 2,
+    AbsoluteColorimetric = 3,
+
+    // non-icc intents
+    PreserveKOnlyPerceptual = 10,
+    PreserveKOnlyRelativeColorimetric = 11,
+    PreserveKOnlySaturation = 12,
+    PreserveKPlanePerceptual = 13,
+    PreserveKPlaneRelativeColorimetric = 14,
+    PreserveKPlaneSaturation = 15,
+}
+
+// Flags
+
+pub const FLAGS_NOCACHE: u32 =                  0x0040;    // Inhibit 1-pixel cache
+pub const FLAGS_NOOPTIMIZE: u32 =               0x0100;    // Inhibit optimizations
+pub const FLAGS_NULLTRANSFORM: u32 =            0x0200;    // Don't transform anyway
+
+// Proofing flags
+pub const FLAGS_GAMUTCHECK: u32 =               0x1000;    // Out of Gamut alarm
+pub const FLAGS_SOFTPROOFING: u32 =             0x4000;    // Do softproofing
+
+// Misc
+pub const FLAGS_BLACKPOINTCOMPENSATION: u32 =   0x2000;
+pub const FLAGS_NOWHITEONWHITEFIXUP: u32 =      0x0004;    // Don't fix scum dot
+pub const FLAGS_HIGHRESPRECALC: u32 =           0x0400;    // Use more memory to give better accurancy
+pub const FLAGS_LOWRESPRECALC: u32 =            0x0800;    // Use less memory to minimize resouces
+
+// For devicelink creation
+pub const FLAGS_8BITS_DEVICELINK: u32 =         0x0008;   // Create 8 bits devicelinks
+pub const FLAGS_GUESSDEVICECLASS: u32 =         0x0020;   // Guess device class (for transform2devicelink)
+pub const FLAGS_KEEP_SEQUENCE: u32 =            0x0080;   // Keep profile sequence for devicelink creation
+
+// Specific to a particular optimizations
+pub const FLAGS_FORCE_CLUT: u32 =               0x0002;    // Force CLUT optimization
+pub const FLAGS_CLUT_POST_LINEARIZATION: u32 =  0x0001;    // create postlinearization tables if possible
+pub const FLAGS_CLUT_PRE_LINEARIZATION: u32 =   0x0010;    // create prelinearization tables if possible
+
+// Specific to unbounded mode
+pub const FLAGS_NONEGATIVES: u32 =              0x8000;    // Prevent negative numbers in floating point transforms
+
+// Fine-tune control over number of gridpoints
+pub fn FLAGS_GRIDPOINTS(n: u32) -> u32 { ((n) & 0xFF) << 16 }
+
+// CRD special
+pub const FLAGS_NODEFAULTRESOURCEDEF: u32 =     0x01000000;
+
 impl CIEXYZ {
     pub fn d50() -> &'static CIEXYZ {
         unsafe { cmsD50_XYZ() }
@@ -1008,6 +1044,7 @@ pub enum PSResourceType {
     PS_RESOURCE_CSA = 0,
     PS_RESOURCE_CRD = 1,
 }
+
 extern "C" {
     pub fn cmsGetEncodedCMMversion() -> c_int;
     pub fn cmsstrcasecmp(s1: *const c_char, s2: *const c_char) -> c_int;

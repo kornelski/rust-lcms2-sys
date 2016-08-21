@@ -33,9 +33,10 @@
 use std::os::raw::{c_char, c_int, c_long, c_void};
 use libc;
 use std::mem;
-use libc::{tm, FILE};
+use libc::FILE;
 use std::default::Default;
 
+pub type tm = libc::tm;
 pub type wchar_t = libc::wchar_t;
 pub type Signature = u32;
 pub type S15Fixed16Number = i32;

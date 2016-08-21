@@ -173,7 +173,8 @@ pub enum TagSignature {
     SigViewingCondDescTag                = 0x76756564,  // 'vued'
     SigViewingConditionsTag              = 0x76696577,  // 'view'
     SigVcgtTag                           = 0x76636774,  // 'vcgt'
-    SigMetaTag                           = 0x6D657461   // 'meta'
+    SigMetaTag                           = 0x6D657461,  // 'meta'
+    SigArgyllArtsTag                     = 0x61727473,  // 'arts'
 }
 pub use self::TagSignature::*;
 
@@ -1062,6 +1063,8 @@ pub const FLAGS_CLUT_PRE_LINEARIZATION: u32 =   0x0010;    // create prelineariz
 // Specific to unbounded mode
 pub const FLAGS_NONEGATIVES: u32 =              0x8000;    // Prevent negative numbers in floating point transforms
 
+pub const FLAGS_COPY_ALPHA: u32 =           0x04000000;    // Alpha channels are copied on cmsDoTransform()
+
 // Fine-tune control over number of gridpoints
 pub fn FLAGS_GRIDPOINTS(n: u32) -> u32 { ((n) & 0xFF) << 16 }
 
@@ -1385,6 +1388,15 @@ extern "C" {
     pub fn cmsDeleteTransform(hTransform: HTRANSFORM);
     pub fn cmsDoTransform(Transform: HTRANSFORM, InputBuffer: *const c_void, OutputBuffer: *mut c_void, Size: u32);
     pub fn cmsDoTransformStride(Transform: HTRANSFORM, InputBuffer: *const c_void, OutputBuffer: *mut c_void, Size: u32, Stride: u32);
+    pub fn cmsDoTransformLineStride(Transform: HTRANSFORM,
+                                    InputBuffer: *const c_void,
+                                    OutputBuffer: *mut c_void,
+                                    PixelsPerLine: u32,
+                                    LineCount: u32,
+                                    BytesPerLineIn: u32,
+                                    BytesPerLineOut: u32,
+                                    BytesPerPlaneIn: u32,
+                                    BytesPerPlaneOut: u32);
     pub fn cmsSetAlarmCodes(NewAlarm: *mut u16);
     pub fn cmsGetAlarmCodes(NewAlarm: *mut u16);
     pub fn cmsSetAlarmCodesTHR(ContextID: Context, AlarmCodes: *mut u16);

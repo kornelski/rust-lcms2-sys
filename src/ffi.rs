@@ -1153,11 +1153,11 @@ extern "C" {
     pub fn cmsLab2XYZ(WhitePoint: *const CIEXYZ, xyz: *mut CIEXYZ, Lab: *const CIELab);
     pub fn cmsLab2LCh(LCh: *mut CIELCh, Lab: *const CIELab);
     pub fn cmsLCh2Lab(Lab: *mut CIELab, LCh: *const CIELCh);
-    pub fn cmsLabEncoded2Float(Lab: *mut CIELab, wLab: *mut u16);
-    pub fn cmsLabEncoded2FloatV2(Lab: *mut CIELab, wLab: *mut u16);
+    pub fn cmsLabEncoded2Float(Lab: *mut CIELab, wLab: *const u16);
+    pub fn cmsLabEncoded2FloatV2(Lab: *mut CIELab, wLab: *const u16);
     pub fn cmsFloat2LabEncoded(wLab: *mut u16, Lab: *const CIELab);
     pub fn cmsFloat2LabEncodedV2(wLab: *mut u16, Lab: *const CIELab);
-    pub fn cmsXYZEncoded2Float(fxyz: *mut CIEXYZ, XYZ: *mut u16);
+    pub fn cmsXYZEncoded2Float(fxyz: *mut CIEXYZ, XYZ: *const u16);
     pub fn cmsFloat2XYZEncoded(XYZ: *mut u16, fXYZ: *const CIEXYZ);
     pub fn cmsDeltaE(Lab1: *const CIELab, Lab2: *const CIELab) -> f64;
     pub fn cmsCIE94DeltaE(Lab1: *const CIELab, Lab2: *const CIELab) -> f64;
@@ -1171,8 +1171,8 @@ extern "C" {
     pub fn cmsCIECAM02Done(hModel: HANDLE);
     pub fn cmsCIECAM02Forward(hModel: HANDLE, pIn: *const CIEXYZ, pOut: *mut JCh);
     pub fn cmsCIECAM02Reverse(hModel: HANDLE, pIn: *const JCh, pOut: *mut CIEXYZ);
-    pub fn cmsBuildSegmentedToneCurve(ContextID: Context, nSegments: i32, Segments: *mut CurveSegment) -> *mut ToneCurve;
-    pub fn cmsBuildParametricToneCurve(ContextID: Context, Type: i32, Params: *mut f64) -> *mut ToneCurve;
+    pub fn cmsBuildSegmentedToneCurve(ContextID: Context, nSegments: i32, Segments: *const CurveSegment) -> *mut ToneCurve;
+    pub fn cmsBuildParametricToneCurve(ContextID: Context, Type: i32, Params: *const f64) -> *mut ToneCurve;
     pub fn cmsBuildGamma(ContextID: Context, Gamma: f64) -> *mut ToneCurve;
     pub fn cmsBuildTabulatedToneCurve16(ContextID: Context, nEntries: i32, values: *const u16) -> *mut ToneCurve;
     pub fn cmsBuildTabulatedToneCurveFloat(ContextID: Context, nEntries: u32, values: *const f32) -> *mut ToneCurve;
@@ -1202,8 +1202,8 @@ extern "C" {
     pub fn cmsPipelineStageCount(lut: *const Pipeline) -> u32;
     pub fn cmsPipelineGetPtrToFirstStage(lut: *const Pipeline) -> *mut Stage;
     pub fn cmsPipelineGetPtrToLastStage(lut: *const Pipeline) -> *mut Stage;
-    pub fn cmsPipelineEval16(In: *mut u16, Out: *mut u16, lut: *const Pipeline);
-    pub fn cmsPipelineEvalFloat(In: *mut f32, Out: *mut f32, lut: *const Pipeline);
+    pub fn cmsPipelineEval16(In: *const u16, Out: *mut u16, lut: *const Pipeline);
+    pub fn cmsPipelineEvalFloat(In: *const f32, Out: *mut f32, lut: *const Pipeline);
     pub fn cmsPipelineEvalReverseFloat(Target: *mut f32, Result: *mut f32, Hint: *mut f32, lut: *const Pipeline) -> Bool;
     pub fn cmsPipelineCat(l1: *mut Pipeline, l2: *const Pipeline) -> Bool;
     pub fn cmsPipelineSetSaveAs8bitsFlag(lut: *mut Pipeline, On: Bool) -> Bool;
@@ -1211,12 +1211,12 @@ extern "C" {
     pub fn cmsPipelineUnlinkStage(lut: *mut Pipeline, loc: StageLoc, mpe: *mut *mut Stage);
     pub fn cmsPipelineCheckAndRetreiveStages(Lut: *const Pipeline, n: u32, ...) -> Bool;
     pub fn cmsStageAllocIdentity(ContextID: Context, nChannels: u32) -> *mut Stage;
-    pub fn cmsStageAllocToneCurves(ContextID: Context, nChannels: u32, Curves: *mut *mut ToneCurve) -> *mut Stage;
+    pub fn cmsStageAllocToneCurves(ContextID: Context, nChannels: u32, Curves: *const *const ToneCurve) -> *mut Stage;
     pub fn cmsStageAllocMatrix(ContextID: Context, Rows: u32, Cols: u32, Matrix: *const f64, Offset: *const f64) -> *mut Stage;
     pub fn cmsStageAllocCLut16bit(ContextID: Context, nGridPoints: u32, inputChan: u32, outputChan: u32, Table: *const u16) -> *mut Stage;
     pub fn cmsStageAllocCLutFloat(ContextID: Context, nGridPoints: u32, inputChan: u32, outputChan: u32, Table: *const f32) -> *mut Stage;
-    pub fn cmsStageAllocCLut16bitGranular(ContextID: Context, clutPoints: *mut u32, inputChan: u32, outputChan: u32, Table: *const u16) -> *mut Stage;
-    pub fn cmsStageAllocCLutFloatGranular(ContextID: Context, clutPoints: *mut u32, inputChan: u32, outputChan: u32, Table: *const f32) -> *mut Stage;
+    pub fn cmsStageAllocCLut16bitGranular(ContextID: Context, clutPoints: *const u32, inputChan: u32, outputChan: u32, Table: *const u16) -> *mut Stage;
+    pub fn cmsStageAllocCLutFloatGranular(ContextID: Context, clutPoints: *const u32, inputChan: u32, outputChan: u32, Table: *const f32) -> *mut Stage;
     pub fn cmsStageDup(mpe: *mut Stage) -> *mut Stage;
     pub fn cmsStageFree(mpe: *mut Stage);
     pub fn cmsStageNext(mpe: *const Stage) -> *mut Stage;
@@ -1226,16 +1226,16 @@ extern "C" {
     pub fn cmsStageData(mpe: *const Stage) -> *mut c_void;
     pub fn cmsStageSampleCLut16bit(mpe: *mut Stage, Sampler: SAMPLER16, Cargo: *mut c_void, dwFlags: u32) -> Bool;
     pub fn cmsStageSampleCLutFloat(mpe: *mut Stage, Sampler: SAMPLERFLOAT, Cargo: *mut c_void, dwFlags: u32) -> Bool;
-    pub fn cmsSliceSpace16(nInputs: u32, clutPoints: *mut u32, Sampler: SAMPLER16, Cargo: *mut c_void) -> Bool;
-    pub fn cmsSliceSpaceFloat(nInputs: u32, clutPoints: *mut u32, Sampler: SAMPLERFLOAT, Cargo: *mut c_void) -> Bool;
+    pub fn cmsSliceSpace16(nInputs: u32, clutPoints: *const u32, Sampler: SAMPLER16, Cargo: *mut c_void) -> Bool;
+    pub fn cmsSliceSpaceFloat(nInputs: u32, clutPoints: *const u32, Sampler: SAMPLERFLOAT, Cargo: *mut c_void) -> Bool;
     pub fn cmsMLUalloc(ContextID: Context, nItems: u32) -> *mut MLU;
     pub fn cmsMLUfree(mlu: *mut MLU);
     pub fn cmsMLUdup(mlu: *const MLU) -> *mut MLU;
-    pub fn cmsMLUsetASCII(mlu: *mut MLU, LanguageCode: *mut c_char, CountryCode: *mut c_char, ASCIIString: *const c_char) -> Bool;
-    pub fn cmsMLUsetWide(mlu: *mut MLU, LanguageCode: *mut c_char, CountryCode: *mut c_char, WideString: *const wchar_t) -> Bool;
-    pub fn cmsMLUgetASCII(mlu: *const MLU, LanguageCode: *mut c_char, CountryCode: *mut c_char, Buffer: *mut c_char, BufferSize: u32) -> u32;
-    pub fn cmsMLUgetWide(mlu: *const MLU, LanguageCode: *mut c_char, CountryCode: *mut c_char, Buffer: *mut wchar_t, BufferSize: u32) -> u32;
-    pub fn cmsMLUgetTranslation(mlu: *const MLU, LanguageCode: *mut c_char, CountryCode: *mut c_char, ObtainedLanguage: *mut c_char, ObtainedCountry: *mut c_char) -> Bool;
+    pub fn cmsMLUsetASCII(mlu: *mut MLU, LanguageCode: *const c_char, CountryCode: *const c_char, ASCIIString: *const c_char) -> Bool;
+    pub fn cmsMLUsetWide(mlu: *mut MLU, LanguageCode: *const c_char, CountryCode: *const c_char, WideString: *const wchar_t) -> Bool;
+    pub fn cmsMLUgetASCII(mlu: *const MLU, LanguageCode: *const c_char, CountryCode: *const c_char, Buffer: *mut c_char, BufferSize: u32) -> u32;
+    pub fn cmsMLUgetWide(mlu: *const MLU, LanguageCode: *const c_char, CountryCode: *const c_char, Buffer: *mut wchar_t, BufferSize: u32) -> u32;
+    pub fn cmsMLUgetTranslation(mlu: *const MLU, LanguageCode: *const c_char, CountryCode: *const c_char, ObtainedLanguage: *mut c_char, ObtainedCountry: *mut c_char) -> Bool;
     pub fn cmsMLUtranslationsCount(mlu: *const MLU) -> u32;
     pub fn cmsMLUtranslationsCodes(mlu: *const MLU, idx: u32, LanguageCode: *mut c_char, CountryCode: *mut c_char) -> Bool;
     pub fn cmsAllocNamedColorList(ContextID: Context, n: u32, ColorantCount: u32, Prefix: *const c_char, Suffix: *const c_char) -> *mut NAMEDCOLORLIST;
@@ -1397,9 +1397,9 @@ extern "C" {
                                     BytesPerLineOut: u32,
                                     BytesPerPlaneIn: u32,
                                     BytesPerPlaneOut: u32);
-    pub fn cmsSetAlarmCodes(NewAlarm: *mut u16);
+    pub fn cmsSetAlarmCodes(NewAlarm: *const u16);
     pub fn cmsGetAlarmCodes(NewAlarm: *mut u16);
-    pub fn cmsSetAlarmCodesTHR(ContextID: Context, AlarmCodes: *mut u16);
+    pub fn cmsSetAlarmCodesTHR(ContextID: Context, AlarmCodes: *const u16);
     pub fn cmsGetAlarmCodesTHR(ContextID: Context, AlarmCodes: *mut u16);
     pub fn cmsSetAdaptationState(d: f64) -> f64;
     pub fn cmsSetAdaptationStateTHR(ContextID: Context, d: f64) -> f64;
@@ -1415,7 +1415,7 @@ extern "C" {
     pub fn cmsIT8TableCount(hIT8: HANDLE) -> u32;
     pub fn cmsIT8SetTable(hIT8: HANDLE, nTable: u32) -> i32;
     pub fn cmsIT8LoadFromFile(ContextID: Context, cFileName: *const c_char) -> HANDLE;
-    pub fn cmsIT8LoadFromMem(ContextID: Context, Ptr: *mut c_void, len: u32) -> HANDLE;
+    pub fn cmsIT8LoadFromMem(ContextID: Context, Ptr: *const c_void, len: u32) -> HANDLE;
     pub fn cmsIT8SaveToFile(hIT8: HANDLE, cFileName: *const c_char) -> Bool;
     pub fn cmsIT8SaveToMem(hIT8: HANDLE, MemPtr: *mut c_void, BytesNeeded: *mut u32) -> Bool;
     pub fn cmsIT8GetSheetType(hIT8: HANDLE) -> *const c_char;

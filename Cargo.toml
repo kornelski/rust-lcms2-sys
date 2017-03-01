@@ -1,6 +1,6 @@
 [package]
 name = "lcms2-sys"
-version = "1.0.0"
+version = "1.0.1"
 authors = ["Kornel Lesiński <kornel@geekhood.net>"]
 build = "src/build.rs"
 repository="https://github.com/pornel/rust-lcms2-sys.git"
@@ -9,6 +9,7 @@ description = "Bindings for liblcms2 (Little CMS)"
 readme = "README.md"
 license = "MIT"
 keywords = ["icc", "color", "profile", "lcms", "sys"]
+categories = ["multimedia::images", "external-ffi-bindings" ]
 
 [lib]
 doctest = false

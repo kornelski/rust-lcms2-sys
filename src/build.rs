@@ -12,11 +12,10 @@ fn main() {
     }
 
     if let Ok(info) = pkg_config::find_library("lcms2") {
-        if info.include_paths.len() > 0 {
-            let paths = env::join_paths(info.include_paths).unwrap();
-            println!("cargo:include={}", paths.to_str().unwrap());
+        for path in info.include_paths {
+            println!("cargo:include={}", path.display());
         }
+    } else {
+        println!("cargo:rustc-link-lib=lcms2");
     }
-
-    println!("cargo:rustc-link-lib=lcms2");
 }

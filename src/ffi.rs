@@ -77,7 +77,7 @@ pub enum TagTypeSignature {
     SigMeasurementType                   = 0x6D656173,  // 'meas'
     SigMultiLocalizedUnicodeType         = 0x6D6C7563,  // 'mluc'
     SigMultiProcessElementType           = 0x6D706574,  // 'mpet'
-    SigNamedColorType                    = 0x6E636f6C,  // 'ncol' -- DEPRECATED!
+    SigNamedColorType                    = 0x6E636F6C,  // 'ncol' -- DEPRECATED!
     SigNamedColor2Type                   = 0x6E636C32,  // 'ncl2'
     SigParametricCurveType               = 0x70617261,  // 'para'
     SigProfileSequenceDescType           = 0x70736571,  // 'pseq'
@@ -142,11 +142,11 @@ pub enum TagSignature {
     SigGrayTRCTag                        = 0x6b545243,  // 'kTRC'
     SigGreenColorantTag                  = 0x6758595A,  // 'gXYZ'
     SigGreenTRCTag                       = 0x67545243,  // 'gTRC'
-    SigLuminanceTag                      = 0x6C756d69,  // 'lumi'
+    SigLuminanceTag                      = 0x6C756D69,  // 'lumi'
     SigMeasurementTag                    = 0x6D656173,  // 'meas'
     SigMediaBlackPointTag                = 0x626B7074,  // 'bkpt'
     SigMediaWhitePointTag                = 0x77747074,  // 'wtpt'
-    SigNamedColorTag                     = 0x6E636f6C,  // 'ncol' // Deprecated by the ICC
+    SigNamedColorTag                     = 0x6E636F6C,  // 'ncol' // Deprecated by the ICC
     SigNamedColor2Tag                    = 0x6E636C32,  // 'ncl2'
     SigOutputResponseTag                 = 0x72657370,  // 'resp'
     SigPerceptualRenderingIntentGamutTag = 0x72696730,  // 'rig0'
@@ -154,7 +154,7 @@ pub enum TagSignature {
     SigPreview1Tag                       = 0x70726531,  // 'pre1'
     SigPreview2Tag                       = 0x70726532,  // 'pre2'
     SigProfileDescriptionTag             = 0x64657363,  // 'desc'
-    SigProfileDescriptionMLTag           = 0x6473636d,  // 'dscm'
+    SigProfileDescriptionMLTag           = 0x6473636D,  // 'dscm'
     SigProfileSequenceDescTag            = 0x70736571,  // 'pseq'
     SigProfileSequenceIdTag              = 0x70736964,  // 'psid'
     SigPs2CRD0Tag                        = 0x70736430,  // 'psd0'

@@ -394,22 +394,7 @@ impl Default for EncodedXYZNumber {
 #[derive(Copy, Clone, PartialEq, Eq)]
 #[derive(Debug)]
 pub struct ProfileID {
-    pub _bindgen_data_: [u32; 4],
-}
-
-impl ProfileID {
-    pub unsafe fn ID8(&mut self) -> *mut [u8; 16] {
-        let raw: *mut u8 = mem::transmute(&self._bindgen_data_);
-        mem::transmute(raw.offset(0))
-    }
-    pub unsafe fn ID16(&mut self) -> *mut [u16; 8] {
-        let raw: *mut u8 = mem::transmute(&self._bindgen_data_);
-        mem::transmute(raw.offset(0))
-    }
-    pub unsafe fn ID32(&mut self) -> *mut [u32; 4] {
-        let raw: *mut u8 = mem::transmute(&self._bindgen_data_);
-        mem::transmute(raw.offset(0))
-    }
+    pub ID32: [u32; 4],
 }
 
 impl Default for ProfileID {

@@ -3,6 +3,7 @@ name = "lcms2-sys"
 version = "1.0.2"
 authors = ["Kornel Lesiński <kornel@geekhood.net>"]
 build = "src/build.rs"
+links = "lcms2"
 repository="https://github.com/pornel/rust-lcms2-sys.git"
 include = ["src/**/*", "Cargo.toml", "README.md"]
 description = "Bindings for liblcms2 (Little CMS)"

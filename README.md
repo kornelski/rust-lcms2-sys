@@ -1,4 +1,4 @@
-#[Little CMS](http://www.littlecms.com) bindings for [Rust](http://www.rust-lang.org/)
+# [Little CMS](http://www.littlecms.com) bindings for [Rust](http://www.rust-lang.org/)
 
 Makes [LCMS C API](https://github.com/mm2/Little-CMS) available in Rust.
 

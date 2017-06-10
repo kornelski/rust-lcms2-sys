@@ -1,6 +1,9 @@
+//! See [LCMS documentation](https://pornel.github.io/rust-lcms2-sys/) for more information about these functions.
+
 pub mod ffi;
 pub use ffi::*;
 
+#[doc(hidden)]
 extern crate libc;
 
 #[test]

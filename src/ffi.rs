@@ -31,6 +31,7 @@
 // Version 2.7
 
 use std::os::raw::{c_char, c_int, c_long, c_void};
+#[doc(hidden)]
 use libc;
 use std::mem;
 use libc::FILE;

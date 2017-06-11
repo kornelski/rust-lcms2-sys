@@ -1,6 +1,5 @@
 [package]
 name = "lcms2-sys"
-version = "2.0.0"
 authors = ["Kornel Lesiński <kornel@geekhood.net>"]
 build = "src/build.rs"
 links = "lcms2"
@@ -11,6 +10,7 @@ readme = "README.md"
 license = "MIT"
 keywords = ["icc", "color", "profile", "lcms", "sys"]
 categories = ["multimedia::images", "external-ffi-bindings" ]
+version = "2.1.0"
 
 [lib]
 doctest = false

@@ -363,7 +363,7 @@ impl Default for ICCData {
 }
 
 #[repr(C)]
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq, Eq)]
 #[derive(Debug)]
 pub struct DateTimeNumber {
     pub year: u16,
@@ -379,7 +379,7 @@ impl Default for DateTimeNumber {
 }
 
 #[repr(C)]
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq, Eq)]
 #[derive(Debug)]
 pub struct EncodedXYZNumber {
     pub X: S15Fixed16Number,
@@ -441,7 +441,7 @@ impl Default for TagBase {
 }
 
 #[repr(C)]
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq)]
 #[derive(Debug)]
 pub struct TagEntry {
     pub sig: TagSignature,
@@ -718,7 +718,7 @@ impl PixelFormat {
 }
 
 #[repr(C)]
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq)]
 #[derive(Debug)]
 pub struct CIEXYZ {
     pub X: f64,
@@ -730,7 +730,7 @@ impl Default for CIEXYZ {
 }
 
 #[repr(C)]
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq)]
 #[derive(Debug)]
 pub struct CIExyY {
     pub x: f64,
@@ -742,7 +742,7 @@ impl Default for CIExyY {
 }
 
 #[repr(C)]
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq)]
 #[derive(Debug)]
 pub struct CIELab {
     pub L: f64,
@@ -754,7 +754,7 @@ impl Default for CIELab {
 }
 
 #[repr(C)]
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq)]
 #[derive(Debug)]
 pub struct CIELCh {
     pub L: f64,
@@ -766,7 +766,7 @@ impl Default for CIELCh {
 }
 
 #[repr(C)]
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq)]
 #[derive(Debug)]
 pub struct JCh {
     pub J: f64,
@@ -778,7 +778,7 @@ impl Default for JCh {
 }
 
 #[repr(C)]
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq)]
 #[derive(Debug)]
 pub struct CIEXYZTRIPLE {
     pub Red: CIEXYZ,
@@ -787,7 +787,7 @@ pub struct CIEXYZTRIPLE {
 }
 
 #[repr(C)]
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq)]
 #[derive(Debug)]
 pub struct CIExyYTRIPLE {
     pub Red: CIExyY,

@@ -2,4 +2,9 @@
 
 Makes [LCMS C API](https://github.com/mm2/Little-CMS) available in Rust. There's also a [higher-level wrapper](https://github.com/pornel/rust-lcms2).
 
-All function names and arguments are the same. Constant/struct/enum names don't have the `cms` prefix (because Rust has namespacing already!
+## Differences from C
+
+    * Type names don't have the `cms` prefix, e.g. `cmsColorSpace` is `ColorSpace`.
+        * All C function names remained the same (with the prefix, e.g. `fn cmsReadTag()`).
+    * Enum values don't have the `cmsSig` prefix, e.g. `cmsSigLabData` is `LabData`.
+    * Some arguments use more specific type, e.g. `Intent::Perceptual` enum instead of `INTENT_PERCEPTUAL` integer.

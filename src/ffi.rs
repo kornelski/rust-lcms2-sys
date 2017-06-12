@@ -26,7 +26,7 @@
 //!
 //!---------------------------------------------------------------------------------
 //!
-//! Version 2.7
+//! Version 2.8
 
 use std::os::raw::{c_char, c_int, c_long, c_void};
 #[doc(hidden)]
@@ -1113,6 +1113,8 @@ pub enum Surround {
 pub const D_CALCULATE: f64 = -1.;
 
 pub enum _cmsContext_struct { }
+// Each context holds its owns globals and its own plug-ins. There is a global context with the id = 0 for lecacy compatibility
+// though using the global context is not recommended. Proper context handling makes lcms more thread-safe.
 pub type Context = *mut _cmsContext_struct;
 pub type LogErrorHandlerFunction = ::std::option::Option<unsafe extern "C" fn(ContextID: Context, ErrorCode: u32, Text: *const c_char)>;
 
@@ -1133,7 +1135,9 @@ impl Default for ViewingConditions {
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]
-/// This describes a curve segment. For a table of supported types, see the manual. User can increase the number of
+/// This describes a curve segment.
+///
+/// For a table of supported types, see the manual. User can increase the number of
 /// available types by using a proper plug-in. Parametric segments allow 10 parameters at most
 pub struct CurveSegment {
     pub x0: f32,
@@ -1218,7 +1222,9 @@ pub enum NAMEDCOLORLIST { }
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]
-/// Profile sequence descriptor. Some fields come from profile sequence descriptor tag, others
+/// Profile sequence descriptor.
+///
+/// Some fields come from profile sequence descriptor tag, others
 /// come from Profile Sequence Identifier Tag
 pub struct PSEQDESC {
     pub deviceMfg: Signature,
@@ -1308,7 +1314,7 @@ pub const FLAGS_BLACKPOINTCOMPENSATION: u32 =   0x2000;
 pub const FLAGS_NOWHITEONWHITEFIXUP: u32 =      0x0004;
 /// Use more memory to give better accurancy
 pub const FLAGS_HIGHRESPRECALC: u32 =           0x0400;
-/// Use less memory to minimize resouces
+/// Use less memory to minimize resources
 pub const FLAGS_LOWRESPRECALC: u32 =            0x0800;
 
 /// For devicelink creation
@@ -1479,7 +1485,9 @@ extern "C" {
     pub fn cmsPipelineInsertStage(lut: *mut Pipeline, loc: StageLoc, mpe: *mut Stage) -> c_int;
     pub fn cmsPipelineUnlinkStage(lut: *mut Pipeline, loc: StageLoc, mpe: *mut *mut Stage);
     /// This function is quite useful to analyze the structure of a Pipeline and retrieve the Stage elements
-    /// that conform the Pipeline. It should be called with the Pipeline, the number of expected elements and
+    /// that conform the Pipeline.
+    ///
+    /// It should be called with the Pipeline, the number of expected elements and
     /// then a list of expected types followed with a list of double pointers to Stage elements. If
     /// the function founds a match with current pipeline, it fills the pointers and returns TRUE
     /// if not, returns FALSE without touching anything.
@@ -1661,6 +1669,7 @@ extern "C" {
                                       -> HTRANSFORM;
     pub fn cmsDeleteTransform(hTransform: HTRANSFORM);
     pub fn cmsDoTransform(Transform: HTRANSFORM, InputBuffer: *const c_void, OutputBuffer: *mut c_void, Size: u32);
+    /// Deprecated
     pub fn cmsDoTransformStride(Transform: HTRANSFORM, InputBuffer: *const c_void, OutputBuffer: *mut c_void, Size: u32, Stride: u32);
     pub fn cmsDoTransformLineStride(Transform: HTRANSFORM,
                                     InputBuffer: *const c_void,

@@ -10,7 +10,7 @@ readme = "README.md"
 license = "MIT"
 keywords = ["icc", "color", "profile", "lcms", "sys"]
 categories = ["multimedia::images", "external-ffi-bindings" ]
-version = "2.1.1"
+version = "2.2.0"
 
 [lib]
 doctest = false

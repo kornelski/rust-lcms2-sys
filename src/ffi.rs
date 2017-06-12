@@ -58,7 +58,7 @@ pub const MagicNumber: Signature = 0x61637370;
 /// 'lcms'
 pub const lcmsSignature: Signature = 0x6c636d73;
 
-#[derive(Copy, Clone, PartialEq, Eq)]
+#[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum TagTypeSignature {
@@ -140,7 +140,7 @@ pub const BlueMatrixColumnTag: TagSignature = TagSignature::BlueColorantTag;
 pub const GreenMatrixColumnTag: TagSignature = TagSignature::GreenColorantTag;
 pub const RedMatrixColumnTag: TagSignature = TagSignature::RedColorantTag;
 
-#[derive(Copy, Clone, PartialEq, Eq)]
+#[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum TagSignature {
@@ -283,7 +283,7 @@ pub enum TagSignature {
 }
 pub use self::TagSignature::*;
 
-#[derive(Copy, Clone, PartialEq, Eq)]
+#[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum TechnologySignature {
@@ -341,7 +341,7 @@ pub enum TechnologySignature {
     DigitalCinemaProjector            = 0x64636A70
 }
 
-#[derive(Copy, Clone, PartialEq, Eq)]
+#[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum ColorSpaceSignature {
@@ -433,7 +433,7 @@ pub enum ColorSpaceSignature {
     LuvKData                          = 0x4C75764B
 }
 
-#[derive(Copy, Clone, PartialEq, Eq)]
+#[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum ProfileClassSignature {
@@ -453,7 +453,7 @@ pub enum ProfileClassSignature {
     NamedColorClass                   = 0x6e6d636c
 }
 
-#[derive(Copy, Clone, PartialEq, Eq)]
+#[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum PlatformSignature {
@@ -486,7 +486,7 @@ pub const ReflectionHardcopyOriginalColorimetry:u32 =  0x72686F63;
 ///'rpoc'
 pub const ReflectionPrintOutputColorimetry:u32 =       0x72706F63;
 
-#[derive(Copy, Clone, PartialEq, Eq)]
+#[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum StageSignature {
@@ -531,7 +531,7 @@ pub enum StageSignature {
     ClipNegativesElemType         = 0x636c7020
 }
 
-#[derive(Copy, Clone, PartialEq, Eq)]
+#[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum CurveSegSignature {
@@ -612,7 +612,7 @@ impl Default for EncodedXYZNumber {
 }
 
 #[repr(C)]
-#[derive(Copy, Clone, PartialEq, Eq)]
+#[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[derive(Debug)]
 /// Profile ID as computed by MD5 algorithm
 pub struct ProfileID {
@@ -1058,7 +1058,7 @@ pub struct CIExyYTRIPLE {
 }
 
 /// Illuminant types for structs below
-#[derive(Copy, Clone, PartialEq, Eq)]
+#[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum IlluminantType {
@@ -1262,7 +1262,7 @@ pub struct DICTentry {
     pub Value: *mut wchar_t,
 }
 
-#[derive(Copy, Clone, PartialEq, Eq)]
+#[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum InfoType {
@@ -1274,7 +1274,7 @@ pub enum InfoType {
 pub enum IOHANDLER { }
 
 
-#[derive(Copy, Clone, PartialEq, Eq)]
+#[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum Intent {

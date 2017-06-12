@@ -3,32 +3,30 @@
          non_upper_case_globals,
          non_snake_case)]
 
-// Based on:
-//
-//  Little Color Management System
-//  Copyright (c) 1998-2014 Marti Maria Saguer
-//
-// Permission is hereby granted, free of charge, to any person obtaining
-// a copy of this software and associated documentation files (the "Software"),
-// to deal in the Software without restriction, including without limitation
-// the rights to use, copy, modify, merge, publish, distribute, sublicense,
-// and/or sell copies of the Software, and to permit persons to whom the Software
-// is furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-//---------------------------------------------------------------------------------
-//
-// Version 2.7
+//!  Little Color Management System
+//!  Copyright (c) 1998-2014 Marti Maria Saguer
+//!
+//! Permission is hereby granted, free of charge, to any person obtaining
+//! a copy of this software and associated documentation files (the "Software"),
+//! to deal in the Software without restriction, including without limitation
+//! the rights to use, copy, modify, merge, publish, distribute, sublicense,
+//! and/or sell copies of the Software, and to permit persons to whom the Software
+//! is furnished to do so, subject to the following conditions:
+//!
+//! The above copyright notice and this permission notice shall be included in
+//! all copies or substantial portions of the Software.
+//!
+//! THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+//! EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+//! THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+//! NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+//! LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+//! OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+//! WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//!
+//!---------------------------------------------------------------------------------
+//!
+//! Version 2.7
 
 use std::os::raw::{c_char, c_int, c_long, c_void};
 #[doc(hidden)]
@@ -44,60 +42,98 @@ pub type S15Fixed16Number = i32;
 pub type Bool = c_int;
 
 
-// D50 XYZ normalized to Y=1.0
+/// D50 XYZ normalized to Y=1.0
 pub const D50X: f64 = 0.9642;
 pub const D50Y: f64 = 1.0;
 pub const D50Z: f64 = 0.8249;
 
-// V4 perceptual black
+/// V4 perceptual black
 pub const PERCEPTUAL_BLACK_X: f64 = 0.00336;
 pub const PERCEPTUAL_BLACK_Y: f64 = 0.0034731;
 pub const PERCEPTUAL_BLACK_Z: f64 = 0.00287;
 
-// Definitions in ICC spec
-pub const MagicNumber: Signature = 0x61637370; // 'acsp'
-pub const lcmsSignature: Signature = 0x6c636d73; // 'lcms'
+/// Definitions in ICC spec
+/// 'acsp'
+pub const MagicNumber: Signature = 0x61637370;
+/// 'lcms'
+pub const lcmsSignature: Signature = 0x6c636d73;
 
 #[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum TagTypeSignature {
-    ChromaticityType                  = 0x6368726D,  // 'chrm'
-    ColorantOrderType                 = 0x636C726F,  // 'clro'
-    ColorantTableType                 = 0x636C7274,  // 'clrt'
-    CrdInfoType                       = 0x63726469,  // 'crdi'
-    CurveType                         = 0x63757276,  // 'curv'
-    DataType                          = 0x64617461,  // 'data'
-    DictType                          = 0x64696374,  // 'dict'
-    DateTimeType                      = 0x6474696D,  // 'dtim'
-    DeviceSettingsType                = 0x64657673,  // 'devs'
-    Lut16Type                         = 0x6d667432,  // 'mft2'
-    Lut8Type                          = 0x6d667431,  // 'mft1'
-    LutAtoBType                       = 0x6d414220,  // 'mAB '
-    LutBtoAType                       = 0x6d424120,  // 'mBA '
-    MeasurementType                   = 0x6D656173,  // 'meas'
-    MultiLocalizedUnicodeType         = 0x6D6C7563,  // 'mluc'
-    MultiProcessElementType           = 0x6D706574,  // 'mpet'
-    NamedColorType                    = 0x6E636F6C,  // 'ncol' -- DEPRECATED!
-    NamedColor2Type                   = 0x6E636C32,  // 'ncl2'
-    ParametricCurveType               = 0x70617261,  // 'para'
-    ProfileSequenceDescType           = 0x70736571,  // 'pseq'
-    ProfileSequenceIdType             = 0x70736964,  // 'psid'
-    ResponseCurveSet16Type            = 0x72637332,  // 'rcs2'
-    S15Fixed16ArrayType               = 0x73663332,  // 'sf32'
-    ScreeningType                     = 0x7363726E,  // 'scrn'
-    SignatureType                     = 0x73696720,  // 'sig '
-    TextType                          = 0x74657874,  // 'text'
-    TextDescriptionType               = 0x64657363,  // 'desc'
-    U16Fixed16ArrayType               = 0x75663332,  // 'uf32'
-    UcrBgType                         = 0x62666420,  // 'bfd '
-    UInt16ArrayType                   = 0x75693136,  // 'ui16'
-    UInt32ArrayType                   = 0x75693332,  // 'ui32'
-    UInt64ArrayType                   = 0x75693634,  // 'ui64'
-    UInt8ArrayType                    = 0x75693038,  // 'ui08'
-    VcgtType                          = 0x76636774,  // 'vcgt'
-    ViewingConditionsType             = 0x76696577,  // 'view'
-    XYZType                           = 0x58595A20   // 'XYZ '
+    /// 'chrm'
+    ChromaticityType                  = 0x6368726D,
+    /// 'clro'
+    ColorantOrderType                 = 0x636C726F,
+    /// 'clrt'
+    ColorantTableType                 = 0x636C7274,
+    /// 'crdi'
+    CrdInfoType                       = 0x63726469,
+    /// 'curv'
+    CurveType                         = 0x63757276,
+    /// 'data'
+    DataType                          = 0x64617461,
+    /// 'dict'
+    DictType                          = 0x64696374,
+    /// 'dtim'
+    DateTimeType                      = 0x6474696D,
+    /// 'devs'
+    DeviceSettingsType                = 0x64657673,
+    /// 'mft2'
+    Lut16Type                         = 0x6d667432,
+    /// 'mft1'
+    Lut8Type                          = 0x6d667431,
+    /// 'mAB '
+    LutAtoBType                       = 0x6d414220,
+    /// 'mBA '
+    LutBtoAType                       = 0x6d424120,
+    /// 'meas'
+    MeasurementType                   = 0x6D656173,
+    /// 'mluc'
+    MultiLocalizedUnicodeType         = 0x6D6C7563,
+    /// 'mpet'
+    MultiProcessElementType           = 0x6D706574,
+    /// 'ncol' -- DEPRECATED!
+    NamedColorType                    = 0x6E636F6C,
+    /// 'ncl2'
+    NamedColor2Type                   = 0x6E636C32,
+    /// 'para'
+    ParametricCurveType               = 0x70617261,
+    /// 'pseq'
+    ProfileSequenceDescType           = 0x70736571,
+    /// 'psid'
+    ProfileSequenceIdType             = 0x70736964,
+    /// 'rcs2'
+    ResponseCurveSet16Type            = 0x72637332,
+    /// 'sf32'
+    S15Fixed16ArrayType               = 0x73663332,
+    /// 'scrn'
+    ScreeningType                     = 0x7363726E,
+    /// 'sig '
+    SignatureType                     = 0x73696720,
+    /// 'text'
+    TextType                          = 0x74657874,
+    /// 'desc'
+    TextDescriptionType               = 0x64657363,
+    /// 'uf32'
+    U16Fixed16ArrayType               = 0x75663332,
+    /// 'bfd '
+    UcrBgType                         = 0x62666420,
+    /// 'ui16'
+    UInt16ArrayType                   = 0x75693136,
+    /// 'ui32'
+    UInt32ArrayType                   = 0x75693332,
+    /// 'ui64'
+    UInt64ArrayType                   = 0x75693634,
+    /// 'ui08'
+    UInt8ArrayType                    = 0x75693038,
+    /// 'vcgt'
+    VcgtType                          = 0x76636774,
+    /// 'view'
+    ViewingConditionsType             = 0x76696577,
+    /// 'XYZ '
+    XYZType                           = 0x58595A20
 }
 
 pub const BlueMatrixColumnTag: TagSignature = TagSignature::BlueColorantTag;
@@ -108,74 +144,142 @@ pub const RedMatrixColumnTag: TagSignature = TagSignature::RedColorantTag;
 #[repr(u32)]
 #[derive(Debug)]
 pub enum TagSignature {
-    AToB0Tag                          = 0x41324230,  // 'A2B0'
-    AToB1Tag                          = 0x41324231,  // 'A2B1'
-    AToB2Tag                          = 0x41324232,  // 'A2B2'
-    BlueColorantTag                   = 0x6258595A,  // 'bXYZ'
-    BlueTRCTag                        = 0x62545243,  // 'bTRC'
-    BToA0Tag                          = 0x42324130,  // 'B2A0'
-    BToA1Tag                          = 0x42324131,  // 'B2A1'
-    BToA2Tag                          = 0x42324132,  // 'B2A2'
-    CalibrationDateTimeTag            = 0x63616C74,  // 'calt'
-    CharTargetTag                     = 0x74617267,  // 'targ'
-    ChromaticAdaptationTag            = 0x63686164,  // 'chad'
-    ChromaticityTag                   = 0x6368726D,  // 'chrm'
-    ColorantOrderTag                  = 0x636C726F,  // 'clro'
-    ColorantTableTag                  = 0x636C7274,  // 'clrt'
-    ColorantTableOutTag               = 0x636C6F74,  // 'clot'
-    ColorimetricIntentImageStateTag   = 0x63696973,  // 'ciis'
-    CopyrightTag                      = 0x63707274,  // 'cprt'
-    CrdInfoTag                        = 0x63726469,  // 'crdi'
-    DataTag                           = 0x64617461,  // 'data'
-    DateTimeTag                       = 0x6474696D,  // 'dtim'
-    DeviceMfgDescTag                  = 0x646D6E64,  // 'dmnd'
-    DeviceModelDescTag                = 0x646D6464,  // 'dmdd'
-    DeviceSettingsTag                 = 0x64657673,  // 'devs'
-    DToB0Tag                          = 0x44324230,  // 'D2B0'
-    DToB1Tag                          = 0x44324231,  // 'D2B1'
-    DToB2Tag                          = 0x44324232,  // 'D2B2'
-    DToB3Tag                          = 0x44324233,  // 'D2B3'
-    BToD0Tag                          = 0x42324430,  // 'B2D0'
-    BToD1Tag                          = 0x42324431,  // 'B2D1'
-    BToD2Tag                          = 0x42324432,  // 'B2D2'
-    BToD3Tag                          = 0x42324433,  // 'B2D3'
-    GamutTag                          = 0x67616D74,  // 'gamt'
-    GrayTRCTag                        = 0x6b545243,  // 'kTRC'
-    GreenColorantTag                  = 0x6758595A,  // 'gXYZ'
-    GreenTRCTag                       = 0x67545243,  // 'gTRC'
-    LuminanceTag                      = 0x6C756D69,  // 'lumi'
-    MeasurementTag                    = 0x6D656173,  // 'meas'
-    MediaBlackPointTag                = 0x626B7074,  // 'bkpt'
-    MediaWhitePointTag                = 0x77747074,  // 'wtpt'
-    NamedColorTag                     = 0x6E636F6C,  // 'ncol' // Deprecated by the ICC
-    NamedColor2Tag                    = 0x6E636C32,  // 'ncl2'
-    OutputResponseTag                 = 0x72657370,  // 'resp'
-    PerceptualRenderingIntentGamutTag = 0x72696730,  // 'rig0'
-    Preview0Tag                       = 0x70726530,  // 'pre0'
-    Preview1Tag                       = 0x70726531,  // 'pre1'
-    Preview2Tag                       = 0x70726532,  // 'pre2'
-    ProfileDescriptionTag             = 0x64657363,  // 'desc'
-    ProfileDescriptionMLTag           = 0x6473636D,  // 'dscm'
-    ProfileSequenceDescTag            = 0x70736571,  // 'pseq'
-    ProfileSequenceIdTag              = 0x70736964,  // 'psid'
-    Ps2CRD0Tag                        = 0x70736430,  // 'psd0'
-    Ps2CRD1Tag                        = 0x70736431,  // 'psd1'
-    Ps2CRD2Tag                        = 0x70736432,  // 'psd2'
-    Ps2CRD3Tag                        = 0x70736433,  // 'psd3'
-    Ps2CSATag                         = 0x70733273,  // 'ps2s'
-    Ps2RenderingIntentTag             = 0x70733269,  // 'ps2i'
-    RedColorantTag                    = 0x7258595A,  // 'rXYZ'
-    RedTRCTag                         = 0x72545243,  // 'rTRC'
-    SaturationRenderingIntentGamutTag = 0x72696732,  // 'rig2'
-    ScreeningDescTag                  = 0x73637264,  // 'scrd'
-    ScreeningTag                      = 0x7363726E,  // 'scrn'
-    TechnologyTag                     = 0x74656368,  // 'tech'
-    UcrBgTag                          = 0x62666420,  // 'bfd '
-    ViewingCondDescTag                = 0x76756564,  // 'vued'
-    ViewingConditionsTag              = 0x76696577,  // 'view'
-    VcgtTag                           = 0x76636774,  // 'vcgt'
-    MetaTag                           = 0x6D657461,  // 'meta'
-    ArgyllArtsTag                     = 0x61727473,  // 'arts'
+    /// 'A2B0'
+    AToB0Tag                          = 0x41324230,
+    /// 'A2B1'
+    AToB1Tag                          = 0x41324231,
+    /// 'A2B2'
+    AToB2Tag                          = 0x41324232,
+    /// 'bXYZ'
+    BlueColorantTag                   = 0x6258595A,
+    /// 'bTRC'
+    BlueTRCTag                        = 0x62545243,
+    /// 'B2A0'
+    BToA0Tag                          = 0x42324130,
+    /// 'B2A1'
+    BToA1Tag                          = 0x42324131,
+    /// 'B2A2'
+    BToA2Tag                          = 0x42324132,
+    /// 'calt'
+    CalibrationDateTimeTag            = 0x63616C74,
+    /// 'targ'
+    CharTargetTag                     = 0x74617267,
+    /// 'chad'
+    ChromaticAdaptationTag            = 0x63686164,
+    /// 'chrm'
+    ChromaticityTag                   = 0x6368726D,
+    /// 'clro'
+    ColorantOrderTag                  = 0x636C726F,
+    /// 'clrt'
+    ColorantTableTag                  = 0x636C7274,
+    /// 'clot'
+    ColorantTableOutTag               = 0x636C6F74,
+    /// 'ciis'
+    ColorimetricIntentImageStateTag   = 0x63696973,
+    /// 'cprt'
+    CopyrightTag                      = 0x63707274,
+    /// 'crdi'
+    CrdInfoTag                        = 0x63726469,
+    /// 'data'
+    DataTag                           = 0x64617461,
+    /// 'dtim'
+    DateTimeTag                       = 0x6474696D,
+    /// 'dmnd'
+    DeviceMfgDescTag                  = 0x646D6E64,
+    /// 'dmdd'
+    DeviceModelDescTag                = 0x646D6464,
+    /// 'devs'
+    DeviceSettingsTag                 = 0x64657673,
+    /// 'D2B0'
+    DToB0Tag                          = 0x44324230,
+    /// 'D2B1'
+    DToB1Tag                          = 0x44324231,
+    /// 'D2B2'
+    DToB2Tag                          = 0x44324232,
+    /// 'D2B3'
+    DToB3Tag                          = 0x44324233,
+    /// 'B2D0'
+    BToD0Tag                          = 0x42324430,
+    /// 'B2D1'
+    BToD1Tag                          = 0x42324431,
+    /// 'B2D2'
+    BToD2Tag                          = 0x42324432,
+    /// 'B2D3'
+    BToD3Tag                          = 0x42324433,
+    /// 'gamt'
+    GamutTag                          = 0x67616D74,
+    /// 'kTRC'
+    GrayTRCTag                        = 0x6b545243,
+    /// 'gXYZ'
+    GreenColorantTag                  = 0x6758595A,
+    /// 'gTRC'
+    GreenTRCTag                       = 0x67545243,
+    /// 'lumi'
+    LuminanceTag                      = 0x6C756D69,
+    /// 'meas'
+    MeasurementTag                    = 0x6D656173,
+    /// 'bkpt'
+    MediaBlackPointTag                = 0x626B7074,
+    /// 'wtpt'
+    MediaWhitePointTag                = 0x77747074,
+    /// 'ncol' // Deprecated by the ICC
+    NamedColorTag                     = 0x6E636F6C,
+    /// 'ncl2'
+    NamedColor2Tag                    = 0x6E636C32,
+    /// 'resp'
+    OutputResponseTag                 = 0x72657370,
+    /// 'rig0'
+    PerceptualRenderingIntentGamutTag = 0x72696730,
+    /// 'pre0'
+    Preview0Tag                       = 0x70726530,
+    /// 'pre1'
+    Preview1Tag                       = 0x70726531,
+    /// 'pre2'
+    Preview2Tag                       = 0x70726532,
+    /// 'desc'
+    ProfileDescriptionTag             = 0x64657363,
+    /// 'dscm'
+    ProfileDescriptionMLTag           = 0x6473636D,
+    /// 'pseq'
+    ProfileSequenceDescTag            = 0x70736571,
+    /// 'psid'
+    ProfileSequenceIdTag              = 0x70736964,
+    /// 'psd0'
+    Ps2CRD0Tag                        = 0x70736430,
+    /// 'psd1'
+    Ps2CRD1Tag                        = 0x70736431,
+    /// 'psd2'
+    Ps2CRD2Tag                        = 0x70736432,
+    /// 'psd3'
+    Ps2CRD3Tag                        = 0x70736433,
+    /// 'ps2s'
+    Ps2CSATag                         = 0x70733273,
+    /// 'ps2i'
+    Ps2RenderingIntentTag             = 0x70733269,
+    /// 'rXYZ'
+    RedColorantTag                    = 0x7258595A,
+    /// 'rTRC'
+    RedTRCTag                         = 0x72545243,
+    /// 'rig2'
+    SaturationRenderingIntentGamutTag = 0x72696732,
+    /// 'scrd'
+    ScreeningDescTag                  = 0x73637264,
+    /// 'scrn'
+    ScreeningTag                      = 0x7363726E,
+    /// 'tech'
+    TechnologyTag                     = 0x74656368,
+    /// 'bfd '
+    UcrBgTag                          = 0x62666420,
+    /// 'vued'
+    ViewingCondDescTag                = 0x76756564,
+    /// 'view'
+    ViewingConditionsTag              = 0x76696577,
+    /// 'vcgt'
+    VcgtTag                           = 0x76636774,
+    /// 'meta'
+    MetaTag                           = 0x6D657461,
+    /// 'arts'
+    ArgyllArtsTag                     = 0x61727473,
 }
 pub use self::TagSignature::*;
 
@@ -183,167 +287,283 @@ pub use self::TagSignature::*;
 #[repr(u32)]
 #[derive(Debug)]
 pub enum TechnologySignature {
-    DigitalCamera                     = 0x6463616D,  // 'dcam'
-    FilmScanner                       = 0x6673636E,  // 'fscn'
-    ReflectiveScanner                 = 0x7273636E,  // 'rscn'
-    InkJetPrinter                     = 0x696A6574,  // 'ijet'
-    ThermalWaxPrinter                 = 0x74776178,  // 'twax'
-    ElectrophotographicPrinter        = 0x6570686F,  // 'epho'
-    ElectrostaticPrinter              = 0x65737461,  // 'esta'
-    DyeSublimationPrinter             = 0x64737562,  // 'dsub'
-    PhotographicPaperPrinter          = 0x7270686F,  // 'rpho'
-    FilmWriter                        = 0x6670726E,  // 'fprn'
-    VideoMonitor                      = 0x7669646D,  // 'vidm'
-    VideoCamera                       = 0x76696463,  // 'vidc'
-    ProjectionTelevision              = 0x706A7476,  // 'pjtv'
-    CRTDisplay                        = 0x43525420,  // 'CRT '
-    PMDisplay                         = 0x504D4420,  // 'PMD '
-    AMDisplay                         = 0x414D4420,  // 'AMD '
-    PhotoCD                           = 0x4B504344,  // 'KPCD'
-    PhotoImageSetter                  = 0x696D6773,  // 'imgs'
-    Gravure                           = 0x67726176,  // 'grav'
-    OffsetLithography                 = 0x6F666673,  // 'offs'
-    Silkscreen                        = 0x73696C6B,  // 'silk'
-    Flexography                       = 0x666C6578,  // 'flex'
-    MotionPictureFilmScanner          = 0x6D706673,  // 'mpfs'
-    MotionPictureFilmRecorder         = 0x6D706672,  // 'mpfr'
-    DigitalMotionPictureCamera        = 0x646D7063,  // 'dmpc'
-    DigitalCinemaProjector            = 0x64636A70   // 'dcpj'
+    /// 'dcam'
+    DigitalCamera                     = 0x6463616D,
+    /// 'fscn'
+    FilmScanner                       = 0x6673636E,
+    /// 'rscn'
+    ReflectiveScanner                 = 0x7273636E,
+    /// 'ijet'
+    InkJetPrinter                     = 0x696A6574,
+    /// 'twax'
+    ThermalWaxPrinter                 = 0x74776178,
+    /// 'epho'
+    ElectrophotographicPrinter        = 0x6570686F,
+    /// 'esta'
+    ElectrostaticPrinter              = 0x65737461,
+    /// 'dsub'
+    DyeSublimationPrinter             = 0x64737562,
+    /// 'rpho'
+    PhotographicPaperPrinter          = 0x7270686F,
+    /// 'fprn'
+    FilmWriter                        = 0x6670726E,
+    /// 'vidm'
+    VideoMonitor                      = 0x7669646D,
+    /// 'vidc'
+    VideoCamera                       = 0x76696463,
+    /// 'pjtv'
+    ProjectionTelevision              = 0x706A7476,
+    /// 'CRT '
+    CRTDisplay                        = 0x43525420,
+    /// 'PMD '
+    PMDisplay                         = 0x504D4420,
+    /// 'AMD '
+    AMDisplay                         = 0x414D4420,
+    /// 'KPCD'
+    PhotoCD                           = 0x4B504344,
+    /// 'imgs'
+    PhotoImageSetter                  = 0x696D6773,
+    /// 'grav'
+    Gravure                           = 0x67726176,
+    /// 'offs'
+    OffsetLithography                 = 0x6F666673,
+    /// 'silk'
+    Silkscreen                        = 0x73696C6B,
+    /// 'flex'
+    Flexography                       = 0x666C6578,
+    /// 'mpfs'
+    MotionPictureFilmScanner          = 0x6D706673,
+    /// 'mpfr'
+    MotionPictureFilmRecorder         = 0x6D706672,
+    /// 'dmpc'
+    DigitalMotionPictureCamera        = 0x646D7063,
+    /// 'dcpj'
+    DigitalCinemaProjector            = 0x64636A70
 }
 
 #[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum ColorSpaceSignature {
-    XYZData                           = 0x58595A20,  // 'XYZ '
-    LabData                           = 0x4C616220,  // 'Lab '
-    LuvData                           = 0x4C757620,  // 'Luv '
-    YCbCrData                         = 0x59436272,  // 'YCbr'
-    YxyData                           = 0x59787920,  // 'Yxy '
-    RgbData                           = 0x52474220,  // 'RGB '
-    GrayData                          = 0x47524159,  // 'GRAY'
-    HsvData                           = 0x48535620,  // 'HSV '
-    HlsData                           = 0x484C5320,  // 'HLS '
-    CmykData                          = 0x434D594B,  // 'CMYK'
-    CmyData                           = 0x434D5920,  // 'CMY '
-    MCH1Data                          = 0x4D434831,  // 'MCH1'
-    MCH2Data                          = 0x4D434832,  // 'MCH2'
-    MCH3Data                          = 0x4D434833,  // 'MCH3'
-    MCH4Data                          = 0x4D434834,  // 'MCH4'
-    MCH5Data                          = 0x4D434835,  // 'MCH5'
-    MCH6Data                          = 0x4D434836,  // 'MCH6'
-    MCH7Data                          = 0x4D434837,  // 'MCH7'
-    MCH8Data                          = 0x4D434838,  // 'MCH8'
-    MCH9Data                          = 0x4D434839,  // 'MCH9'
-    MCHAData                          = 0x4D434841,  // 'MCHA'
-    MCHBData                          = 0x4D434842,  // 'MCHB'
-    MCHCData                          = 0x4D434843,  // 'MCHC'
-    MCHDData                          = 0x4D434844,  // 'MCHD'
-    MCHEData                          = 0x4D434845,  // 'MCHE'
-    MCHFData                          = 0x4D434846,  // 'MCHF'
-    NamedData                         = 0x6e6d636c,  // 'nmcl'
-    Sig1colorData                     = 0x31434C52,  // '1CLR'
-    Sig2colorData                     = 0x32434C52,  // '2CLR'
-    Sig3colorData                     = 0x33434C52,  // '3CLR'
-    Sig4colorData                     = 0x34434C52,  // '4CLR'
-    Sig5colorData                     = 0x35434C52,  // '5CLR'
-    Sig6colorData                     = 0x36434C52,  // '6CLR'
-    Sig7colorData                     = 0x37434C52,  // '7CLR'
-    Sig8colorData                     = 0x38434C52,  // '8CLR'
-    Sig9colorData                     = 0x39434C52,  // '9CLR'
-    Sig10colorData                    = 0x41434C52,  // 'ACLR'
-    Sig11colorData                    = 0x42434C52,  // 'BCLR'
-    Sig12colorData                    = 0x43434C52,  // 'CCLR'
-    Sig13colorData                    = 0x44434C52,  // 'DCLR'
-    Sig14colorData                    = 0x45434C52,  // 'ECLR'
-    Sig15colorData                    = 0x46434C52,  // 'FCLR'
-    LuvKData                          = 0x4C75764B   // 'LuvK'
+    /// 'XYZ '
+    XYZData                           = 0x58595A20,
+    /// 'Lab '
+    LabData                           = 0x4C616220,
+    /// 'Luv '
+    LuvData                           = 0x4C757620,
+    /// 'YCbr'
+    YCbCrData                         = 0x59436272,
+    /// 'Yxy '
+    YxyData                           = 0x59787920,
+    /// 'RGB '
+    RgbData                           = 0x52474220,
+    /// 'GRAY'
+    GrayData                          = 0x47524159,
+    /// 'HSV '
+    HsvData                           = 0x48535620,
+    /// 'HLS '
+    HlsData                           = 0x484C5320,
+    /// 'CMYK'
+    CmykData                          = 0x434D594B,
+    /// 'CMY '
+    CmyData                           = 0x434D5920,
+    /// 'MCH1'
+    MCH1Data                          = 0x4D434831,
+    /// 'MCH2'
+    MCH2Data                          = 0x4D434832,
+    /// 'MCH3'
+    MCH3Data                          = 0x4D434833,
+    /// 'MCH4'
+    MCH4Data                          = 0x4D434834,
+    /// 'MCH5'
+    MCH5Data                          = 0x4D434835,
+    /// 'MCH6'
+    MCH6Data                          = 0x4D434836,
+    /// 'MCH7'
+    MCH7Data                          = 0x4D434837,
+    /// 'MCH8'
+    MCH8Data                          = 0x4D434838,
+    /// 'MCH9'
+    MCH9Data                          = 0x4D434839,
+    /// 'MCHA'
+    MCHAData                          = 0x4D434841,
+    /// 'MCHB'
+    MCHBData                          = 0x4D434842,
+    /// 'MCHC'
+    MCHCData                          = 0x4D434843,
+    /// 'MCHD'
+    MCHDData                          = 0x4D434844,
+    /// 'MCHE'
+    MCHEData                          = 0x4D434845,
+    /// 'MCHF'
+    MCHFData                          = 0x4D434846,
+    /// 'nmcl'
+    NamedData                         = 0x6e6d636c,
+    /// '1CLR'
+    Sig1colorData                     = 0x31434C52,
+    /// '2CLR'
+    Sig2colorData                     = 0x32434C52,
+    /// '3CLR'
+    Sig3colorData                     = 0x33434C52,
+    /// '4CLR'
+    Sig4colorData                     = 0x34434C52,
+    /// '5CLR'
+    Sig5colorData                     = 0x35434C52,
+    /// '6CLR'
+    Sig6colorData                     = 0x36434C52,
+    /// '7CLR'
+    Sig7colorData                     = 0x37434C52,
+    /// '8CLR'
+    Sig8colorData                     = 0x38434C52,
+    /// '9CLR'
+    Sig9colorData                     = 0x39434C52,
+    /// 'ACLR'
+    Sig10colorData                    = 0x41434C52,
+    /// 'BCLR'
+    Sig11colorData                    = 0x42434C52,
+    /// 'CCLR'
+    Sig12colorData                    = 0x43434C52,
+    /// 'DCLR'
+    Sig13colorData                    = 0x44434C52,
+    /// 'ECLR'
+    Sig14colorData                    = 0x45434C52,
+    /// 'FCLR'
+    Sig15colorData                    = 0x46434C52,
+    /// 'LuvK'
+    LuvKData                          = 0x4C75764B
 }
 
 #[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum ProfileClassSignature {
-    InputClass                        = 0x73636E72,  // 'scnr'
-    DisplayClass                      = 0x6D6E7472,  // 'mntr'
-    OutputClass                       = 0x70727472,  // 'prtr'
-    LinkClass                         = 0x6C696E6B,  // 'link'
-    AbstractClass                     = 0x61627374,  // 'abst'
-    ColorSpaceClass                   = 0x73706163,  // 'spac'
-    NamedColorClass                   = 0x6e6d636c   // 'nmcl'
+    /// 'scnr'
+    InputClass                        = 0x73636E72,
+    /// 'mntr'
+    DisplayClass                      = 0x6D6E7472,
+    /// 'prtr'
+    OutputClass                       = 0x70727472,
+    /// 'link'
+    LinkClass                         = 0x6C696E6B,
+    /// 'abst'
+    AbstractClass                     = 0x61627374,
+    /// 'spac'
+    ColorSpaceClass                   = 0x73706163,
+    /// 'nmcl'
+    NamedColorClass                   = 0x6e6d636c
 }
 
 #[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum PlatformSignature {
-    Macintosh                         = 0x4150504C,  // 'APPL'
-    Microsoft                         = 0x4D534654,  // 'MSFT'
-    Solaris                           = 0x53554E57,  // 'SUNW'
-    SGI                               = 0x53474920,  // 'SGI '
-    Taligent                          = 0x54474E54,  // 'TGNT'
-    Unices                            = 0x2A6E6978   // '*nix'   // From argyll -- Not official
+    /// 'APPL'
+    Macintosh                         = 0x4150504C,
+    /// 'MSFT'
+    Microsoft                         = 0x4D534654,
+    /// 'SUNW'
+    Solaris                           = 0x53554E57,
+    /// 'SGI '
+    SGI                               = 0x53474920,
+    /// 'TGNT'
+    Taligent                          = 0x54474E54,
+    /// '*nix'   // From argyll -- Not official
+    Unices                            = 0x2A6E6978
 }
 
-pub const PerceptualReferenceMediumGamut:u32 =         0x70726d67;  //'prmg'
+///'prmg'
+pub const PerceptualReferenceMediumGamut:u32 =         0x70726d67;
 
-// For ColorimetricIntentImageStateTag
-pub const SceneColorimetryEstimates:u32 =              0x73636F65;  //'scoe'
-pub const SceneAppearanceEstimates:u32 =               0x73617065;  //'sape'
-pub const FocalPlaneColorimetryEstimates:u32 =         0x66706365;  //'fpce'
-pub const ReflectionHardcopyOriginalColorimetry:u32 =  0x72686F63;  //'rhoc'
-pub const ReflectionPrintOutputColorimetry:u32 =       0x72706F63;  //'rpoc'
+/// For ColorimetricIntentImageStateTag
+///'scoe'
+pub const SceneColorimetryEstimates:u32 =              0x73636F65;
+///'sape'
+pub const SceneAppearanceEstimates:u32 =               0x73617065;
+///'fpce'
+pub const FocalPlaneColorimetryEstimates:u32 =         0x66706365;
+///'rhoc'
+pub const ReflectionHardcopyOriginalColorimetry:u32 =  0x72686F63;
+///'rpoc'
+pub const ReflectionPrintOutputColorimetry:u32 =       0x72706F63;
 
 #[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum StageSignature {
-    CurveSetElemType              = 0x63767374,  //'cvst'
-    MatrixElemType                = 0x6D617466,  //'matf'
-    CLutElemType                  = 0x636C7574,  //'clut'
+    ///'cvst'
+    CurveSetElemType              = 0x63767374,
+    ///'matf'
+    MatrixElemType                = 0x6D617466,
+    ///'clut'
+    CLutElemType                  = 0x636C7574,
 
-    BAcsElemType                  = 0x62414353,  // 'bACS'
-    EAcsElemType                  = 0x65414353,  // 'eACS'
+    /// 'bACS'
+    BAcsElemType                  = 0x62414353,
+    /// 'eACS'
+    EAcsElemType                  = 0x65414353,
 
-    // Custom from here, not in the ICC Spec
-    XYZ2LabElemType               = 0x6C327820,  // 'l2x '
-    Lab2XYZElemType               = 0x78326C20,  // 'x2l '
-    NamedColorElemType            = 0x6E636C20,  // 'ncl '
-    LabV2toV4                     = 0x32203420,  // '2 4 '
-    LabV4toV2                     = 0x34203220,  // '4 2 '
+    /// Custom from here, not in the ICC Spec
+    /// 'l2x '
+    XYZ2LabElemType               = 0x6C327820,
+    /// 'x2l '
+    Lab2XYZElemType               = 0x78326C20,
+    /// 'ncl '
+    NamedColorElemType            = 0x6E636C20,
+    /// '2 4 '
+    LabV2toV4                     = 0x32203420,
+    /// '4 2 '
+    LabV4toV2                     = 0x34203220,
 
-    // Identities
-    IdentityElemType              = 0x69646E20,  // 'idn '
+    /// Identities
+    /// 'idn '
+    IdentityElemType              = 0x69646E20,
 
-    // Float to floatPCS
-    Lab2FloatPCS                  = 0x64326C20,  // 'd2l '
-    FloatPCS2Lab                  = 0x6C326420,  // 'l2d '
-    XYZ2FloatPCS                  = 0x64327820,  // 'd2x '
-    FloatPCS2XYZ                  = 0x78326420,  // 'x2d '
-    ClipNegativesElemType         = 0x636c7020   // 'clp '
+    /// Float to floatPCS
+    /// 'd2l '
+    Lab2FloatPCS                  = 0x64326C20,
+    /// 'l2d '
+    FloatPCS2Lab                  = 0x6C326420,
+    /// 'd2x '
+    XYZ2FloatPCS                  = 0x64327820,
+    /// 'x2d '
+    FloatPCS2XYZ                  = 0x78326420,
+    /// 'clp '
+    ClipNegativesElemType         = 0x636c7020
 }
 
 #[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum CurveSegSignature {
-    FormulaCurveSeg               = 0x70617266, // 'parf'
-    SampledCurveSeg               = 0x73616D66, // 'samf'
-    SegmentedCurve                = 0x63757266  // 'curf'
+    /// 'parf'
+    FormulaCurveSeg               = 0x70617266,
+    /// 'samf'
+    SampledCurveSeg               = 0x73616D66,
+    /// 'curf'
+    SegmentedCurve                = 0x63757266
 }
 
-pub const StatusA:u32 =                    0x53746141; //'StaA'
-pub const StatusE:u32 =                    0x53746145; //'StaE'
-pub const StatusI:u32 =                    0x53746149; //'StaI'
-pub const StatusT:u32 =                    0x53746154; //'StaT'
-pub const StatusM:u32 =                    0x5374614D; //'StaM'
-pub const DN:u32 =                         0x444E2020; //'DN  '
-pub const DNP:u32 =                        0x444E2050; //'DN P'
-pub const DNN:u32 =                        0x444E4E20; //'DNN '
-pub const DNNP:u32 =                       0x444E4E50; //'DNNP'
+///'StaA'
+pub const StatusA:u32 =                    0x53746141;
+///'StaE'
+pub const StatusE:u32 =                    0x53746145;
+///'StaI'
+pub const StatusI:u32 =                    0x53746149;
+///'StaT'
+pub const StatusT:u32 =                    0x53746154;
+///'StaM'
+pub const StatusM:u32 =                    0x5374614D;
+///'DN  '
+pub const DN:u32 =                         0x444E2020;
+///'DN P'
+pub const DNP:u32 =                        0x444E2050;
+///'DNN '
+pub const DNN:u32 =                        0x444E4E20;
+///'DNNP'
+pub const DNNP:u32 =                       0x444E4E50;
 
-// Device attributes, currently defined values correspond to the low 4 bytes
-// of the 8 byte attribute quantity
+/// Device attributes, currently defined values correspond to the low 4 bytes
+/// of the 8 byte attribute quantity
 pub const Reflective:u32 =     0;
 pub const Transparency:u32 =   1;
 pub const Glossy:u32 =         0;
@@ -394,6 +614,7 @@ impl Default for EncodedXYZNumber {
 #[repr(C)]
 #[derive(Copy, Clone, PartialEq, Eq)]
 #[derive(Debug)]
+/// Profile ID as computed by MD5 algorithm
 pub struct ProfileID {
     pub ID32: [u32; 4],
 }
@@ -406,23 +627,41 @@ impl Default for ProfileID {
 #[derive(Copy, Clone)]
 #[derive(Debug)]
 pub struct ICCHeader {
+    /// Profile size in bytes
     pub size: u32,
+    /// CMM for this profile
     pub cmmId: Signature,
+    /// Format version number
     pub version: u32,
+    /// Type of profile
     pub deviceClass: ProfileClassSignature,
+    /// Color space of data
     pub colorSpace: ColorSpaceSignature,
+    /// PCS, XYZ or Lab only
     pub pcs: ColorSpaceSignature,
+    /// Date profile was created
     pub date: DateTimeNumber,
+    /// Magic Number to identify an ICC profile
     pub magic: Signature,
+    /// Primary Platform
     pub platform: PlatformSignature,
+    /// Various bit settings
     pub flags: u32,
+    /// Device manufacturer
     pub manufacturer: Signature,
+    /// Device model number
     pub model: u32,
+    /// Device attributes
     pub attributes: u64,
+    /// Rendering intent
     pub renderingIntent: Intent,
+    /// Profile illuminant
     pub illuminant: EncodedXYZNumber,
+    /// Profile creator
     pub creator: Signature,
+    /// Profile ID using MD5
     pub profileID: ProfileID,
+    /// Reserved for future use
     pub reserved: [i8; 28],
 }
 impl Default for ICCHeader {
@@ -458,7 +697,8 @@ pub type HPROFILE = *mut _HPROFILE;
 pub enum _HTRANSFORM {}
 pub type HTRANSFORM = *mut _HTRANSFORM;
 
-pub const MAXCHANNELS: usize =  16;                // Maximum number of channels in ICC profiles
+/// Maximum number of channels in ICC profiles
+pub const MAXCHANNELS: usize =  16;
 
 
 // Format of pixel is defined by one UInt32Number, using bit fields as follows
@@ -481,17 +721,20 @@ pub const MAXCHANNELS: usize =  16;                // Maximum number of channels
 
 
 // Pixel types
-pub const PT_ANY: u32 =       0;    // Don't check colorspace
-                          // 1 & 2 are reserved
+/// Don't check colorspace
+pub const PT_ANY: u32 =       0;
+/// 1 & 2 are reserved
 pub const PT_GRAY: u32 =      3;
 pub const PT_RGB: u32 =       4;
 pub const PT_CMY: u32 =       5;
 pub const PT_CMYK: u32 =      6;
 pub const PT_YCbCr: u32 =     7;
-pub const PT_YUV: u32 =       8;      // Lu'v'
+/// Lu'v'
+pub const PT_YUV: u32 =       8;
 pub const PT_XYZ: u32 =       9;
 pub const PT_Lab: u32 =       10;
-pub const PT_YUVK: u32 =      11;     // Lu'v'K
+/// Lu'v'K
+pub const PT_YUVK: u32 =      11;
 pub const PT_HSV: u32 =       12;
 pub const PT_HLS: u32 =       13;
 pub const PT_Yxy: u32 =       14;
@@ -512,11 +755,29 @@ pub const PT_MCH13: u32 =     27;
 pub const PT_MCH14: u32 =     28;
 pub const PT_MCH15: u32 =     29;
 
-pub const PT_LabV2: u32 =     30;     // Identical to PT_Lab, but using the V2 old encoding
+/// Identical to PT_Lab, but using the V2 old encoding
+pub const PT_LabV2: u32 =     30;
 
 #[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]
 #[derive(Debug)]
+/// Format of pixel is defined by one cmsUInt32Number, using bit fields as follows
+///
+///                               2                1          0
+///                          3 2 10987 6 5 4 3 2 1 098 7654 321
+///                          A O TTTTT U Y F P X S EEE CCCC BBB
+///
+///            A: Floating point -- With this flag we can differentiate 16 bits as float and as int
+///            O: Optimized -- previous optimization already returns the final 8-bit value
+///            T: Pixeltype
+///            F: Flavor  0=MinIsBlack(Chocolate) 1=MinIsWhite(Vanilla)
+///            P: Planar? 0=Chunky, 1=Planar
+///            X: swap 16 bps endianness?
+///            S: Do swap? ie, BGR, KYMC
+///            E: Extra samples
+///            C: Channels (Samples per pixel)
+///            B: bytes per sample
+///            Y: Swap first - changes ABGR to BGRA and KCMY to CMYK
 pub enum PixelFormat {
     GRAY_8 = 196617,
     GRAY_8_REV = 204809,
@@ -651,6 +912,7 @@ pub enum PixelFormat {
     HSV_16 = 786458,
     HSV_16_PLANAR = 790554,
     HSV_16_SE = 788506,
+    // Named color index. Only 16 bits allowed (don't check colorspace)
     NAMED_COLOR_INDEX = 10,
     XYZ_FLT = 4784156,
     Lab_FLT = 4849692,
@@ -795,7 +1057,7 @@ pub struct CIExyYTRIPLE {
     pub Blue: CIExyY,
 }
 
-// Illuminant types for structs below
+/// Illuminant types for structs below
 #[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]
 #[derive(Debug)]
@@ -871,6 +1133,8 @@ impl Default for ViewingConditions {
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]
+/// This describes a curve segment. For a table of supported types, see the manual. User can increase the number of
+/// available types by using a proper plug-in. Parametric segments allow 10 parameters at most
 pub struct CurveSegment {
     pub x0: f32,
     pub x1: f32,
@@ -890,6 +1154,7 @@ pub enum Stage { }
 #[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]
 #[derive(Debug)]
+/// Where to place/locate the stages in the pipeline chain
 pub enum StageLoc {
     AT_BEGIN = 0,
     AT_END = 1,
@@ -953,6 +1218,8 @@ pub enum NAMEDCOLORLIST { }
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]
+/// Profile sequence descriptor. Some fields come from profile sequence descriptor tag, others
+/// come from Profile Sequence Identifier Tag
 pub struct PSEQDESC {
     pub deviceMfg: Signature,
     pub deviceModel: Signature,
@@ -1005,13 +1272,13 @@ pub enum IOHANDLER { }
 #[repr(u32)]
 #[derive(Debug)]
 pub enum Intent {
-    // ICC Intents
+    /// ICC Intents
     Perceptual = 0,
     RelativeColorimetric = 1,
     Saturation = 2,
     AbsoluteColorimetric = 3,
 
-    // non-icc intents
+    /// non-icc intents
     PreserveKOnlyPerceptual = 10,
     PreserveKOnlyRelativeColorimetric = 11,
     PreserveKOnlySaturation = 12,
@@ -1022,39 +1289,55 @@ pub enum Intent {
 
 // Flags
 
-pub const FLAGS_NOCACHE: u32 =                  0x0040;    // Inhibit 1-pixel cache
-pub const FLAGS_NOOPTIMIZE: u32 =               0x0100;    // Inhibit optimizations
-pub const FLAGS_NULLTRANSFORM: u32 =            0x0200;    // Don't transform anyway
+/// Inhibit 1-pixel cache
+pub const FLAGS_NOCACHE: u32 =                  0x0040;
+/// Inhibit optimizations
+pub const FLAGS_NOOPTIMIZE: u32 =               0x0100;
+/// Don't transform anyway
+pub const FLAGS_NULLTRANSFORM: u32 =            0x0200;
 
-// Proofing flags
-pub const FLAGS_GAMUTCHECK: u32 =               0x1000;    // Out of Gamut alarm
-pub const FLAGS_SOFTPROOFING: u32 =             0x4000;    // Do softproofing
+/// Proofing flags
+/// Out of Gamut alarm
+pub const FLAGS_GAMUTCHECK: u32 =               0x1000;
+/// Do softproofing
+pub const FLAGS_SOFTPROOFING: u32 =             0x4000;
 
 // Misc
 pub const FLAGS_BLACKPOINTCOMPENSATION: u32 =   0x2000;
-pub const FLAGS_NOWHITEONWHITEFIXUP: u32 =      0x0004;    // Don't fix scum dot
-pub const FLAGS_HIGHRESPRECALC: u32 =           0x0400;    // Use more memory to give better accurancy
-pub const FLAGS_LOWRESPRECALC: u32 =            0x0800;    // Use less memory to minimize resouces
+/// Don't fix scum dot
+pub const FLAGS_NOWHITEONWHITEFIXUP: u32 =      0x0004;
+/// Use more memory to give better accurancy
+pub const FLAGS_HIGHRESPRECALC: u32 =           0x0400;
+/// Use less memory to minimize resouces
+pub const FLAGS_LOWRESPRECALC: u32 =            0x0800;
 
-// For devicelink creation
-pub const FLAGS_8BITS_DEVICELINK: u32 =         0x0008;   // Create 8 bits devicelinks
-pub const FLAGS_GUESSDEVICECLASS: u32 =         0x0020;   // Guess device class (for transform2devicelink)
-pub const FLAGS_KEEP_SEQUENCE: u32 =            0x0080;   // Keep profile sequence for devicelink creation
+/// For devicelink creation
+/// Create 8 bits devicelinks
+pub const FLAGS_8BITS_DEVICELINK: u32 =         0x0008;
+/// Guess device class (for transform2devicelink)
+pub const FLAGS_GUESSDEVICECLASS: u32 =         0x0020;
+/// Keep profile sequence for devicelink creation
+pub const FLAGS_KEEP_SEQUENCE: u32 =            0x0080;
 
-// Specific to a particular optimizations
-pub const FLAGS_FORCE_CLUT: u32 =               0x0002;    // Force CLUT optimization
-pub const FLAGS_CLUT_POST_LINEARIZATION: u32 =  0x0001;    // create postlinearization tables if possible
-pub const FLAGS_CLUT_PRE_LINEARIZATION: u32 =   0x0010;    // create prelinearization tables if possible
+/// Specific to a particular optimizations
+/// Force CLUT optimization
+pub const FLAGS_FORCE_CLUT: u32 =               0x0002;
+/// create postlinearization tables if possible
+pub const FLAGS_CLUT_POST_LINEARIZATION: u32 =  0x0001;
+/// create prelinearization tables if possible
+pub const FLAGS_CLUT_PRE_LINEARIZATION: u32 =   0x0010;
 
-// Specific to unbounded mode
-pub const FLAGS_NONEGATIVES: u32 =              0x8000;    // Prevent negative numbers in floating point transforms
+/// Specific to unbounded mode
+/// Prevent negative numbers in floating point transforms
+pub const FLAGS_NONEGATIVES: u32 =              0x8000;
 
-pub const FLAGS_COPY_ALPHA: u32 =           0x04000000;    // Alpha channels are copied on cmsDoTransform()
+/// Alpha channels are copied on cmsDoTransform()
+pub const FLAGS_COPY_ALPHA: u32 =           0x04000000;
 
 // Fine-tune control over number of gridpoints
 pub fn FLAGS_GRIDPOINTS(n: u32) -> u32 { ((n) & 0xFF) << 16 }
 
-// CRD special
+/// CRD special
 pub const FLAGS_NODEFAULTRESOURCEDEF: u32 =     0x01000000;
 
 impl CIEXYZ {
@@ -1195,6 +1478,11 @@ extern "C" {
     pub fn cmsPipelineSetSaveAs8bitsFlag(lut: *mut Pipeline, On: Bool) -> Bool;
     pub fn cmsPipelineInsertStage(lut: *mut Pipeline, loc: StageLoc, mpe: *mut Stage) -> c_int;
     pub fn cmsPipelineUnlinkStage(lut: *mut Pipeline, loc: StageLoc, mpe: *mut *mut Stage);
+    /// This function is quite useful to analyze the structure of a Pipeline and retrieve the Stage elements
+    /// that conform the Pipeline. It should be called with the Pipeline, the number of expected elements and
+    /// then a list of expected types followed with a list of double pointers to Stage elements. If
+    /// the function founds a match with current pipeline, it fills the pointers and returns TRUE
+    /// if not, returns FALSE without touching anything.
     pub fn cmsPipelineCheckAndRetreiveStages(Lut: *const Pipeline, n: u32, ...) -> Bool;
     pub fn cmsStageAllocIdentity(ContextID: Context, nChannels: u32) -> *mut Stage;
     pub fn cmsStageAllocToneCurves(ContextID: Context, nChannels: u32, Curves: *const *const ToneCurve) -> *mut Stage;
@@ -1440,6 +1728,7 @@ extern "C" {
     pub fn cmsGDBCheckPoint(hGBD: HANDLE, Lab: *const CIELab) -> Bool;
     pub fn cmsDetectBlackPoint(BlackPoint: *mut CIEXYZ, hProfile: HPROFILE, Intent: Intent, dwFlags: u32) -> Bool;
     pub fn cmsDetectDestinationBlackPoint(BlackPoint: *mut CIEXYZ, hProfile: HPROFILE, Intent: Intent, dwFlags: u32) -> Bool;
+    // Estimate total area coverage
     pub fn cmsDetectTAC(hProfile: HPROFILE) -> f64;
     pub fn cmsDesaturateLab(Lab: *mut CIELab, amax: f64, amin: f64, bmax: f64, bmin: f64) -> Bool;
 }

@@ -474,17 +474,22 @@ pub enum PlatformSignature {
 ///'prmg'
 pub const PerceptualReferenceMediumGamut:u32 =         0x70726d67;
 
-/// For ColorimetricIntentImageStateTag
-///'scoe'
-pub const SceneColorimetryEstimates:u32 =              0x73636F65;
-///'sape'
-pub const SceneAppearanceEstimates:u32 =               0x73617065;
-///'fpce'
-pub const FocalPlaneColorimetryEstimates:u32 =         0x66706365;
-///'rhoc'
-pub const ReflectionHardcopyOriginalColorimetry:u32 =  0x72686F63;
-///'rpoc'
-pub const ReflectionPrintOutputColorimetry:u32 =       0x72706F63;
+#[derive(Copy, Clone, PartialEq, Eq, Hash)]
+#[repr(u32)]
+#[derive(Debug)]
+pub enum ColorimetricIntentImageState {
+    ///'scoe'
+    SceneColorimetryEstimates =              0x73636F65,
+    ///'sape'
+    SceneAppearanceEstimates =               0x73617065,
+    ///'fpce'
+    FocalPlaneColorimetryEstimates =         0x66706365,
+    ///'rhoc'
+    ReflectionHardcopyOriginalColorimetry =  0x72686F63,
+    ///'rpoc'
+    ReflectionPrintOutputColorimetry =       0x72706F63,
+}
+pub use ColorimetricIntentImageState::*;
 
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
@@ -1500,7 +1505,7 @@ extern "C" {
     pub fn cmsGetHeaderAttributes(hProfile: HPROFILE, Flags: *mut u64);
     pub fn cmsGetHeaderProfileID(hProfile: HPROFILE, ProfileID: *mut u8);
     pub fn cmsGetHeaderCreationDateTime(hProfile: HPROFILE, Dest: *mut tm) -> Bool;
-    pub fn cmsGetHeaderRenderingIntent(hProfile: HPROFILE) -> u32;
+    pub fn cmsGetHeaderRenderingIntent(hProfile: HPROFILE) -> Intent;
     pub fn cmsSetHeaderFlags(hProfile: HPROFILE, Flags: u32);
     pub fn cmsGetHeaderManufacturer(hProfile: HPROFILE) -> u32;
     pub fn cmsSetHeaderManufacturer(hProfile: HPROFILE, manufacturer: u32);

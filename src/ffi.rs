@@ -1168,8 +1168,9 @@ pub enum StageLoc {
     AT_BEGIN = 0,
     AT_END = 1,
 }
-pub type SAMPLER16 = ::std::option::Option<unsafe extern "C" fn(In: *mut u16, Out: *mut u16, Cargo: *mut c_void) -> i32>;
-pub type SAMPLERFLOAT = ::std::option::Option<unsafe extern "C" fn(In: *mut f32, Out: *mut f32, Cargo: *mut c_void) -> i32>;
+pub type SAMPLER16 = unsafe extern "C" fn(input: *const u16, output: *mut u16, user_data: *mut c_void) -> i32;
+pub type SAMPLERFLOAT = unsafe extern "C" fn(input: *const f32, output: *mut f32, user_data: *mut c_void) -> i32;
+
 pub enum MLU { }
 
 #[repr(C)]
@@ -1350,6 +1351,9 @@ pub fn FLAGS_GRIDPOINTS(n: u32) -> u32 { ((n) & 0xFF) << 16 }
 
 /// CRD special
 pub const FLAGS_NODEFAULTRESOURCEDEF: u32 =     0x01000000;
+
+/// Use this flag to prevent changes being written to destination.
+pub const SAMPLER_INSPECT: u32 = 0x01000000;
 
 #[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]

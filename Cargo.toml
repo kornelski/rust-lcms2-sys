@@ -4,19 +4,25 @@ authors = ["Kornel Lesiński <kornel@geekhood.net>"]
 build = "src/build.rs"
 links = "lcms2"
 repository="https://github.com/pornel/rust-lcms2-sys.git"
-include = ["src/**/*", "Cargo.toml", "README.md"]
 description = "Bindings for liblcms2 (Little CMS)"
 readme = "README.md"
 license = "MIT"
+include = ["src/**/*", "Cargo.toml", "README.md", "vendor/COPYING", "vendor/src/*.c", "vendor/src/*.h", "vendor/include/*.h"]
 keywords = ["icc", "color", "profile", "lcms", "sys"]
 categories = ["multimedia::images", "external-ffi-bindings" ]
-version = "2.3.1"
+version = "2.4.0"
 
 [lib]
 doctest = false
 
+[build-dependencies]
+gcc = { optional = true, version = "0.3.51" }
+pkg-config = { optional = true, version = "0.3.9" }
+
 [dependencies]
 libc = "0.2"
 
-[build-dependencies]
-pkg-config = "0.3"
+[features]
+default = ["dynamic", "static"]
+dynamic = ["pkg-config"]
+static = ["gcc"]

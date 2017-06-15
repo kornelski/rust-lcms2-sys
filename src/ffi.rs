@@ -35,7 +35,27 @@ use std::mem;
 use libc::FILE;
 use std::default::Default;
 
+// That one is missing in Rust's libc
+#[cfg(not(windows))]
+#[doc(hidden)]
 pub type tm = libc::tm;
+#[cfg(windows)]
+#[doc(hidden)]
+#[repr(C)]
+#[derive(Copy, Clone, PartialEq, Eq, Debug)]
+pub struct tm {
+    tm_sec: c_int,
+    tm_min: c_int,
+    tm_hour: c_int,
+    tm_mday: c_int,
+    tm_mon: c_int,
+    tm_year: c_int,
+    tm_wday: c_int,
+    tm_yday: c_int,
+    tm_isdst: c_int,
+}
+
+#[doc(hidden)]
 pub type wchar_t = libc::wchar_t;
 pub type Signature = u32;
 pub type S15Fixed16Number = i32;

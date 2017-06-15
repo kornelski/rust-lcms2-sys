@@ -1,3 +1,5 @@
+//! Check out [higher-level wrapper](https://pornel.github.io/rust-lcms2/lcms2/) for usage in Rust.
+//!
 //! See [LCMS documentation](https://pornel.github.io/rust-lcms2-sys/) for more information about these functions.
 
 pub mod ffi;

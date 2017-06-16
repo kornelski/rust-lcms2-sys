@@ -77,4 +77,6 @@ fn compile_static() {
         .file("vendor/src/cmswtpnt.c")
         .file("vendor/src/cmsxform.c")
         .compile("liblcms2.a");
+
+    println!("cargo:include={}", std::fs::canonicalize("vendor/include").unwrap().display());
 }

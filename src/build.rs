@@ -1,6 +1,6 @@
 #[cfg(feature = "dynamic")]
 extern crate pkg_config;
-#[cfg(feature = "static")]
+#[cfg(any(feature = "static", feature = "static-fallback"))]
 extern crate gcc;
 
 use std::env;
@@ -14,7 +14,7 @@ fn main() {
         println!("cargo:include={}", include_dir);
     }
 
-    if cfg!(feature = "static") || !configure_dynamic() {
+    if cfg!(feature = "static") || (!configure_dynamic() && cfg!(feature = "static-fallback")) {
         compile_static();
     }
 }
@@ -40,13 +40,13 @@ fn configure_dynamic() -> bool {
     false
 }
 
-#[cfg(not(feature = "static"))]
+#[cfg(not(any(feature = "static", feature = "static-fallback")))]
 fn compile_static() {
     println!("cargo:warning='static' feature of lcms2-sys is disabled, so the library won't be built, and probably won't work at all");
     println!("cargo:rustc-link-lib=lcms2");
 }
 
-#[cfg(feature = "static")]
+#[cfg(any(feature = "static", feature = "static-fallback"))]
 fn compile_static() {
     gcc::Config::new()
         .include("vendor/include")

@@ -14,14 +14,15 @@ fn main() {
         println!("cargo:include={}", include_dir);
     }
 
-    if cfg!(feature = "static") || (!configure_dynamic() && cfg!(feature = "static-fallback")) {
+    let requires_static_only = cfg!(feature = "static") || env::var("LCMS2_STATIC").is_ok();
+    if requires_static_only || (!configure_pkg_config() && cfg!(feature = "static-fallback")) {
         compile_static();
     }
 }
 
 #[cfg(feature = "dynamic")]
-fn configure_dynamic() -> bool {
-    match pkg_config::find_library("lcms2") {
+fn configure_pkg_config() -> bool {
+    match pkg_config::probe_library("lcms2") {
         Ok(info) => {
             for path in info.include_paths {
                 println!("cargo:include={}", path.display());
@@ -36,7 +37,7 @@ fn configure_dynamic() -> bool {
 }
 
 #[cfg(not(feature = "dynamic"))]
-fn configure_dynamic() -> bool {
+fn configure_pkg_config() -> bool {
     false
 }
 

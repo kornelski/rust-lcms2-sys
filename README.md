@@ -16,3 +16,5 @@ It's up to date with version 2.8. Linux, macOS and Windows are supported. Other 
 The package supports "static" and "dynamic" [Cargo features](http://doc.crates.io/manifest.html#usage-in-end-products). If "dynamic" is selected (the default) then it will link to system-wide LCMS2 shared library if `pkg-config` is installed and working correctly.
 
 If `pkg-config` doesn't work (i.e. on Windows), or the "static" feature is enabled, it will build LCMS 2.8 from source instead.
+
+If `LCMS2_STATIC` environmental variable is set it will prefer static linking.

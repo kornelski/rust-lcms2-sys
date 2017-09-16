@@ -4,14 +4,24 @@ extern crate pkg_config;
 extern crate gcc;
 
 use std::env;
+use std::env::consts;
+use std::path::Path;
 
 fn main() {
-    if let Ok(lib_dir) = env::var("LCMS2_LIB_DIR") {
-        println!("cargo:rustc-link-search=native={}", lib_dir);
-    }
-
     if let Ok(include_dir) = env::var("LCMS2_INCLUDE_DIR") {
         println!("cargo:include={}", include_dir);
+    }
+
+    if let Some(lib_dir) = env::var_os("LCMS2_LIB_DIR") {
+        let lib_dir = Path::new(&lib_dir);
+        let dylib_name = format!("{}lcms2{}", consts::DLL_PREFIX, consts::DLL_SUFFIX);
+        if lib_dir.join(dylib_name).exists() ||
+           lib_dir.join("liblcms2.a").exists() ||
+           lib_dir.join("lcms2.lib").exists() {
+            println!("cargo:rustc-link-search=native={}", lib_dir.display());
+            println!("cargo:rustc-link-lib=lcms2");
+            return;
+        }
     }
 
     let requires_static_only = cfg!(feature = "static") || env::var("LCMS2_STATIC").is_ok();

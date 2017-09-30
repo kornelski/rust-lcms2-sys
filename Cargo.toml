@@ -10,13 +10,13 @@ description = "Bindings for liblcms2 (Little CMS) with support for Linux, macOS,
 include = ["src/**/*", "Cargo.toml", "README.md", "vendor/COPYING", "vendor/src/*.c", "vendor/src/*.h", "vendor/include/*.h"]
 keywords = ["icc", "color", "profile", "lcms", "sys"]
 categories = ["multimedia::images", "external-ffi-bindings" ]
-version = "2.4.5"
+version = "2.4.6"
 
 [lib]
 doctest = false
 
 [build-dependencies]
-gcc = { optional = true, version = "0.3.51" }
+cc = { optional = true, version = "1.0.0", features = ["parallel"] }
 pkg-config = { optional = true, version = "0.3.9" }
 
 [dependencies]
@@ -25,5 +25,5 @@ libc = "0.2"
 [features]
 default = ["dynamic", "static-fallback"]
 dynamic = ["pkg-config"]
-static = ["gcc"]
-static-fallback = ["gcc"]
+static = ["cc"]
+static-fallback = ["cc"]

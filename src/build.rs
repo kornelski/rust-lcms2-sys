@@ -1,7 +1,7 @@
 #[cfg(feature = "dynamic")]
 extern crate pkg_config;
 #[cfg(any(feature = "static", feature = "static-fallback"))]
-extern crate gcc;
+extern crate cc;
 
 use std::env;
 use std::env::consts;
@@ -59,7 +59,7 @@ fn compile_static() {
 
 #[cfg(any(feature = "static", feature = "static-fallback"))]
 fn compile_static() {
-    gcc::Config::new()
+    cc::Build::new()
         .include("vendor/include")
         .file("vendor/src/cmsalpha.c")
         .file("vendor/src/cmscam02.c")

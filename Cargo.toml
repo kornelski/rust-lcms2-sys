@@ -7,10 +7,10 @@ repository="https://github.com/kornelski/rust-lcms2-sys.git"
 readme = "README.md"
 license = "MIT"
 description = "Bindings for liblcms2 (Little CMS) with support for Linux, macOS, and Windows.\n\nSee lcms2 crate for a safe Rust wrapper."
-include = ["src/**/*", "Cargo.toml", "README.md", "vendor/COPYING", "vendor/src/*.c", "vendor/src/*.h", "vendor/include/*.h"]
+include = ["src/*", "Cargo.toml", "README.md", "vendor/COPYING", "vendor/src/*.c", "vendor/src/*.h", "vendor/include/*.h"]
 keywords = ["icc", "color", "profile", "lcms", "sys"]
 categories = ["multimedia::images", "external-ffi-bindings" ]
-version = "2.4.8"
+version = "3.0.0"
 
 [lib]
 doctest = false

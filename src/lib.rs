@@ -1,6 +1,8 @@
 //! Check out [higher-level wrapper](https://pornel.github.io/rust-lcms2/lcms2/) for usage in Rust.
 //!
 //! See [LCMS documentation](https://pornel.github.io/rust-lcms2-sys/) for more information about these functions.
+#![doc(html_logo_url = "https://pornel.github.io/rust-lcms2/lcms_logo.png")]
+#![doc(html_root_url = "https://docs.rs/lcms2-sys")]
 
 pub mod ffi;
 pub use ffi::*;

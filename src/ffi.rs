@@ -1145,7 +1145,7 @@ impl Default for ICCViewingConditions {
 }
 
 
-#[repr(C)]
+#[repr(u32)]
 #[derive(Copy, Clone, Eq, PartialEq)]
 #[derive(Debug)]
 pub enum Surround {
@@ -1447,16 +1447,16 @@ extern "C" {
     pub fn cmsCIECAM02Done(hModel: HANDLE);
     pub fn cmsCIECAM02Forward(hModel: HANDLE, pIn: *const CIEXYZ, pOut: *mut JCh);
     pub fn cmsCIECAM02Reverse(hModel: HANDLE, pIn: *const JCh, pOut: *mut CIEXYZ);
-    pub fn cmsBuildSegmentedToneCurve(ContextID: Context, nSegments: i32, Segments: *const CurveSegment) -> *mut ToneCurve;
+    pub fn cmsBuildSegmentedToneCurve(ContextID: Context, nSegments: u32, Segments: *const CurveSegment) -> *mut ToneCurve;
     pub fn cmsBuildParametricToneCurve(ContextID: Context, Type: i32, Params: *const f64) -> *mut ToneCurve;
     pub fn cmsBuildGamma(ContextID: Context, Gamma: f64) -> *mut ToneCurve;
-    pub fn cmsBuildTabulatedToneCurve16(ContextID: Context, nEntries: i32, values: *const u16) -> *mut ToneCurve;
+    pub fn cmsBuildTabulatedToneCurve16(ContextID: Context, nEntries: u32, values: *const u16) -> *mut ToneCurve;
     pub fn cmsBuildTabulatedToneCurveFloat(ContextID: Context, nEntries: u32, values: *const f32) -> *mut ToneCurve;
     pub fn cmsFreeToneCurve(Curve: *mut ToneCurve);
     pub fn cmsFreeToneCurveTriple(Curve: *mut *mut ToneCurve);
     pub fn cmsDupToneCurve(Src: *const ToneCurve) -> *mut ToneCurve;
     pub fn cmsReverseToneCurve(InGamma: *const ToneCurve) -> *mut ToneCurve;
-    pub fn cmsReverseToneCurveEx(nResultSamples: i32, InGamma: *const ToneCurve) -> *mut ToneCurve;
+    pub fn cmsReverseToneCurveEx(nResultSamples: u32, InGamma: *const ToneCurve) -> *mut ToneCurve;
     pub fn cmsJoinToneCurve(ContextID: Context, X: *const ToneCurve, Y: *const ToneCurve, nPoints: u32) -> *mut ToneCurve;
     pub fn cmsSmoothToneCurve(Tab: *mut ToneCurve, lambda: f64) -> Bool;
     pub fn cmsEvalToneCurveFloat(Curve: *const ToneCurve, v: f32) -> f32;
@@ -1483,7 +1483,7 @@ extern "C" {
     pub fn cmsPipelineEvalReverseFloat(Target: *mut f32, Result: *mut f32, Hint: *mut f32, lut: *const Pipeline) -> Bool;
     pub fn cmsPipelineCat(l1: *mut Pipeline, l2: *const Pipeline) -> Bool;
     pub fn cmsPipelineSetSaveAs8bitsFlag(lut: *mut Pipeline, On: Bool) -> Bool;
-    pub fn cmsPipelineInsertStage(lut: *mut Pipeline, loc: StageLoc, mpe: *mut Stage) -> c_int;
+    pub fn cmsPipelineInsertStage(lut: *mut Pipeline, loc: StageLoc, mpe: *mut Stage) -> bool;
     pub fn cmsPipelineUnlinkStage(lut: *mut Pipeline, loc: StageLoc, mpe: *mut *mut Stage);
     /// This function is quite useful to analyze the structure of a Pipeline and retrieve the Stage elements
     /// that conform the Pipeline.
@@ -1547,7 +1547,7 @@ extern "C" {
     pub fn cmsWriteTag(hProfile: HPROFILE, sig: TagSignature, data: *const c_void) -> Bool;
     pub fn cmsLinkTag(hProfile: HPROFILE, sig: TagSignature, dest: TagSignature) -> Bool;
     pub fn cmsTagLinkedTo(hProfile: HPROFILE, sig: TagSignature) -> TagSignature;
-    pub fn cmsReadRawTag(hProfile: HPROFILE, sig: TagSignature, Buffer: *mut c_void, BufferSize: u32) -> i32;
+    pub fn cmsReadRawTag(hProfile: HPROFILE, sig: TagSignature, Buffer: *mut c_void, BufferSize: u32) -> u32;
     pub fn cmsWriteRawTag(hProfile: HPROFILE, sig: TagSignature, data: *const c_void, Size: u32) -> Bool;
     pub fn cmsGetHeaderFlags(hProfile: HPROFILE) -> u32;
     pub fn cmsGetHeaderAttributes(hProfile: HPROFILE, Flags: *mut u64);
@@ -1619,8 +1619,8 @@ extern "C" {
     pub fn cmsCreateXYZProfile() -> HPROFILE;
     pub fn cmsCreate_sRGBProfileTHR(ContextID: Context) -> HPROFILE;
     pub fn cmsCreate_sRGBProfile() -> HPROFILE;
-    pub fn cmsCreateBCHSWabstractProfileTHR(ContextID: Context, nLUTPoints: c_int, Bright: f64, Contrast: f64, Hue: f64, Saturation: f64, TempSrc: c_int, TempDest: c_int) -> HPROFILE;
-    pub fn cmsCreateBCHSWabstractProfile(nLUTPoints: c_int, Bright: f64, Contrast: f64, Hue: f64, Saturation: f64, TempSrc: c_int, TempDest: c_int) -> HPROFILE;
+    pub fn cmsCreateBCHSWabstractProfileTHR(ContextID: Context, nLUTPoints: u32, Bright: f64, Contrast: f64, Hue: f64, Saturation: f64, TempSrc: u32, TempDest: u32) -> HPROFILE;
+    pub fn cmsCreateBCHSWabstractProfile(nLUTPoints: u32, Bright: f64, Contrast: f64, Hue: f64, Saturation: f64, TempSrc: u32, TempDest: u32) -> HPROFILE;
     pub fn cmsCreateNULLProfileTHR(ContextID: Context) -> HPROFILE;
     pub fn cmsCreateNULLProfile() -> HPROFILE;
     pub fn cmsTransform2DeviceLink(hTransform: HTRANSFORM, Version: f64, dwFlags: u32) -> HPROFILE;

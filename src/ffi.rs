@@ -717,9 +717,11 @@ impl Default for TagEntry {
 }
 
 pub type HANDLE = *mut c_void;
-pub enum _HPROFILE {}
+#[repr(C)]
+pub struct _HPROFILE { _opaque_type: [u8; 0] }
 pub type HPROFILE = *mut _HPROFILE;
-pub enum _HTRANSFORM {}
+#[repr(C)]
+pub struct _HTRANSFORM { _opaque_type: [u8; 0] }
 pub type HTRANSFORM = *mut _HTRANSFORM;
 
 /// Maximum number of channels in ICC profiles
@@ -1137,7 +1139,8 @@ pub enum Surround {
 
 pub const D_CALCULATE: f64 = -1.;
 
-pub enum _cmsContext_struct { }
+#[repr(C)]
+pub struct _cmsContext_struct { _opaque_type: [u8; 0] }
 // Each context holds its owns globals and its own plug-ins. There is a global context with the id = 0 for lecacy compatibility
 // though using the global context is not recommended. Proper context handling makes lcms more thread-safe.
 pub type Context = *mut _cmsContext_struct;
@@ -1191,7 +1194,8 @@ pub enum StageLoc {
 pub type SAMPLER16 = unsafe extern "C" fn(input: *const u16, output: *mut u16, user_data: *mut c_void) -> i32;
 pub type SAMPLERFLOAT = unsafe extern "C" fn(input: *const f32, output: *mut f32, user_data: *mut c_void) -> i32;
 
-pub enum MLU { }
+#[repr(C)]
+pub struct MLU { _opaque_type: [u8; 0] }
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -1243,7 +1247,8 @@ pub struct Screening {
 impl Default for Screening {
     fn default() -> Self { unsafe { mem::zeroed() } }
 }
-pub enum NAMEDCOLORLIST { }
+#[repr(C)]
+pub struct NAMEDCOLORLIST { _opaque_type: [u8; 0] }
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -1297,7 +1302,8 @@ pub enum InfoType {
     Model = 2,
     Copyright = 3,
 }
-pub enum IOHANDLER { }
+#[repr(C)]
+pub struct IOHANDLER { _opaque_type: [u8; 0] }
 
 
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
@@ -1363,7 +1369,7 @@ pub const FLAGS_CLUT_PRE_LINEARIZATION: u32 =   0x0010;
 /// Prevent negative numbers in floating point transforms
 pub const FLAGS_NONEGATIVES: u32 =              0x8000;
 
-/// Alpha channels are copied on cmsDoTransform()
+/// Alpha channels are copied on `cmsDoTransform()`
 pub const FLAGS_COPY_ALPHA: u32 =           0x04000000;
 
 // Fine-tune control over number of gridpoints

@@ -727,67 +727,48 @@ pub type HTRANSFORM = *mut _HTRANSFORM;
 /// Maximum number of channels in ICC profiles
 pub const MAXCHANNELS: usize =  16;
 
-
-// Format of pixel is defined by one UInt32Number, using bit fields as follows
-//
-//                               2                1          0
-//                          3 2 10987 6 5 4 3 2 1 098 7654 321
-//                          A O TTTTT U Y F P X S EEE CCCC BBB
-//
-//            A: Floating point -- With this flag we can differentiate 16 bits as float and as int
-//            O: Optimized -- previous optimization already returns the final 8-bit value
-//            T: Pixeltype
-//            F: Flavor  0=MinIsBlack(Chocolate) 1=MinIsWhite(Vanilla)
-//            P: Planar? 0=Chunky, 1=Planar
-//            X: swap 16 bps endianess?
-//            S: Do swap? ie, BGR, KYMC
-//            E: Extra samples
-//            C: Channels (Samples per pixel)
-//            B: bytes per sample
-//            Y: Swap first - changes ABGR to BGRA and KCMY to CMYK
-
+#[repr(C)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+pub struct PixelType(pub u32);
 
 // Pixel types
 /// Don't check colorspace
-pub const PT_ANY: u32 =       0;
+pub const PT_ANY: PixelType =   PixelType(0);
 /// 1 & 2 are reserved
-pub const PT_GRAY: u32 =      3;
-pub const PT_RGB: u32 =       4;
-pub const PT_CMY: u32 =       5;
-pub const PT_CMYK: u32 =      6;
-pub const PT_YCbCr: u32 =     7;
+pub const PT_GRAY: PixelType =  PixelType(3);
+pub const PT_RGB: PixelType =   PixelType(4);
+pub const PT_CMY: PixelType =   PixelType(5);
+pub const PT_CMYK: PixelType =  PixelType(6);
+pub const PT_YCbCr: PixelType = PixelType(7);
 /// Lu'v'
-pub const PT_YUV: u32 =       8;
-pub const PT_XYZ: u32 =       9;
-pub const PT_Lab: u32 =       10;
+pub const PT_YUV: PixelType =   PixelType(8);
+pub const PT_XYZ: PixelType =   PixelType(9);
+pub const PT_Lab: PixelType =   PixelType(10);
 /// Lu'v'K
-pub const PT_YUVK: u32 =      11;
-pub const PT_HSV: u32 =       12;
-pub const PT_HLS: u32 =       13;
-pub const PT_Yxy: u32 =       14;
+pub const PT_YUVK: PixelType =  PixelType(11);
+pub const PT_HSV: PixelType =   PixelType(12);
+pub const PT_HLS: PixelType =   PixelType(13);
+pub const PT_Yxy: PixelType =   PixelType(14);
 
-pub const PT_MCH1: u32 =      15;
-pub const PT_MCH2: u32 =      16;
-pub const PT_MCH3: u32 =      17;
-pub const PT_MCH4: u32 =      18;
-pub const PT_MCH5: u32 =      19;
-pub const PT_MCH6: u32 =      20;
-pub const PT_MCH7: u32 =      21;
-pub const PT_MCH8: u32 =      22;
-pub const PT_MCH9: u32 =      23;
-pub const PT_MCH10: u32 =     24;
-pub const PT_MCH11: u32 =     25;
-pub const PT_MCH12: u32 =     26;
-pub const PT_MCH13: u32 =     27;
-pub const PT_MCH14: u32 =     28;
-pub const PT_MCH15: u32 =     29;
+pub const PT_MCH1: PixelType =  PixelType(15);
+pub const PT_MCH2: PixelType =  PixelType(16);
+pub const PT_MCH3: PixelType =  PixelType(17);
+pub const PT_MCH4: PixelType =  PixelType(18);
+pub const PT_MCH5: PixelType =  PixelType(19);
+pub const PT_MCH6: PixelType =  PixelType(20);
+pub const PT_MCH7: PixelType =  PixelType(21);
+pub const PT_MCH8: PixelType =  PixelType(22);
+pub const PT_MCH9: PixelType =  PixelType(23);
+pub const PT_MCH10: PixelType = PixelType(24);
+pub const PT_MCH11: PixelType = PixelType(25);
+pub const PT_MCH12: PixelType = PixelType(26);
+pub const PT_MCH13: PixelType = PixelType(27);
+pub const PT_MCH14: PixelType = PixelType(28);
+pub const PT_MCH15: PixelType = PixelType(29);
 
 /// Identical to PT_Lab, but using the V2 old encoding
-pub const PT_LabV2: u32 =     30;
+pub const PT_LabV2: PixelType = PixelType(30);
 
-#[derive(Copy, Clone, PartialEq, Eq)]
-#[repr(u32)]
-#[derive(Debug)]
 /// Format of pixel is defined by one cmsUInt32Number, using bit fields as follows
 ///
 ///                               2                1          0
@@ -805,205 +786,242 @@ pub const PT_LabV2: u32 =     30;
 ///            C: Channels (Samples per pixel)
 ///            B: bytes per sample
 ///            Y: Swap first - changes ABGR to BGRA and KCMY to CMYK
-pub enum PixelFormat {
-    GRAY_8 = 196617,
-    GRAY_8_REV = 204809,
-    GRAY_16 = 196618,
-    GRAY_16_REV = 204810,
-    GRAY_16_SE = 198666,
-    GRAYA_8 = 196745,
-    GRAYA_16 = 196746,
-    GRAYA_16_SE = 198794,
-    GRAYA_8_PLANAR = 200841,
-    GRAYA_16_PLANAR = 200842,
-    RGB_8 = 262169,
-    RGB_8_PLANAR = 266265,
-    BGR_8 = 263193,
-    BGR_8_PLANAR = 267289,
-    RGB_16 = 262170,
-    RGB_16_PLANAR = 266266,
-    RGB_16_SE = 264218,
-    BGR_16 = 263194,
-    BGR_16_PLANAR = 267290,
-    BGR_16_SE = 265242,
-    RGBA_8 = 262297,
-    RGBA_8_PLANAR = 266393,
-    RGBA_16 = 262298,
-    RGBA_16_PLANAR = 266394,
-    RGBA_16_SE = 264346,
-    ARGB_8 = 278681,
-    ARGB_8_PLANAR = 282777,
-    ARGB_16 = 278682,
-    ABGR_8 = 263321,
-    ABGR_8_PLANAR = 267417,
-    ABGR_16 = 263322,
-    ABGR_16_PLANAR = 267418,
-    ABGR_16_SE = 265370,
-    BGRA_8 = 279705,
-    BGRA_8_PLANAR = 283801,
-    BGRA_16 = 279706,
-    BGRA_16_SE = 281754,
-    CMY_8 = 327705,
-    CMY_8_PLANAR = 331801,
-    CMY_16 = 327706,
-    CMY_16_PLANAR = 331802,
-    CMY_16_SE = 329754,
-    CMYK_8 = 393249,
-    CMYKA_8 = 393377,
-    CMYK_8_REV = 401441,
-    CMYK_8_PLANAR = 397345,
-    CMYK_16 = 393250,
-    CMYK_16_REV = 401442,
-    CMYK_16_PLANAR = 397346,
-    CMYK_16_SE = 395298,
-    KYMC_8 = 394273,
-    KYMC_16 = 394274,
-    KYMC_16_SE = 396322,
-    KCMY_8 = 409633,
-    KCMY_8_REV = 417825,
-    KCMY_16 = 409634,
-    KCMY_16_REV = 417826,
-    KCMY_16_SE = 411682,
-    CMYK5_8 = 1245225,
-    CMYK5_16 = 1245226,
-    CMYK5_16_SE = 1247274,
-    KYMC5_8 = 1246249,
-    KYMC5_16 = 1246250,
-    KYMC5_16_SE = 1248298,
-    CMYK6_8 = 1310769,
-    CMYK6_8_PLANAR = 1314865,
-    CMYK6_16 = 1310770,
-    CMYK6_16_PLANAR = 1314866,
-    CMYK6_16_SE = 1312818,
-    CMYK7_8 = 1376313,
-    CMYK7_16 = 1376314,
-    CMYK7_16_SE = 1378362,
-    KYMC7_8 = 1377337,
-    KYMC7_16 = 1377338,
-    KYMC7_16_SE = 1379386,
-    CMYK8_8 = 1441857,
-    CMYK8_16 = 1441858,
-    CMYK8_16_SE = 1443906,
-    KYMC8_8 = 1442881,
-    KYMC8_16 = 1442882,
-    KYMC8_16_SE = 1444930,
-    CMYK9_8 = 1507401,
-    CMYK9_16 = 1507402,
-    CMYK9_16_SE = 1509450,
-    KYMC9_8 = 1508425,
-    KYMC9_16 = 1508426,
-    KYMC9_16_SE = 1510474,
-    CMYK10_8 = 1572945,
-    CMYK10_16 = 1572946,
-    CMYK10_16_SE = 1574994,
-    KYMC10_8 = 1573969,
-    KYMC10_16 = 1573970,
-    KYMC10_16_SE = 1576018,
-    CMYK11_8 = 1638489,
-    CMYK11_16 = 1638490,
-    CMYK11_16_SE = 1640538,
-    KYMC11_8 = 1639513,
-    KYMC11_16 = 1639514,
-    KYMC11_16_SE = 1641562,
-    CMYK12_8 = 1704033,
-    CMYK12_16 = 1704034,
-    CMYK12_16_SE = 1706082,
-    KYMC12_8 = 1705057,
-    KYMC12_16 = 1705058,
-    KYMC12_16_SE = 1707106,
-    XYZ_16 = 589850,
-    Lab_8 = 655385,
-    LabV2_8 = 1966105,
-    ALab_8 = 671897,
-    ALabV2_8 = 1982617,
-    Lab_16 = 655386,
-    LabV2_16 = 1966106,
-    Yxy_16 = 917530,
-    YCbCr_8 = 458777,
-    YCbCr_8_PLANAR = 462873,
-    YCbCr_16 = 458778,
-    YCbCr_16_PLANAR = 462874,
-    YCbCr_16_SE = 460826,
-    YUV_8 = 524313,
-    YUV_8_PLANAR = 528409,
-    YUV_16 = 524314,
-    YUV_16_PLANAR = 528410,
-    YUV_16_SE = 526362,
-    HLS_8 = 851993,
-    HLS_8_PLANAR = 856089,
-    HLS_16 = 851994,
-    HLS_16_PLANAR = 856090,
-    HLS_16_SE = 854042,
-    HSV_8 = 786457,
-    HSV_8_PLANAR = 790553,
-    HSV_16 = 786458,
-    HSV_16_PLANAR = 790554,
-    HSV_16_SE = 788506,
-    // Named color index. Only 16 bits allowed (don't check colorspace)
-    NAMED_COLOR_INDEX = 10,
-    XYZ_FLT = 4784156,
-    Lab_FLT = 4849692,
-    LabA_FLT = 4849820,
-    GRAY_FLT = 4390924,
-    RGB_FLT = 4456476,
-    RGBA_FLT = 4456604,
-    ARGB_FLT = 4472988,
-    BGR_FLT = 4457500,
-    BGRA_FLT = 4474012,
-    CMYK_FLT = 4587556,
-    XYZ_DBL = 4784152,
-    Lab_DBL = 4849688,
-    GRAY_DBL = 4390920,
-    RGB_DBL = 4456472,
-    BGR_DBL = 4457496,
-    CMYK_DBL = 4587552,
-    GRAY_HALF_FLT = 4390922,
-    RGB_HALF_FLT = 4456474,
-    RGBA_HALF_FLT = 4456602,
-    CMYK_HALF_FLT = 4587554,
-    ARGB_HALF_FLT = 4472986,
-    BGR_HALF_FLT = 4457498,
-    BGRA_HALF_FLT = 4474010,
-}
+#[repr(C)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+pub struct PixelFormat(pub u32);
 
 impl PixelFormat {
-    pub fn float(&self) -> usize {
-        (((*self as u32) >> 22) & 1) as usize
-    }
-    pub fn optimized(&self) -> usize {
-        (((*self as u32) >> 21) & 1) as usize
-    }
-    pub fn colorspace(&self) -> usize {
-        (((*self as u32) >> 16) & 31) as usize
-    }
-    pub fn swapfirst(&self) -> usize {
-        (((*self as u32) >> 14) & 1) as usize
-    }
-    pub fn flavor(&self) -> usize {
-        (((*self as u32) >> 13) & 1) as usize
-    }
-    pub fn planar(&self) -> bool {
-        (((*self as u32) >> 12) & 1) != 0
-    }
-    pub fn endian16(&self) -> usize {
-        (((*self as u32) >> 11) & 1) as usize
-    }
-    pub fn doswap(&self) -> usize {
-        (((*self as u32) >> 10) & 1) as usize
-    }
-    pub fn extra(&self) -> usize {
-        (((*self as u32) >> 7) & 7) as usize
-    }
-    pub fn channels(&self) -> usize {
-        (((*self as u32) >> 3) & 15) as usize
-    }
-    pub fn bytes_per_channel(&self) -> usize {
-        ((*self as u32) & 7) as usize
+    const GRAY_8: PixelFormat = PixelFormat(196617);
+    const GRAY_8_REV: PixelFormat = PixelFormat(204809);
+    const GRAY_16: PixelFormat = PixelFormat(196618);
+    const GRAY_16_REV: PixelFormat = PixelFormat(204810);
+    const GRAY_16_SE: PixelFormat = PixelFormat(198666);
+    const GRAYA_8: PixelFormat = PixelFormat(196745);
+    const GRAYA_16: PixelFormat = PixelFormat(196746);
+    const GRAYA_16_SE: PixelFormat = PixelFormat(198794);
+    const GRAYA_8_PLANAR: PixelFormat = PixelFormat(200841);
+    const GRAYA_16_PLANAR: PixelFormat = PixelFormat(200842);
+    const RGB_8: PixelFormat = PixelFormat(262169);
+    const RGB_8_PLANAR: PixelFormat = PixelFormat(266265);
+    const BGR_8: PixelFormat = PixelFormat(263193);
+    const BGR_8_PLANAR: PixelFormat = PixelFormat(267289);
+    const RGB_16: PixelFormat = PixelFormat(262170);
+    const RGB_16_PLANAR: PixelFormat = PixelFormat(266266);
+    const RGB_16_SE: PixelFormat = PixelFormat(264218);
+    const BGR_16: PixelFormat = PixelFormat(263194);
+    const BGR_16_PLANAR: PixelFormat = PixelFormat(267290);
+    const BGR_16_SE: PixelFormat = PixelFormat(265242);
+    const RGBA_8: PixelFormat = PixelFormat(262297);
+    const RGBA_8_PLANAR: PixelFormat = PixelFormat(266393);
+    const RGBA_16: PixelFormat = PixelFormat(262298);
+    const RGBA_16_PLANAR: PixelFormat = PixelFormat(266394);
+    const RGBA_16_SE: PixelFormat = PixelFormat(264346);
+    const ARGB_8: PixelFormat = PixelFormat(278681);
+    const ARGB_8_PLANAR: PixelFormat = PixelFormat(282777);
+    const ARGB_16: PixelFormat = PixelFormat(278682);
+    const ABGR_8: PixelFormat = PixelFormat(263321);
+    const ABGR_8_PLANAR: PixelFormat = PixelFormat(267417);
+    const ABGR_16: PixelFormat = PixelFormat(263322);
+    const ABGR_16_PLANAR: PixelFormat = PixelFormat(267418);
+    const ABGR_16_SE: PixelFormat = PixelFormat(265370);
+    const BGRA_8: PixelFormat = PixelFormat(279705);
+    const BGRA_8_PLANAR: PixelFormat = PixelFormat(283801);
+    const BGRA_16: PixelFormat = PixelFormat(279706);
+    const BGRA_16_SE: PixelFormat = PixelFormat(281754);
+    const CMY_8: PixelFormat = PixelFormat(327705);
+    const CMY_8_PLANAR: PixelFormat = PixelFormat(331801);
+    const CMY_16: PixelFormat = PixelFormat(327706);
+    const CMY_16_PLANAR: PixelFormat = PixelFormat(331802);
+    const CMY_16_SE: PixelFormat = PixelFormat(329754);
+    const CMYK_8: PixelFormat = PixelFormat(393249);
+    const CMYKA_8: PixelFormat = PixelFormat(393377);
+    const CMYK_8_REV: PixelFormat = PixelFormat(401441);
+    const CMYK_8_PLANAR: PixelFormat = PixelFormat(397345);
+    const CMYK_16: PixelFormat = PixelFormat(393250);
+    const CMYK_16_REV: PixelFormat = PixelFormat(401442);
+    const CMYK_16_PLANAR: PixelFormat = PixelFormat(397346);
+    const CMYK_16_SE: PixelFormat = PixelFormat(395298);
+    const KYMC_8: PixelFormat = PixelFormat(394273);
+    const KYMC_16: PixelFormat = PixelFormat(394274);
+    const KYMC_16_SE: PixelFormat = PixelFormat(396322);
+    const KCMY_8: PixelFormat = PixelFormat(409633);
+    const KCMY_8_REV: PixelFormat = PixelFormat(417825);
+    const KCMY_16: PixelFormat = PixelFormat(409634);
+    const KCMY_16_REV: PixelFormat = PixelFormat(417826);
+    const KCMY_16_SE: PixelFormat = PixelFormat(411682);
+    const CMYK5_8: PixelFormat = PixelFormat(1245225);
+    const CMYK5_16: PixelFormat = PixelFormat(1245226);
+    const CMYK5_16_SE: PixelFormat = PixelFormat(1247274);
+    const KYMC5_8: PixelFormat = PixelFormat(1246249);
+    const KYMC5_16: PixelFormat = PixelFormat(1246250);
+    const KYMC5_16_SE: PixelFormat = PixelFormat(1248298);
+    const CMYK6_8: PixelFormat = PixelFormat(1310769);
+    const CMYK6_8_PLANAR: PixelFormat = PixelFormat(1314865);
+    const CMYK6_16: PixelFormat = PixelFormat(1310770);
+    const CMYK6_16_PLANAR: PixelFormat = PixelFormat(1314866);
+    const CMYK6_16_SE: PixelFormat = PixelFormat(1312818);
+    const CMYK7_8: PixelFormat = PixelFormat(1376313);
+    const CMYK7_16: PixelFormat = PixelFormat(1376314);
+    const CMYK7_16_SE: PixelFormat = PixelFormat(1378362);
+    const KYMC7_8: PixelFormat = PixelFormat(1377337);
+    const KYMC7_16: PixelFormat = PixelFormat(1377338);
+    const KYMC7_16_SE: PixelFormat = PixelFormat(1379386);
+    const CMYK8_8: PixelFormat = PixelFormat(1441857);
+    const CMYK8_16: PixelFormat = PixelFormat(1441858);
+    const CMYK8_16_SE: PixelFormat = PixelFormat(1443906);
+    const KYMC8_8: PixelFormat = PixelFormat(1442881);
+    const KYMC8_16: PixelFormat = PixelFormat(1442882);
+    const KYMC8_16_SE: PixelFormat = PixelFormat(1444930);
+    const CMYK9_8: PixelFormat = PixelFormat(1507401);
+    const CMYK9_16: PixelFormat = PixelFormat(1507402);
+    const CMYK9_16_SE: PixelFormat = PixelFormat(1509450);
+    const KYMC9_8: PixelFormat = PixelFormat(1508425);
+    const KYMC9_16: PixelFormat = PixelFormat(1508426);
+    const KYMC9_16_SE: PixelFormat = PixelFormat(1510474);
+    const CMYK10_8: PixelFormat = PixelFormat(1572945);
+    const CMYK10_16: PixelFormat = PixelFormat(1572946);
+    const CMYK10_16_SE: PixelFormat = PixelFormat(1574994);
+    const KYMC10_8: PixelFormat = PixelFormat(1573969);
+    const KYMC10_16: PixelFormat = PixelFormat(1573970);
+    const KYMC10_16_SE: PixelFormat = PixelFormat(1576018);
+    const CMYK11_8: PixelFormat = PixelFormat(1638489);
+    const CMYK11_16: PixelFormat = PixelFormat(1638490);
+    const CMYK11_16_SE: PixelFormat = PixelFormat(1640538);
+    const KYMC11_8: PixelFormat = PixelFormat(1639513);
+    const KYMC11_16: PixelFormat = PixelFormat(1639514);
+    const KYMC11_16_SE: PixelFormat = PixelFormat(1641562);
+    const CMYK12_8: PixelFormat = PixelFormat(1704033);
+    const CMYK12_16: PixelFormat = PixelFormat(1704034);
+    const CMYK12_16_SE: PixelFormat = PixelFormat(1706082);
+    const KYMC12_8: PixelFormat = PixelFormat(1705057);
+    const KYMC12_16: PixelFormat = PixelFormat(1705058);
+    const KYMC12_16_SE: PixelFormat = PixelFormat(1707106);
+    const XYZ_16: PixelFormat = PixelFormat(589850);
+    const Lab_8: PixelFormat = PixelFormat(655385);
+    const LabV2_8: PixelFormat = PixelFormat(1966105);
+    const ALab_8: PixelFormat = PixelFormat(671897);
+    const ALabV2_8: PixelFormat = PixelFormat(1982617);
+    const Lab_16: PixelFormat = PixelFormat(655386);
+    const LabV2_16: PixelFormat = PixelFormat(1966106);
+    const Yxy_16: PixelFormat = PixelFormat(917530);
+    const YCbCr_8: PixelFormat = PixelFormat(458777);
+    const YCbCr_8_PLANAR: PixelFormat = PixelFormat(462873);
+    const YCbCr_16: PixelFormat = PixelFormat(458778);
+    const YCbCr_16_PLANAR: PixelFormat = PixelFormat(462874);
+    const YCbCr_16_SE: PixelFormat = PixelFormat(460826);
+    const YUV_8: PixelFormat = PixelFormat(524313);
+    const YUV_8_PLANAR: PixelFormat = PixelFormat(528409);
+    const YUV_16: PixelFormat = PixelFormat(524314);
+    const YUV_16_PLANAR: PixelFormat = PixelFormat(528410);
+    const YUV_16_SE: PixelFormat = PixelFormat(526362);
+    const HLS_8: PixelFormat = PixelFormat(851993);
+    const HLS_8_PLANAR: PixelFormat = PixelFormat(856089);
+    const HLS_16: PixelFormat = PixelFormat(851994);
+    const HLS_16_PLANAR: PixelFormat = PixelFormat(856090);
+    const HLS_16_SE: PixelFormat = PixelFormat(854042);
+    const HSV_8: PixelFormat = PixelFormat(786457);
+    const HSV_8_PLANAR: PixelFormat = PixelFormat(790553);
+    const HSV_16: PixelFormat = PixelFormat(786458);
+    const HSV_16_PLANAR: PixelFormat = PixelFormat(790554);
+    const HSV_16_SE: PixelFormat = PixelFormat(788506);
+    // Named color index. Only 16 bits allowed (don't check colorspace)
+    const NAMED_COLOR_INDEX: PixelFormat = PixelFormat(10);
+    const XYZ_FLT: PixelFormat = PixelFormat(4784156);
+    const Lab_FLT: PixelFormat = PixelFormat(4849692);
+    const LabA_FLT: PixelFormat = PixelFormat(4849820);
+    const GRAY_FLT: PixelFormat = PixelFormat(4390924);
+    const RGB_FLT: PixelFormat = PixelFormat(4456476);
+    const RGBA_FLT: PixelFormat = PixelFormat(4456604);
+    const ARGB_FLT: PixelFormat = PixelFormat(4472988);
+    const BGR_FLT: PixelFormat = PixelFormat(4457500);
+    const BGRA_FLT: PixelFormat = PixelFormat(4474012);
+    const CMYK_FLT: PixelFormat = PixelFormat(4587556);
+    const XYZ_DBL: PixelFormat = PixelFormat(4784152);
+    const Lab_DBL: PixelFormat = PixelFormat(4849688);
+    const GRAY_DBL: PixelFormat = PixelFormat(4390920);
+    const RGB_DBL: PixelFormat = PixelFormat(4456472);
+    const BGR_DBL: PixelFormat = PixelFormat(4457496);
+    const CMYK_DBL: PixelFormat = PixelFormat(4587552);
+    const GRAY_HALF_FLT: PixelFormat = PixelFormat(4390922);
+    const RGB_HALF_FLT: PixelFormat = PixelFormat(4456474);
+    const RGBA_HALF_FLT: PixelFormat = PixelFormat(4456602);
+    const CMYK_HALF_FLT: PixelFormat = PixelFormat(4587554);
+    const ARGB_HALF_FLT: PixelFormat = PixelFormat(4472986);
+    const BGR_HALF_FLT: PixelFormat = PixelFormat(4457498);
+    const BGRA_HALF_FLT: PixelFormat = PixelFormat(4474010);
+
+    ///   A: Floating point -- With this flag we can differentiate 16 bits as float and as int
+    pub fn float(&self) -> bool {
+        ((self.0 >> 22) & 1) != 0
     }
 
+    ///   O: Optimized -- previous optimization already returns the final 8-bit value
+    pub fn optimized(&self) -> bool {
+        ((self.0 >> 21) & 1) != 0
+    }
+
+    ///   T: Color space (`PT_*`)
+    pub fn pixel_type(&self) -> PixelType {
+        PixelType((self.0 >> 16) & 31)
+    }
+
+    ///   Y: Swap first - changes ABGR to BGRA and KCMY to CMYK
+    pub fn swapfirst(&self) -> bool {
+        ((self.0 >> 14) & 1) != 0
+    }
+
+    ///   F: Flavor  0=MinIsBlack(Chocolate) 1=MinIsWhite(Vanilla)
+    pub fn min_is_white(&self) -> bool {
+        ((self.0 >> 13) & 1) != 0
+    }
+
+    ///   P: Planar? 0=Chunky, 1=Planar
+    pub fn planar(&self) -> bool {
+        ((self.0 >> 12) & 1) != 0
+    }
+
+    ///   X: swap 16 bps endianness?
+    pub fn endian16(&self) -> bool {
+        ((self.0 >> 11) & 1) != 0
+    }
+
+    ///   S: Do swap? ie, BGR, KYMC
+    pub fn doswap(&self) -> bool {
+        ((self.0 >> 10) & 1) != 0
+    }
+
+    ///   E: Extra samples
+    pub fn extra(&self) -> usize {
+        ((self.0 >> 7) & 7) as usize
+    }
+
+    ///   C: Channels (Samples per pixel)
+    pub fn channels(&self) -> usize {
+        ((self.0 >> 3) & 15) as usize
+    }
+
+    ///   B: bytes per sample
+    pub fn bytes_per_channel(&self) -> usize {
+        (self.0 & 7) as usize
+    }
+
+    /// size of pixel
     pub fn bytes_per_pixel(&self) -> usize {
         self.bytes_per_channel() * (self.extra() + self.channels())
     }
+}
+
+#[test]
+fn test_pixelformat() {
+    assert_eq!(4, PixelFormat::CMYKA_8.channels());
+    assert_eq!(1, PixelFormat::CMYKA_8.extra());
+
+    assert!(!PixelFormat::CMYKA_8.doswap());
+    assert_eq!(1, PixelFormat::CMYKA_8.bytes_per_channel());
+    assert_eq!(5, PixelFormat::CMYKA_8.bytes_per_pixel());
+
+    assert_eq!(2, PixelFormat::CMYK_HALF_FLT.bytes_per_channel());
+    assert_eq!(PT_CMYK, PixelFormat::CMYK_HALF_FLT.pixel_type());
 }
 
 #[repr(C)]

@@ -1,10 +1,10 @@
 # [Little CMS](http://www.littlecms.com) bindings for [Rust](https://www.rust-lang.org/)
 
-Makes [LCMS C API](https://github.com/mm2/Little-CMS) available in Rust. There's also a [higher-level wrapper](https://github.com/pornel/rust-lcms2).
+Makes [LCMS C API](https://github.com/mm2/Little-CMS) available in Rust. There's also a [higher-level wrapper](https://github.com/kornelski/rust-lcms2).
 
 It's up to date with version 2.8. Linux, macOS and Windows are supported. Other platforms may work, too.
 
-## Differences from [the C API](https://pornel.github.io/rust-lcms2-sys/)
+## Differences from [the C API](https://kornelski.github.io/rust-lcms2-sys/)
 
  * Type names don't have the `cms` prefix, e.g. `cmsColorSpace` is `ColorSpace`.
      * All C function names remained the same (with the prefix, e.g. `fn cmsReadTag()`).

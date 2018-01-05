@@ -2,6 +2,7 @@
 extern crate pkg_config;
 #[cfg(any(feature = "static", feature = "static-fallback"))]
 extern crate cc;
+extern crate dunce;
 
 use std::env;
 use std::env::consts;
@@ -89,5 +90,5 @@ fn compile_static() {
         .file("vendor/src/cmsxform.c")
         .compile("liblcms2.a");
 
-    println!("cargo:include={}", std::fs::canonicalize("vendor/include").unwrap().display());
+    println!("cargo:include={}", dunce::canonicalize("vendor/include").unwrap().display());
 }

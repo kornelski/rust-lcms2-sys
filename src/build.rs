@@ -2,7 +2,6 @@
 extern crate pkg_config;
 #[cfg(any(feature = "static", feature = "static-fallback"))]
 extern crate cc;
-extern crate dunce;
 
 use std::env;
 use std::env::consts;

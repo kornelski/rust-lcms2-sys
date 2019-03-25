@@ -21,3 +21,12 @@ If `pkg-config` doesn't work (i.e. on Windows), or the "static" feature is enabl
 
 If `LCMS2_STATIC` environmental variable is set it will prefer static linking.
 
+## Contributing
+
+Make sure you clone with `--recursive` or run
+
+```sh
+git submodule update --init
+```
+
+before compiling.

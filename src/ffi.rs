@@ -509,7 +509,7 @@ pub enum ColorimetricIntentImageState {
     ///'rpoc'
     ReflectionPrintOutputColorimetry =       0x72706F63,
 }
-pub use ColorimetricIntentImageState::*;
+pub use crate::ColorimetricIntentImageState::*;
 
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]

@@ -11,7 +11,7 @@ description = "Bindings for liblcms2 (Little CMS) with support for Linux, macOS,
 include = ["src/*", "Cargo.toml", "README.md", "vendor/COPYING", "vendor/src/*.c", "vendor/src/*.h", "vendor/include/*.h"]
 keywords = ["icc", "color", "profile", "lcms", "sys"]
 categories = ["multimedia::images", "external-ffi-bindings" ]
-version = "3.1.0"
+version = "3.1.1"
 edition = "2018"
 
 [lib]

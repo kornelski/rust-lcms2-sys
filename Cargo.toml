@@ -3,7 +3,7 @@ name = "lcms2-sys"
 authors = ["Kornel Lesiński <kornel@geekhood.net>"]
 build = "src/build.rs"
 links = "lcms2"
-homepage = "https://crates.rs/crates/lcms2-sys"
+homepage = "https://lib.rs/crates/lcms2-sys"
 repository = "https://github.com/kornelski/rust-lcms2-sys.git"
 readme = "README.md"
 license = "MIT"
@@ -11,14 +11,14 @@ description = "Bindings for liblcms2 (Little CMS) with support for Linux, macOS,
 include = ["src/*", "Cargo.toml", "README.md", "vendor/COPYING", "vendor/src/*.c", "vendor/src/*.h", "vendor/include/*.h"]
 keywords = ["icc", "color", "profile", "lcms", "sys"]
 categories = ["multimedia::images", "external-ffi-bindings" ]
-version = "3.1.1"
+version = "3.1.2"
 edition = "2018"
 
 [lib]
 doctest = false
 
 [build-dependencies]
-cc = { optional = true, version = "1.0.30", features = ["parallel"] }
+cc = { optional = true, version = "1.0.30" }
 pkg-config = { optional = true, version = "0.3.9" }
 dunce = "1.0.0"
 
@@ -26,7 +26,8 @@ dunce = "1.0.0"
 libc = "0.2.45"
 
 [features]
-default = ["dynamic", "static-fallback"]
+default = ["dynamic", "static-fallback", "parallel"]
 dynamic = ["pkg-config"]
+parallel = ["cc/parallel"]
 static = ["cc"]
 static-fallback = ["cc"]

@@ -6,7 +6,7 @@
 
 pub mod ffi;
 pub use crate::ffi::*;
-use std::mem;
+use std::mem::MaybeUninit;
 
 #[doc(hidden)]
 extern crate libc;
@@ -26,9 +26,9 @@ impl CIExyY {
 impl From<CIEXYZ> for CIExyY {
     fn from(f: CIEXYZ) -> Self {
         unsafe {
-            let mut new = mem::uninitialized();
-            cmsXYZ2xyY(&mut new, &f);
-            new
+            let mut new = MaybeUninit::uninit();
+            cmsXYZ2xyY(new.as_mut_ptr(), &f);
+            new.assume_init()
         }
     }
 }
@@ -36,9 +36,9 @@ impl From<CIEXYZ> for CIExyY {
 impl From<CIExyY> for CIEXYZ {
     fn from(f: CIExyY) -> Self {
         unsafe {
-            let mut new = mem::uninitialized();
-            cmsxyY2XYZ(&mut new, &f);
-            new
+            let mut new = MaybeUninit::uninit();
+            cmsxyY2XYZ(new.as_mut_ptr(), &f);
+            new.assume_init()
         }
     }
 }
@@ -46,9 +46,9 @@ impl From<CIExyY> for CIEXYZ {
 impl From<CIELab> for CIELCh {
     fn from(f: CIELab) -> Self {
         unsafe {
-            let mut new = mem::uninitialized();
-            cmsLab2LCh(&mut new, &f);
-            new
+            let mut new = MaybeUninit::uninit();
+            cmsLab2LCh(new.as_mut_ptr(), &f);
+            new.assume_init()
         }
     }
 }
@@ -56,9 +56,9 @@ impl From<CIELab> for CIELCh {
 impl From<CIELCh> for CIELab {
     fn from(f: CIELCh) -> Self {
         unsafe {
-            let mut new = mem::uninitialized();
-            cmsLCh2Lab(&mut new, &f);
-            new
+            let mut new = MaybeUninit::uninit();
+            cmsLCh2Lab(new.as_mut_ptr(), &f);
+            new.assume_init()
         }
     }
 }

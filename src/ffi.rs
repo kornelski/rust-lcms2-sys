@@ -1002,13 +1002,25 @@ impl PixelFormat {
 
     ///   B: bytes per sample
     pub fn bytes_per_channel(&self) -> usize {
-        (self.0 & 7) as usize
+        let res = (self.0 & 7) as usize;
+        // 8 overflows the field
+        if res != 0 {res} else {8}
     }
 
     /// size of pixel
     pub fn bytes_per_pixel(&self) -> usize {
         self.bytes_per_channel() * (self.extra() + self.channels())
     }
+}
+
+#[test]
+fn test_bpc() {
+    assert_eq!(8, PixelFormat::XYZ_DBL.bytes_per_channel());
+    assert_eq!(8, PixelFormat::Lab_DBL.bytes_per_channel());
+    assert_eq!(8, PixelFormat::GRAY_DBL.bytes_per_channel());
+    assert_eq!(8, PixelFormat::RGB_DBL.bytes_per_channel());
+    assert_eq!(8, PixelFormat::BGR_DBL.bytes_per_channel());
+    assert_eq!(8, PixelFormat::CMYK_DBL.bytes_per_channel());
 }
 
 #[test]

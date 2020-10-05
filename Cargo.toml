@@ -1,17 +1,18 @@
 [package]
 name = "lcms2-sys"
+version = "3.1.5"
 authors = ["Kornel Lesiński <kornel@geekhood.net>"]
 build = "src/build.rs"
-links = "lcms2"
-homepage = "https://lib.rs/crates/lcms2-sys"
-repository = "https://github.com/kornelski/rust-lcms2-sys.git"
-readme = "README.md"
-license = "MIT"
+categories = ["multimedia::images", "external-ffi-bindings" ]
 description = "Bindings for liblcms2 (Little CMS) with support for Linux, macOS, and Windows.\n\nSee lcms2 crate for a safe Rust wrapper."
+documentation = "https://kornelski.github.io/rust-lcms2-sys/"
+homepage = "https://lib.rs/crates/lcms2-sys"
 include = ["src/*", "Cargo.toml", "README.md", "vendor/COPYING", "vendor/src/*.c", "vendor/src/*.h", "vendor/include/*.h"]
 keywords = ["icc", "color", "profile", "lcms", "sys"]
-categories = ["multimedia::images", "external-ffi-bindings" ]
-version = "3.1.4"
+license = "MIT"
+links = "lcms2"
+readme = "README.md"
+repository = "https://github.com/kornelski/rust-lcms2-sys.git"
 edition = "2018"
 
 [lib]
@@ -31,3 +32,6 @@ dynamic = ["pkg-config"]
 parallel = ["cc/parallel"]
 static = ["cc"]
 static-fallback = ["cc"]
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]

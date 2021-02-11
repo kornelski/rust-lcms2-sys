@@ -2,7 +2,7 @@
 
 Makes [LCMS C API](https://github.com/mm2/Little-CMS) available in Rust. There's also a [higher-level wrapper](https://github.com/kornelski/rust-lcms2).
 
-It's up to date with version 2.9. Linux, macOS and Windows are supported. Other platforms may work, too.
+It's up to date with version 2.12. Linux, macOS and Windows are supported. Other platforms may work, too.
 
 ## Differences from [the C API](https://kornelski.github.io/rust-lcms2-sys/)
 

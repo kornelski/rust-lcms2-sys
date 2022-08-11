@@ -772,9 +772,10 @@ pub const PT_LabV2: PixelType = PixelType(30);
 /// Format of pixel is defined by one cmsUInt32Number, using bit fields as follows
 ///
 ///                               2                1          0
-///                          3 2 10987 6 5 4 3 2 1 098 7654 321
-///                          A O TTTTT U Y F P X S EEE CCCC BBB
+///                        4 3 2 10987 6 5 4 3 2 1 098 7654 321
+///                        M A O TTTTT U Y F P X S EEE CCCC BBB
 ///
+///            M: Premultiplied alpha (only works when extra samples is 1)
 ///            A: Floating point -- With this flag we can differentiate 16 bits as float and as int
 ///            O: Optimized -- previous optimization already returns the final 8-bit value
 ///            T: Pixeltype
@@ -949,6 +950,11 @@ impl PixelFormat {
     pub const ARGB_HALF_FLT: PixelFormat = PixelFormat(4472986);
     pub const BGR_HALF_FLT: PixelFormat = PixelFormat(4457498);
     pub const BGRA_HALF_FLT: PixelFormat = PixelFormat(4474010);
+
+    ///   M: Premultiplied alpha (only works when extra samples is 1)
+    pub fn premultiplied(&self) -> bool {
+        ((self.0 >> 23) & 1) != 0
+    }
 
     ///   A: Floating point -- With this flag we can differentiate 16 bits as float and as int
     pub fn float(&self) -> bool {

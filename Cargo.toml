@@ -1,6 +1,6 @@
 [package]
 name = "lcms2-sys"
-version = "3.1.9"
+version = "3.1.10"
 authors = ["Kornel Lesiński <kornel@geekhood.net>"]
 build = "src/build.rs"
 categories = ["multimedia::images", "external-ffi-bindings" ]
@@ -19,12 +19,12 @@ edition = "2018"
 doctest = false
 
 [build-dependencies]
-cc = { optional = true, version = "1.0.66" }
-pkg-config = { optional = true, version = "0.3.19" }
-dunce = "1.0.1"
+cc = { optional = true, version = "1.0.73" }
+pkg-config = { optional = true, version = "0.3.25" }
+dunce = "1.0.2"
 
 [dependencies]
-libc = "0.2.82"
+libc = "0.2.129"
 
 [features]
 default = ["dynamic", "static-fallback", "parallel"]

@@ -81,6 +81,7 @@ pub const lcmsSignature: Signature = 0x6c636d73;
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
 #[derive(Debug)]
+#[non_exhaustive]
 pub enum TagTypeSignature {
     /// 'chrm'
     ChromaticityType                  = 0x6368726D,
@@ -153,7 +154,9 @@ pub enum TagTypeSignature {
     /// 'view'
     ViewingConditionsType             = 0x76696577,
     /// 'XYZ '
-    XYZType                           = 0x58595A20
+    XYZType                           = 0x58595A20,
+    /// `cicp`
+    CicpType                          = 0x63696370,
 }
 
 pub const BlueMatrixColumnTag: TagSignature = TagSignature::BlueColorantTag;
@@ -163,6 +166,7 @@ pub const RedMatrixColumnTag: TagSignature = TagSignature::RedColorantTag;
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
 #[derive(Debug)]
+#[non_exhaustive]
 pub enum TagSignature {
     /// 'A2B0'
     AToB0Tag                          = 0x41324230,
@@ -300,12 +304,14 @@ pub enum TagSignature {
     MetaTag                           = 0x6D657461,
     /// 'arts'
     ArgyllArtsTag                     = 0x61727473,
+    /// `cicp`
+    CicpTag                           = 0x63696370,
 }
-pub use self::TagSignature::*;
 
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
 #[derive(Debug)]
+#[non_exhaustive]
 pub enum TechnologySignature {
     /// 'dcam'
     DigitalCamera                     = 0x6463616D,
@@ -364,6 +370,7 @@ pub enum TechnologySignature {
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
 #[derive(Debug)]
+#[non_exhaustive]
 pub enum ColorSpaceSignature {
     /// 'XYZ '
     XYZData                           = 0x58595A20,
@@ -456,6 +463,7 @@ pub enum ColorSpaceSignature {
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
 #[derive(Debug)]
+#[non_exhaustive]
 pub enum ProfileClassSignature {
     /// 'scnr'
     InputClass                        = 0x73636E72,
@@ -476,6 +484,7 @@ pub enum ProfileClassSignature {
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
 #[derive(Debug)]
+#[non_exhaustive]
 pub enum PlatformSignature {
     /// 'APPL'
     Macintosh                         = 0x4150504C,
@@ -497,6 +506,7 @@ pub const PerceptualReferenceMediumGamut:u32 =         0x70726d67;
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
 #[derive(Debug)]
+#[non_exhaustive]
 pub enum ColorimetricIntentImageState {
     ///'scoe'
     SceneColorimetryEstimates =              0x73636F65,
@@ -509,11 +519,11 @@ pub enum ColorimetricIntentImageState {
     ///'rpoc'
     ReflectionPrintOutputColorimetry =       0x72706F63,
 }
-pub use crate::ColorimetricIntentImageState::*;
 
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
 #[derive(Debug)]
+#[non_exhaustive]
 pub enum StageSignature {
     ///'cvst'
     CurveSetElemType              = 0x63767374,
@@ -559,6 +569,7 @@ pub enum StageSignature {
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
 #[derive(Debug)]
+#[non_exhaustive]
 pub enum CurveSegSignature {
     /// 'parf'
     FormulaCurveSeg               = 0x70617266,
@@ -1124,6 +1135,7 @@ pub struct CIExyYTRIPLE {
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
 #[derive(Debug)]
+#[non_exhaustive]
 pub enum IlluminantType {
     UNKNOWN = 0x0000000,
     D50 =     0x0000001,
@@ -1345,6 +1357,7 @@ pub struct IOHANDLER { _opaque_type: [u8; 0] }
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
 #[derive(Debug)]
+#[non_exhaustive]
 pub enum Intent {
     /// ICC Intents
     Perceptual = 0,
@@ -1423,6 +1436,15 @@ pub const SAMPLER_INSPECT: u32 = 0x01000000;
 pub enum PSResourceType {
     PS_RESOURCE_CSA = 0,
     PS_RESOURCE_CRD = 1,
+}
+
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct VideoSignalType {
+    pub ColourPrimaries: u8,
+    pub TransferCharacteristics: u8,
+    pub MatrixCoefficients: u8,
+    pub VideoFullRangeFlag: u8,
 }
 
 extern "C" {
@@ -1597,6 +1619,7 @@ extern "C" {
     pub fn _cmsICCcolorSpace(OurNotation: c_int) -> ColorSpaceSignature;
     pub fn _cmsLCMScolorSpace(ProfileSpace: ColorSpaceSignature) -> c_int;
     pub fn cmsChannelsOf(ColorSpace: ColorSpaceSignature) -> u32;
+    pub fn cmsChannelsOfColorSpace(ColorSpace: ColorSpaceSignature) -> i32;
     pub fn cmsFormatterForColorspaceOfProfile(hProfile: HPROFILE, nBytes: u32, lIsFloat: Bool) -> u32;
     pub fn cmsFormatterForPCSOfProfile(hProfile: HPROFILE, nBytes: u32, lIsFloat: Bool) -> u32;
     pub fn cmsGetProfileInfo(hProfile: HPROFILE, Info: InfoType, LanguageCode: *const c_char, CountryCode: *const c_char, Buffer: *mut wchar_t, BufferSize: u32) -> u32;

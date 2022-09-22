@@ -1,6 +1,6 @@
 [package]
 name = "lcms2-sys"
-version = "3.1.10"
+version = "4.0.0"
 authors = ["Kornel Lesiński <kornel@geekhood.net>"]
 build = "src/build.rs"
 categories = ["multimedia::images", "external-ffi-bindings" ]
@@ -35,3 +35,6 @@ static-fallback = ["cc"]
 
 [package.metadata.docs.rs]
 targets = ["x86_64-unknown-linux-gnu"]
+
+[badges]
+maintenance = { status = "actively-developed" }

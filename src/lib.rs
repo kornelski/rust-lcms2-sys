@@ -12,12 +12,14 @@ use std::mem::MaybeUninit;
 extern crate libc;
 
 impl CIEXYZ {
+    #[must_use]
     pub fn d50() -> &'static CIEXYZ {
         unsafe { cmsD50_XYZ() }
     }
 }
 
 impl CIExyY {
+    #[must_use]
     pub fn d50() -> &'static CIExyY {
         unsafe { cmsD50_xyY() }
     }
@@ -69,7 +71,7 @@ fn it_works() {
         let c = cmsCreateContext(std::ptr::null_mut(), std::ptr::null_mut());
         cmsDeleteContext(c);
 
-        let xyz:CIEXYZ = ::std::default::Default::default();
-        let _:CIExyY = xyz.into();
+        let xyz: CIEXYZ = ::std::default::Default::default();
+        let _: CIExyY = xyz.into();
     }
 }

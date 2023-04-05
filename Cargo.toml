@@ -1,6 +1,6 @@
 [package]
 name = "lcms2-sys"
-version = "4.0.0"
+version = "4.0.1"
 authors = ["Kornel Lesiński <kornel@geekhood.net>"]
 build = "src/build.rs"
 categories = ["multimedia::images", "external-ffi-bindings" ]
@@ -13,7 +13,7 @@ license = "MIT"
 links = "lcms2"
 readme = "README.md"
 repository = "https://github.com/kornelski/rust-lcms2-sys.git"
-edition = "2018"
+edition = "2021"
 
 [lib]
 doctest = false

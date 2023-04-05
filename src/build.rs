@@ -1,8 +1,3 @@
-#[cfg(feature = "dynamic")]
-extern crate pkg_config;
-#[cfg(any(feature = "static", feature = "static-fallback"))]
-extern crate cc;
-
 use std::env;
 use std::env::consts;
 use std::path::Path;

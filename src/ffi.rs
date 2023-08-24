@@ -1487,6 +1487,7 @@ extern "C" {
     pub fn cmsCIECAM02Done(hModel: HANDLE);
     pub fn cmsCIECAM02Forward(hModel: HANDLE, pIn: *const CIEXYZ, pOut: *mut JCh);
     pub fn cmsCIECAM02Reverse(hModel: HANDLE, pIn: *const JCh, pOut: *mut CIEXYZ);
+    pub fn cmsGetToneCurveSegment(n: u32, t: &ToneCurve) -> &CurveSegment;
     pub fn cmsBuildSegmentedToneCurve(ContextID: Context, nSegments: u32, Segments: *const CurveSegment) -> *mut ToneCurve;
     pub fn cmsBuildParametricToneCurve(ContextID: Context, Type: i32, Params: *const f64) -> *mut ToneCurve;
     pub fn cmsBuildGamma(ContextID: Context, Gamma: f64) -> *mut ToneCurve;
@@ -1660,6 +1661,7 @@ extern "C" {
     pub fn cmsCreateXYZProfile() -> HPROFILE;
     pub fn cmsCreate_sRGBProfileTHR(ContextID: Context) -> HPROFILE;
     pub fn cmsCreate_sRGBProfile() -> HPROFILE;
+    pub fn cmsCreate_OkLabProfile(ContextID: Context) -> HPROFILE;
     pub fn cmsCreateBCHSWabstractProfileTHR(ContextID: Context, nLUTPoints: u32, Bright: f64, Contrast: f64, Hue: f64, Saturation: f64, TempSrc: u32, TempDest: u32) -> HPROFILE;
     pub fn cmsCreateBCHSWabstractProfile(nLUTPoints: u32, Bright: f64, Contrast: f64, Hue: f64, Saturation: f64, TempSrc: u32, TempDest: u32) -> HPROFILE;
     pub fn cmsCreateNULLProfileTHR(ContextID: Context) -> HPROFILE;

@@ -31,7 +31,7 @@
 use std::os::raw::{c_char, c_int, c_long, c_void};
 #[doc(hidden)]
 use libc;
-use std::mem;
+use std::mem::MaybeUninit;
 use libc::FILE;
 use std::default::Default;
 
@@ -615,7 +615,7 @@ pub struct ICCData {
 }
 
 impl Default for ICCData {
-    fn default() -> Self { unsafe { mem::zeroed() } }
+    fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
 #[repr(C)]
@@ -631,7 +631,7 @@ pub struct DateTimeNumber {
 }
 
 impl Default for DateTimeNumber {
-    fn default() -> Self { unsafe { mem::zeroed() } }
+    fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
 #[repr(C)]
@@ -644,7 +644,7 @@ pub struct EncodedXYZNumber {
 }
 
 impl Default for EncodedXYZNumber {
-    fn default() -> Self { unsafe { mem::zeroed() } }
+    fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
 #[repr(C)]
@@ -656,7 +656,7 @@ pub struct ProfileID {
 }
 
 impl Default for ProfileID {
-    fn default() -> Self { unsafe { mem::zeroed() } }
+    fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
 #[repr(C)]
@@ -701,7 +701,7 @@ pub struct ICCHeader {
     pub reserved: [i8; 28],
 }
 impl Default for ICCHeader {
-    fn default() -> Self { unsafe { mem::zeroed() } }
+    fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
 #[repr(C)]
@@ -712,7 +712,7 @@ pub struct TagBase {
     pub reserved: [i8; 4],
 }
 impl Default for TagBase {
-    fn default() -> Self { unsafe { mem::zeroed() } }
+    fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
 #[repr(C)]
@@ -724,7 +724,7 @@ pub struct TagEntry {
     pub size: u32,
 }
 impl Default for TagEntry {
-    fn default() -> Self { unsafe { mem::zeroed() } }
+    fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
 pub type HANDLE = *mut c_void;
@@ -1062,7 +1062,7 @@ pub struct CIEXYZ {
     pub Z: f64,
 }
 impl Default for CIEXYZ {
-    fn default() -> Self { unsafe { mem::zeroed() } }
+    fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
 #[repr(C)]
@@ -1086,7 +1086,7 @@ pub struct CIELab {
     pub b: f64,
 }
 impl Default for CIELab {
-    fn default() -> Self { unsafe { mem::zeroed() } }
+    fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
 #[repr(C)]
@@ -1098,7 +1098,7 @@ pub struct CIELCh {
     pub h: f64,
 }
 impl Default for CIELCh {
-    fn default() -> Self { unsafe { mem::zeroed() } }
+    fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
 #[repr(C)]
@@ -1110,7 +1110,7 @@ pub struct JCh {
     pub h: f64,
 }
 impl Default for JCh {
-    fn default() -> Self { unsafe { mem::zeroed() } }
+    fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
 #[repr(C)]
@@ -1159,7 +1159,7 @@ pub struct ICCMeasurementConditions {
     pub IlluminantType: IlluminantType,
 }
 impl Default for ICCMeasurementConditions {
-    fn default() -> Self { unsafe { mem::zeroed() } }
+    fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
 #[repr(C)]
@@ -1171,7 +1171,7 @@ pub struct ICCViewingConditions {
     pub IlluminantType: IlluminantType,
 }
 impl Default for ICCViewingConditions {
-    fn default() -> Self { unsafe { mem::zeroed() } }
+    fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
 
@@ -1205,7 +1205,7 @@ pub struct ViewingConditions {
     pub D_value: f64,
 }
 impl Default for ViewingConditions {
-    fn default() -> Self { unsafe { mem::zeroed() } }
+    fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
 #[repr(C)]
@@ -1224,7 +1224,7 @@ pub struct CurveSegment {
     pub SampledPoints: *mut f32,
 }
 impl Default for CurveSegment {
-    fn default() -> Self { unsafe { mem::zeroed() } }
+    fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
 pub enum ToneCurve { }
@@ -1281,7 +1281,7 @@ pub struct ScreeningChannel {
     pub SpotShape: SpotShape,
 }
 impl Default for ScreeningChannel {
-    fn default() -> Self { unsafe { mem::zeroed() } }
+    fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
 #[repr(C)]
@@ -1293,7 +1293,7 @@ pub struct Screening {
     pub Channels: [ScreeningChannel; 16],
 }
 impl Default for Screening {
-    fn default() -> Self { unsafe { mem::zeroed() } }
+    fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 #[repr(C)]
 pub struct NAMEDCOLORLIST { _opaque_type: [u8; 0] }

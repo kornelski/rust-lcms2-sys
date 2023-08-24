@@ -615,6 +615,7 @@ pub struct ICCData {
 }
 
 impl Default for ICCData {
+    #[inline]
     fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
@@ -631,6 +632,7 @@ pub struct DateTimeNumber {
 }
 
 impl Default for DateTimeNumber {
+    #[inline]
     fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
@@ -644,6 +646,7 @@ pub struct EncodedXYZNumber {
 }
 
 impl Default for EncodedXYZNumber {
+    #[inline]
     fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
@@ -656,6 +659,7 @@ pub struct ProfileID {
 }
 
 impl Default for ProfileID {
+    #[inline]
     fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
@@ -701,6 +705,7 @@ pub struct ICCHeader {
     pub reserved: [i8; 28],
 }
 impl Default for ICCHeader {
+    #[inline]
     fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
@@ -712,6 +717,7 @@ pub struct TagBase {
     pub reserved: [i8; 4],
 }
 impl Default for TagBase {
+    #[inline]
     fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
@@ -724,6 +730,7 @@ pub struct TagEntry {
     pub size: u32,
 }
 impl Default for TagEntry {
+    #[inline]
     fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
@@ -963,61 +970,84 @@ impl PixelFormat {
     pub const BGRA_HALF_FLT: PixelFormat = PixelFormat(4474010);
 
     ///   M: Premultiplied alpha (only works when extra samples is 1)
+    #[must_use]
+    #[inline]
     pub fn premultiplied(&self) -> bool {
         ((self.0 >> 23) & 1) != 0
     }
 
     ///   A: Floating point -- With this flag we can differentiate 16 bits as float and as int
+    #[must_use]
+    #[inline]
     pub fn float(&self) -> bool {
         ((self.0 >> 22) & 1) != 0
     }
 
     ///   O: Optimized -- previous optimization already returns the final 8-bit value
+    #[must_use]
+    #[inline]
     pub fn optimized(&self) -> bool {
         ((self.0 >> 21) & 1) != 0
     }
 
     ///   T: Color space (`PT_*`)
+    #[must_use]
+    #[inline]
     pub fn pixel_type(&self) -> PixelType {
         PixelType((self.0 >> 16) & 31)
     }
 
     ///   Y: Swap first - changes ABGR to BGRA and KCMY to CMYK
+    #[must_use]
+    #[inline]
     pub fn swapfirst(&self) -> bool {
         ((self.0 >> 14) & 1) != 0
     }
 
     ///   F: Flavor  0=MinIsBlack(Chocolate) 1=MinIsWhite(Vanilla)
+    #[must_use]
+    #[inline]
     pub fn min_is_white(&self) -> bool {
         ((self.0 >> 13) & 1) != 0
     }
 
     ///   P: Planar? 0=Chunky, 1=Planar
+    #[must_use]
+    #[inline]
     pub fn planar(&self) -> bool {
         ((self.0 >> 12) & 1) != 0
     }
 
     ///   X: swap 16 bps endianness?
+    #[must_use]
+    #[inline]
     pub fn endian16(&self) -> bool {
         ((self.0 >> 11) & 1) != 0
     }
 
     ///   S: Do swap? ie, BGR, KYMC
+    #[must_use]
+    #[inline]
     pub fn doswap(&self) -> bool {
         ((self.0 >> 10) & 1) != 0
     }
 
     ///   E: Extra samples
+    #[must_use]
+    #[inline]
     pub fn extra(&self) -> usize {
         ((self.0 >> 7) & 7) as usize
     }
 
     ///   C: Channels (Samples per pixel)
+    #[must_use]
+    #[inline]
     pub fn channels(&self) -> usize {
         ((self.0 >> 3) & 15) as usize
     }
 
     ///   B: bytes per sample
+    #[must_use]
     pub fn bytes_per_channel(&self) -> usize {
         let res = (self.0 & 7) as usize;
         // 8 overflows the field
@@ -1025,6 +1055,7 @@ impl PixelFormat {
     }
 
     /// size of pixel
+    #[must_use]
     pub fn bytes_per_pixel(&self) -> usize {
         self.bytes_per_channel() * (self.extra() + self.channels())
     }
@@ -1062,6 +1093,7 @@ pub struct CIEXYZ {
     pub Z: f64,
 }
 impl Default for CIEXYZ {
+    #[inline]
     fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
@@ -1074,6 +1106,7 @@ pub struct CIExyY {
     pub Y: f64,
 }
 impl Default for CIExyY {
+    #[inline]
     fn default() -> Self { CIExyY{x:0., y:0., Y:1.} }
 }
 
@@ -1086,6 +1119,7 @@ pub struct CIELab {
     pub b: f64,
 }
 impl Default for CIELab {
+    #[inline]
     fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
@@ -1098,6 +1132,7 @@ pub struct CIELCh {
     pub h: f64,
 }
 impl Default for CIELCh {
+    #[inline]
     fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
@@ -1110,6 +1145,7 @@ pub struct JCh {
     pub h: f64,
 }
 impl Default for JCh {
+    #[inline]
     fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
@@ -1159,6 +1195,7 @@ pub struct ICCMeasurementConditions {
     pub IlluminantType: IlluminantType,
 }
 impl Default for ICCMeasurementConditions {
+    #[inline]
     fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
@@ -1171,6 +1208,7 @@ pub struct ICCViewingConditions {
     pub IlluminantType: IlluminantType,
 }
 impl Default for ICCViewingConditions {
+    #[inline]
     fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
@@ -1205,6 +1243,7 @@ pub struct ViewingConditions {
     pub D_value: f64,
 }
 impl Default for ViewingConditions {
+    #[inline]
     fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
@@ -1224,6 +1263,7 @@ pub struct CurveSegment {
     pub SampledPoints: *mut f32,
 }
 impl Default for CurveSegment {
+    #[inline]
     fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
@@ -1281,6 +1321,7 @@ pub struct ScreeningChannel {
     pub SpotShape: SpotShape,
 }
 impl Default for ScreeningChannel {
+    #[inline]
     fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
@@ -1293,6 +1334,7 @@ pub struct Screening {
     pub Channels: [ScreeningChannel; 16],
 }
 impl Default for Screening {
+    #[inline]
     fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 #[repr(C)]
@@ -1422,6 +1464,8 @@ pub const FLAGS_NONEGATIVES: u32 =              0x8000;
 pub const FLAGS_COPY_ALPHA: u32 =           0x04000000;
 
 // Fine-tune control over number of gridpoints
+#[must_use]
+#[inline]
 pub fn FLAGS_GRIDPOINTS(n: u32) -> u32 { ((n) & 0xFF) << 16 }
 
 /// CRD special

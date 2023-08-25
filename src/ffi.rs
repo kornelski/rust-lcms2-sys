@@ -26,7 +26,7 @@
 //!
 //!---------------------------------------------------------------------------------
 //!
-//! Version 2.8
+//! Version 2.16
 
 use std::os::raw::{c_char, c_int, c_long, c_void};
 #[doc(hidden)]
@@ -157,6 +157,7 @@ pub enum TagTypeSignature {
     XYZType                           = 0x58595A20,
     /// `cicp`
     CicpType                          = 0x63696370,
+    MHC2Type                          = 1296581426,
 }
 
 pub const BlueMatrixColumnTag: TagSignature = TagSignature::BlueColorantTag;
@@ -306,6 +307,7 @@ pub enum TagSignature {
     ArgyllArtsTag                     = 0x61727473,
     /// `cicp`
     CicpTag                           = 0x63696370,
+    MHC2Tag                           = 1296581426,
 }
 
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
@@ -1491,6 +1493,18 @@ pub struct VideoSignalType {
     pub VideoFullRangeFlag: u8,
 }
 
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct cmsMHC2Type {
+    pub CurveEntries: u32,
+    pub RedCurve: *mut f64,
+    pub GreenCurve: *mut f64,
+    pub BlueCurve: *mut f64,
+    pub MinLuminance: f64,
+    pub PeakLuminance: f64,
+    pub XYZ2XYZmatrix: [[f64; 4]; 3],
+}
+
 extern "C" {
     pub fn cmsGetEncodedCMMversion() -> c_int;
     pub fn cmsstrcasecmp(s1: *const c_char, s2: *const c_char) -> c_int;
@@ -1568,7 +1582,7 @@ extern "C" {
     pub fn cmsPipelineEvalReverseFloat(Target: *mut f32, Result: *mut f32, Hint: *mut f32, lut: *const Pipeline) -> Bool;
     pub fn cmsPipelineCat(l1: *mut Pipeline, l2: *const Pipeline) -> Bool;
     pub fn cmsPipelineSetSaveAs8bitsFlag(lut: *mut Pipeline, On: Bool) -> Bool;
-    pub fn cmsPipelineInsertStage(lut: *mut Pipeline, loc: StageLoc, mpe: *mut Stage) -> bool;
+    pub fn cmsPipelineInsertStage(lut: *mut Pipeline, loc: StageLoc, mpe: *mut Stage) -> Bool;
     pub fn cmsPipelineUnlinkStage(lut: *mut Pipeline, loc: StageLoc, mpe: *mut *mut Stage);
     /// This function is quite useful to analyze the structure of a Pipeline and retrieve the Stage elements
     /// that conform the Pipeline.
@@ -1828,4 +1842,5 @@ extern "C" {
     // Estimate total area coverage
     pub fn cmsDetectTAC(hProfile: HPROFILE) -> f64;
     pub fn cmsDesaturateLab(Lab: *mut CIELab, amax: f64, amin: f64, bmax: f64, bmin: f64) -> Bool;
+    pub fn cmsDetectRGBProfileGamma(hProfile: HPROFILE, threshold: f64) -> f64;
 }

@@ -28,10 +28,17 @@ libc = "0.2.129"
 
 [features]
 default = ["dynamic", "static-fallback", "parallel"]
-dynamic = ["pkg-config"]
-parallel = ["cc/parallel"]
-static = ["cc"]
-static-fallback = ["cc"]
+# Try pkg-config to link dynamically. You can also set `LCMS2_LIB_DIR` and `LCMS2_INCLUDE_DIR` instead.
+dynamic = ["dep:pkg-config"]
+# Makes static builds faster
+parallel = ["cc?/parallel"]
+# Prefer static build
+static = ["dep:cc"]
+# Allow static build if dynamic linking fails. You can set `LCMS2_STATIC` env var to prefer static.
+static-fallback = ["dep:cc"]
+
+# If building lcms2 from source, configure it to be strict about parsing CGATS.13.
+lcms2-strict-cgats = []
 
 [package.metadata.docs.rs]
 targets = ["x86_64-unknown-linux-gnu"]

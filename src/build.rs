@@ -10,13 +10,12 @@ fn main() {
     if let Some(lib_dir) = env::var_os("LCMS2_LIB_DIR") {
         let lib_dir = Path::new(&lib_dir);
         let dylib_name = format!("{}lcms2{}", consts::DLL_PREFIX, consts::DLL_SUFFIX);
-        if lib_dir.join(dylib_name).exists() ||
-           lib_dir.join("liblcms2.a").exists() ||
-           lib_dir.join("lcms2.lib").exists() {
+        if [&dylib_name, "liblcms2.a", "lcms2.so", "lcms2.lib"].iter().any(|file| lib_dir.join(file).exists()) {
             println!("cargo:rustc-link-search=native={}", lib_dir.display());
             println!("cargo:rustc-link-lib=lcms2");
             return;
         }
+        println!("cargo:warning=LCMS2_LIB_DIR path ({}) did not contain {dylib_name}", lib_dir.display());
     }
 
     let requires_static_only = cfg!(feature = "static") || env::var("LCMS2_STATIC").is_ok();
@@ -29,10 +28,14 @@ fn main() {
 fn configure_pkg_config() -> bool {
     match pkg_config::probe_library("lcms2") {
         Ok(info) => {
-            for path in info.include_paths {
-                println!("cargo:include={}", path.display());
+            let joined_paths = std::env::join_paths(info.include_paths).ok().and_then(|p| p.into_string().ok());
+            if let Some(joined_paths) = joined_paths {
+                println!("cargo:include={joined_paths}");
+                true
+            } else {
+                println!("cargo:warning=got invalid include paths from pkg-config of lcms2");
+                false
             }
-            true
         },
         Err(err) => {
             println!("cargo:warning=pkg_config failed ({}). Falling back to static build.", err);
@@ -54,8 +57,8 @@ fn compile_static() {
 
 #[cfg(any(feature = "static", feature = "static-fallback"))]
 fn compile_static() {
-    cc::Build::new()
-        .include("vendor/include")
+    let mut cc = cc::Build::new();
+        cc.include("vendor/include")
         .file("vendor/src/cmsalpha.c")
         .file("vendor/src/cmscam02.c")
         .file("vendor/src/cmscgats.c")
@@ -81,8 +84,20 @@ fn compile_static() {
         .file("vendor/src/cmstypes.c")
         .file("vendor/src/cmsvirt.c")
         .file("vendor/src/cmswtpnt.c")
-        .file("vendor/src/cmsxform.c")
-        .compile("liblcms2.a");
+        .file("vendor/src/cmsxform.c");
 
+    if env::var_os("CARGO_CFG_TARGET_ENDIAN").as_deref() == Some("big".as_ref()) {
+        cc.define("CMS_USE_BIG_ENDIAN", Some("1"));
+    }
+
+    if cfg!(feature = "lcms2-strict-cgats") {
+        cc.define("CMS_STRICT_CGATS", Some("1"));
+    }
+
+    if env::var_os("DEBUG").as_deref() != Some("true".as_ref()) {
+        cc.define("NDEBUG", Some("1"));
+    }
+
+    cc.compile("liblcms2.a");
     println!("cargo:include={}", dunce::canonicalize("vendor/include").unwrap().display());
 }

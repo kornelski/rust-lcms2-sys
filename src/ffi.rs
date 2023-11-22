@@ -807,7 +807,7 @@ pub const PT_LabV2: PixelType = PixelType(30);
 ///            C: Channels (Samples per pixel)
 ///            B: bytes per sample
 ///            Y: Swap first - changes ABGR to BGRA and KCMY to CMYK
-#[repr(C)]
+#[repr(transparent)]
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub struct PixelFormat(pub u32);
 

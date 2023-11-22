@@ -789,7 +789,7 @@ pub const PT_MCH15: PixelType = PixelType(29);
 /// Identical to PT_Lab, but using the V2 old encoding
 pub const PT_LabV2: PixelType = PixelType(30);
 
-/// Format of pixel is defined by one cmsUInt32Number, using bit fields as follows
+/// Format of pixel is defined by one u32, using bit fields as follows
 ///
 ///                               2                1          0
 ///                        4 3 2 10987 6 5 4 3 2 1 098 7654 321
@@ -1546,6 +1546,7 @@ extern "C" {
     pub fn cmsCIECAM02Forward(hModel: HANDLE, pIn: *const CIEXYZ, pOut: *mut JCh);
     pub fn cmsCIECAM02Reverse(hModel: HANDLE, pIn: *const JCh, pOut: *mut CIEXYZ);
     pub fn cmsGetToneCurveSegment(n: u32, t: &ToneCurve) -> &CurveSegment;
+    pub fn cmsGetStageContextID(mpe: *const Stage) -> Context;
     pub fn cmsBuildSegmentedToneCurve(ContextID: Context, nSegments: u32, Segments: *const CurveSegment) -> *mut ToneCurve;
     pub fn cmsBuildParametricToneCurve(ContextID: Context, Type: i32, Params: *const f64) -> *mut ToneCurve;
     pub fn cmsBuildGamma(ContextID: Context, Gamma: f64) -> *mut ToneCurve;
@@ -1614,8 +1615,10 @@ extern "C" {
     pub fn cmsMLUfree(mlu: *mut MLU);
     pub fn cmsMLUdup(mlu: *const MLU) -> *mut MLU;
     pub fn cmsMLUsetASCII(mlu: *mut MLU, LanguageCode: *const c_char, CountryCode: *const c_char, ASCIIString: *const c_char) -> Bool;
+    pub fn cmsMLUsetUTF8(mlu: *mut MLU, LanguageCode: *const c_char, CountryCode: *const c_char, UTF8String: *const c_char) -> Bool;
     pub fn cmsMLUsetWide(mlu: *mut MLU, LanguageCode: *const c_char, CountryCode: *const c_char, WideString: *const wchar_t) -> Bool;
     pub fn cmsMLUgetASCII(mlu: *const MLU, LanguageCode: *const c_char, CountryCode: *const c_char, Buffer: *mut c_char, BufferSize: u32) -> u32;
+    pub fn cmsMLUgetUTF8(mlu: *const MLU, LanguageCode: *const c_char, CountryCode: *const c_char, Buffer: *mut c_char, BufferSize: u32) -> u32;
     pub fn cmsMLUgetWide(mlu: *const MLU, LanguageCode: *const c_char, CountryCode: *const c_char, Buffer: *mut wchar_t, BufferSize: u32) -> u32;
     pub fn cmsMLUgetTranslation(mlu: *const MLU, LanguageCode: *const c_char, CountryCode: *const c_char, ObtainedLanguage: *mut c_char, ObtainedCountry: *mut c_char) -> Bool;
     pub fn cmsMLUtranslationsCount(mlu: *const MLU) -> u32;
@@ -1668,6 +1671,8 @@ extern "C" {
     pub fn cmsSetColorSpace(hProfile: HPROFILE, sig: ColorSpaceSignature);
     pub fn cmsGetDeviceClass(hProfile: HPROFILE) -> ProfileClassSignature;
     pub fn cmsSetDeviceClass(hProfile: HPROFILE, sig: ProfileClassSignature);
+    pub fn cmsCreateDeviceLinkFromCubeFile(cFileName: *const c_char) -> HPROFILE;
+    pub fn cmsCreateDeviceLinkFromCubeFileTHR(ContextID: Context, cFileName: *const c_char) -> HPROFILE;
     pub fn cmsSetProfileVersion(hProfile: HPROFILE, Version: f64);
     pub fn cmsGetProfileVersion(hProfile: HPROFILE) -> f64;
     pub fn cmsGetEncodedICCversion(hProfile: HPROFILE) -> u32;
@@ -1683,6 +1688,7 @@ extern "C" {
     pub fn cmsFormatterForPCSOfProfile(hProfile: HPROFILE, nBytes: u32, lIsFloat: Bool) -> u32;
     pub fn cmsGetProfileInfo(hProfile: HPROFILE, Info: InfoType, LanguageCode: *const c_char, CountryCode: *const c_char, Buffer: *mut wchar_t, BufferSize: u32) -> u32;
     pub fn cmsGetProfileInfoASCII(hProfile: HPROFILE, Info: InfoType, LanguageCode: *const c_char, CountryCode: *const c_char, Buffer: *mut c_char, BufferSize: u32) -> u32;
+    pub fn cmsGetProfileInfoUTF8(hProfile: HPROFILE, Info: InfoType, LanguageCode: *const c_char, CountryCode: *const c_char, Buffer: *mut c_char, BufferSize: u32) -> u32;
     pub fn cmsOpenIOhandlerFromFile(ContextID: Context, FileName: *const c_char, AccessMode: *const c_char) -> *mut IOHANDLER;
     pub fn cmsOpenIOhandlerFromStream(ContextID: Context, Stream: *mut FILE) -> *mut IOHANDLER;
     pub fn cmsOpenIOhandlerFromMem(ContextID: Context, Buffer: *mut c_void, size: u32, AccessMode: *const c_char) -> *mut IOHANDLER;

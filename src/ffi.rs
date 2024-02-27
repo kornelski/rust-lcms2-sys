@@ -1495,15 +1495,22 @@ pub struct VideoSignalType {
 
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct cmsMHC2Type {
+pub struct MHC2Type {
     pub CurveEntries: u32,
     pub RedCurve: *mut f64,
     pub GreenCurve: *mut f64,
     pub BlueCurve: *mut f64,
+    /// ST.2086 min luminance in nits
     pub MinLuminance: f64,
+    /// ST.2086 peak luminance in nits
     pub PeakLuminance: f64,
     pub XYZ2XYZmatrix: [[f64; 4]; 3],
 }
+
+/// back compat only
+#[doc(hidden)]
+#[deprecated(note = "use MHC2Type")]
+pub type cmsMHC2Type = MHC2Type;
 
 extern "C" {
     pub fn cmsGetEncodedCMMversion() -> c_int;

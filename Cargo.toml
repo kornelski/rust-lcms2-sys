@@ -1,6 +1,6 @@
 [package]
 name = "lcms2-sys"
-version = "4.0.6"
+version = "4.0.7"
 authors = ["Kornel Lesiński <kornel@geekhood.net>"]
 build = "src/build.rs"
 categories = ["multimedia::images", "external-ffi-bindings" ]

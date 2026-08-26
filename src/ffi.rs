@@ -28,12 +28,12 @@
 //!
 //! Version 2.16
 
-use std::os::raw::{c_char, c_int, c_long, c_void};
 #[doc(hidden)]
 use libc;
-use std::mem::MaybeUninit;
 use libc::FILE;
 use std::default::Default;
+use std::mem::MaybeUninit;
+use std::os::raw::{c_char, c_int, c_long, c_void};
 
 // That one is missing in Rust's libc
 #[cfg(not(windows))]
@@ -60,7 +60,6 @@ pub type wchar_t = libc::wchar_t;
 pub type Signature = u32;
 pub type S15Fixed16Number = i32;
 pub type Bool = c_int;
-
 
 /// D50 XYZ normalized to Y=1.0
 pub const D50X: f64 = 0.9642;

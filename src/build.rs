@@ -4,7 +4,7 @@ use std::path::Path;
 
 fn main() {
     if let Ok(include_dir) = env::var("LCMS2_INCLUDE_DIR") {
-        println!("cargo:include={}", include_dir);
+        println!("cargo:include={include_dir}");
     }
 
     if let Some(lib_dir) = env::var_os("LCMS2_LIB_DIR") {
@@ -28,7 +28,7 @@ fn main() {
 fn configure_pkg_config() -> bool {
     match pkg_config::probe_library("lcms2") {
         Ok(info) => {
-            let joined_paths = std::env::join_paths(info.include_paths).ok().and_then(|p| p.into_string().ok());
+            let joined_paths = env::join_paths(info.include_paths).ok().and_then(|p| p.into_string().ok());
             if let Some(joined_paths) = joined_paths {
                 println!("cargo:include={joined_paths}");
                 true
@@ -38,7 +38,7 @@ fn configure_pkg_config() -> bool {
             }
         },
         Err(err) => {
-            println!("cargo:warning=pkg_config failed ({}). Falling back to static build.", err);
+            println!("cargo:warning=pkg_config failed ({err}). Falling back to static build.");
             false
         },
     }
@@ -58,7 +58,7 @@ fn compile_static() {
 #[cfg(any(feature = "static", feature = "static-fallback"))]
 fn compile_static() {
     let mut cc = cc::Build::new();
-        cc.include("vendor/include")
+    cc.include("vendor/include")
         .file("vendor/src/cmsalpha.c")
         .file("vendor/src/cmscam02.c")
         .file("vendor/src/cmscgats.c")

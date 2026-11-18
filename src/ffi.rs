@@ -112,9 +112,10 @@ pub const lcmsSignature: Signature = 0x6c636d73;
 
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
-#[derive(Debug)]
+#[derive(Debug, Default)]
 #[non_exhaustive]
 pub enum TagTypeSignature {
+    #[default]
     /// 'chrm'
     ChromaticityType                  = 0x6368726D,
     /// 'clro'
@@ -198,9 +199,10 @@ pub const RedMatrixColumnTag: TagSignature = TagSignature::RedColorantTag;
 
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
-#[derive(Debug)]
+#[derive(Debug, Default)]
 #[non_exhaustive]
 pub enum TagSignature {
+    #[default]
     /// 'A2B0'
     AToB0Tag                          = 0x41324230,
     /// 'A2B1'
@@ -404,9 +406,10 @@ pub enum TechnologySignature {
 
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
-#[derive(Debug)]
+#[derive(Debug, Default)]
 #[non_exhaustive]
 pub enum ColorSpaceSignature {
+    #[default]
     /// 'XYZ '
     XYZData                           = 0x58595A20,
     /// 'Lab '
@@ -497,9 +500,10 @@ pub enum ColorSpaceSignature {
 
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
-#[derive(Debug)]
+#[derive(Debug, Default)]
 #[non_exhaustive]
 pub enum ProfileClassSignature {
+    #[default]
     /// 'scnr'
     InputClass                        = 0x73636E72,
     /// 'mntr'
@@ -518,9 +522,10 @@ pub enum ProfileClassSignature {
 
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
-#[derive(Debug)]
+#[derive(Debug, Default)]
 #[non_exhaustive]
 pub enum PlatformSignature {
+    #[default]
     /// 'APPL'
     Macintosh                         = 0x4150504C,
     /// 'MSFT'
@@ -701,7 +706,7 @@ impl Default for ProfileID {
 
 #[repr(C)]
 #[derive(Copy, Clone)]
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct ICCHeader {
     /// Profile size in bytes
     pub size: u32,
@@ -740,34 +745,22 @@ pub struct ICCHeader {
     /// Reserved for future use
     pub reserved: [i8; 28],
 }
-impl Default for ICCHeader {
-    #[inline]
-    fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
-}
 
 #[repr(C)]
 #[derive(Copy, Clone)]
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct TagBase {
     pub sig: TagTypeSignature,
     pub reserved: [i8; 4],
 }
-impl Default for TagBase {
-    #[inline]
-    fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
-}
 
 #[repr(C)]
 #[derive(Copy, Clone, PartialEq)]
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct TagEntry {
     pub sig: TagSignature,
     pub offset: u32,
     pub size: u32,
-}
-impl Default for TagEntry {
-    #[inline]
-    fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
 pub type HANDLE = *mut c_void;
@@ -1207,9 +1200,10 @@ u32_enum! {
 /// Illuminant types for structs below
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
-#[derive(Debug)]
+#[derive(Debug, Default)]
 #[non_exhaustive]
 pub enum IlluminantType {
+    #[default]
     UNKNOWN = 0x0000000,
     D50 =     0x0000001,
     D65 =     0x0000002,
@@ -1223,7 +1217,7 @@ pub enum IlluminantType {
 
 #[repr(C)]
 #[derive(Copy, Clone)]
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct ICCMeasurementConditions {
     pub Observer: u32,
     pub Backing: CIEXYZ,
@@ -1231,29 +1225,21 @@ pub struct ICCMeasurementConditions {
     pub Flare: f64,
     pub IlluminantType: IlluminantType,
 }
-impl Default for ICCMeasurementConditions {
-    #[inline]
-    fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
-}
 
 #[repr(C)]
 #[derive(Copy, Clone)]
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct ICCViewingConditions {
     pub IlluminantXYZ: CIEXYZ,
     pub SurroundXYZ: CIEXYZ,
     pub IlluminantType: IlluminantType,
 }
-impl Default for ICCViewingConditions {
-    #[inline]
-    fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
-}
-
 
 #[repr(u32)]
 #[derive(Copy, Clone, Eq, PartialEq)]
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub enum Surround {
+    #[default]
     Avg       = 1,
     Dim       = 2,
     Dark      = 3,
@@ -1271,17 +1257,13 @@ pub type LogErrorHandlerFunction = ::std::option::Option<unsafe extern "C" fn(Co
 
 #[repr(C)]
 #[derive(Copy, Clone)]
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct ViewingConditions {
     pub whitePoint: CIEXYZ,
     pub Yb: f64,
     pub La: f64,
     pub surround: Surround,
     pub D_value: f64,
-}
-impl Default for ViewingConditions {
-    #[inline]
-    fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
 }
 
 #[repr(C)]
@@ -1338,8 +1320,9 @@ pub const FREQUENCE_UNITS_LINES_INCH: u32 =  0x0002;
 u32_enum! {
 #[repr(C)]
 #[derive(Copy, Clone)]
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub enum SpotShape {
+    #[default]
     UNKNOWN         = 0,
     PRINTER_DEFAULT = 1,
     ROUND           = 2,
@@ -1352,29 +1335,22 @@ pub enum SpotShape {
 
 #[repr(C)]
 #[derive(Copy, Clone)]
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct ScreeningChannel {
     pub Frequency: f64,
     pub ScreenAngle: f64,
     pub SpotShape: SpotShape,
 }
-impl Default for ScreeningChannel {
-    #[inline]
-    fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
-}
 
 #[repr(C)]
 #[derive(Copy, Clone)]
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Screening {
     pub Flag: u32,
     pub nChannels: u32,
     pub Channels: [ScreeningChannel; 16],
 }
-impl Default for Screening {
-    #[inline]
-    fn default() -> Self { unsafe { MaybeUninit::zeroed().assume_init() } }
-}
+
 #[repr(C)]
 pub struct NAMEDCOLORLIST { _opaque_type: [u8; 0] }
 
@@ -1436,9 +1412,10 @@ pub struct IOHANDLER { _opaque_type: [u8; 0] }
 u32_enum! {
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
-#[derive(Debug)]
+#[derive(Debug, Default)]
 #[non_exhaustive]
 pub enum Intent {
+    #[default]
     /// ICC Intents
     Perceptual = 0,
     RelativeColorimetric = 1,

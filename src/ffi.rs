@@ -56,7 +56,6 @@ macro_rules! u32_enum {
         impl TryFrom<u32> for $name {
             type Error = u32;
 
-            #[inline]
             fn try_from(value: u32) -> Result<Self, Self::Error> {
                 match value {
                     $(
@@ -64,6 +63,15 @@ macro_rules! u32_enum {
                     )*
                     _ => Err(value),
                 }
+            }
+        }
+
+        impl TryFrom<MaybeUninit<$name>> for $name {
+            type Error = ();
+
+            #[inline]
+            fn try_from(value: MaybeUninit<Self>) -> Result<Self, Self::Error> {
+                Self::try_from(unsafe { *value.as_ptr().cast::<u32>() }).map_err(drop)
             }
         }
     };
@@ -197,6 +205,7 @@ pub const BlueMatrixColumnTag: TagSignature = TagSignature::BlueColorantTag;
 pub const GreenMatrixColumnTag: TagSignature = TagSignature::GreenColorantTag;
 pub const RedMatrixColumnTag: TagSignature = TagSignature::RedColorantTag;
 
+u32_enum! {
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
 #[derive(Debug, Default)]
@@ -342,7 +351,7 @@ pub enum TagSignature {
     /// `cicp`
     CicpTag                           = 0x63696370,
     MHC2Tag                           = 1296581426,
-}
+}}
 
 u32_enum! {
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
@@ -404,6 +413,7 @@ pub enum TechnologySignature {
     DigitalCinemaProjector            = 0x64636A70
 }}
 
+u32_enum! {
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
 #[derive(Debug, Default)]
@@ -496,8 +506,9 @@ pub enum ColorSpaceSignature {
     Sig15colorData                    = 0x46434C52,
     /// 'LuvK'
     LuvKData                          = 0x4C75764B
-}
+}}
 
+u32_enum! {
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
 #[derive(Debug, Default)]
@@ -518,7 +529,7 @@ pub enum ProfileClassSignature {
     ColorSpaceClass                   = 0x73706163,
     /// 'nmcl'
     NamedColorClass                   = 0x6e6d636c
-}
+}}
 
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
@@ -561,6 +572,7 @@ pub enum ColorimetricIntentImageState {
     ReflectionPrintOutputColorimetry =       0x72706F63,
 }}
 
+u32_enum! {
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
 #[derive(Debug)]
@@ -605,7 +617,7 @@ pub enum StageSignature {
     FloatPCS2XYZ                  = 0x78326420,
     /// 'clp '
     ClipNegativesElemType         = 0x636c7020
-}
+}}
 
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
@@ -1525,7 +1537,20 @@ pub struct MHC2Type {
 #[deprecated(note = "use MHC2Type")]
 pub type cmsMHC2Type = MHC2Type;
 
-extern "C" {
+pub mod maybe_enum {
+    use super::{ColorSpaceSignature, HPROFILE, Intent, MaybeUninit, ProfileClassSignature, Stage, StageSignature, TagSignature};
+    unsafe extern "C" {
+        pub fn cmsStageType(mpe: *const Stage) -> MaybeUninit<StageSignature>;
+        pub fn cmsGetTagSignature(hProfile: HPROFILE, n: u32) -> MaybeUninit<TagSignature>;
+        pub fn cmsTagLinkedTo(hProfile: HPROFILE, sig: TagSignature) -> MaybeUninit<TagSignature>;
+        pub fn cmsGetHeaderRenderingIntent(hProfile: HPROFILE) -> MaybeUninit<Intent>;
+        pub fn cmsGetPCS(hProfile: HPROFILE) -> MaybeUninit<ColorSpaceSignature>;
+        pub fn cmsGetColorSpace(hProfile: HPROFILE) -> MaybeUninit<ColorSpaceSignature>;
+        pub fn cmsGetDeviceClass(hProfile: HPROFILE) -> MaybeUninit<ProfileClassSignature>;
+    }
+}
+
+unsafe extern "C" {
     pub fn cmsGetEncodedCMMversion() -> c_int;
     pub fn cmsstrcasecmp(s1: *const c_char, s2: *const c_char) -> c_int;
     pub fn cmsfilelength(f: *mut FILE) -> c_long;

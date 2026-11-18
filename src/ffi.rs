@@ -35,6 +35,39 @@ use std::default::Default;
 use std::mem::MaybeUninit;
 use std::os::raw::{c_char, c_int, c_long, c_void};
 
+macro_rules! u32_enum {
+    (
+        $(#[$enum_meta:meta])*
+        $vis:vis enum $name:ident {
+            $(
+                $(#[$variant_meta:meta])*
+                $variant:ident = $value:expr
+            ),* $(,)?
+        }
+    ) => {
+        $(#[$enum_meta])*
+        $vis enum $name {
+            $(
+                $(#[$variant_meta])*
+                $variant = $value,
+            )*
+        }
+
+        impl TryFrom<u32> for $name {
+            type Error = u32;
+
+            #[inline]
+            fn try_from(value: u32) -> Result<Self, Self::Error> {
+                match value {
+                    $(
+                        $value => Ok(Self::$variant),
+                    )*
+                    _ => Err(value),
+                }
+            }
+        }
+    };
+}
 // That one is missing in Rust's libc
 #[cfg(not(windows))]
 #[doc(hidden)]
@@ -309,6 +342,7 @@ pub enum TagSignature {
     MHC2Tag                           = 1296581426,
 }
 
+u32_enum! {
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
 #[derive(Debug)]
@@ -366,7 +400,7 @@ pub enum TechnologySignature {
     DigitalMotionPictureCamera        = 0x646D7063,
     /// 'dcpj'
     DigitalCinemaProjector            = 0x64636A70
-}
+}}
 
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
@@ -504,6 +538,7 @@ pub enum PlatformSignature {
 ///'prmg'
 pub const PerceptualReferenceMediumGamut:u32 =         0x70726d67;
 
+u32_enum! {
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
 #[derive(Debug)]
@@ -519,7 +554,7 @@ pub enum ColorimetricIntentImageState {
     ReflectionHardcopyOriginalColorimetry =  0x72686F63,
     ///'rpoc'
     ReflectionPrintOutputColorimetry =       0x72706F63,
-}
+}}
 
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
@@ -1168,6 +1203,7 @@ pub struct CIExyYTRIPLE {
     pub Blue: CIExyY,
 }
 
+u32_enum! {
 /// Illuminant types for structs below
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
@@ -1183,7 +1219,7 @@ pub enum IlluminantType {
     A =       0x0000006,
     E =       0x0000007,
     F8 =      0x0000008,
-}
+}}
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -1299,6 +1335,7 @@ pub const PRINTER_DEFAULT_SCREENS: u32 =     0x0001;
 pub const FREQUENCE_UNITS_LINES_CM: u32 =    0x0000;
 pub const FREQUENCE_UNITS_LINES_INCH: u32 =  0x0002;
 
+u32_enum! {
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[derive(Debug)]
@@ -1311,7 +1348,7 @@ pub enum SpotShape {
     LINE            = 5,
     SQUARE          = 6,
     CROSS           = 7,
-}
+}}
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -1396,7 +1433,7 @@ pub enum InfoType {
 #[repr(C)]
 pub struct IOHANDLER { _opaque_type: [u8; 0] }
 
-
+u32_enum! {
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
 #[derive(Debug)]
@@ -1415,7 +1452,7 @@ pub enum Intent {
     PreserveKPlanePerceptual = 13,
     PreserveKPlaneRelativeColorimetric = 14,
     PreserveKPlaneSaturation = 15,
-}
+}}
 
 // Flags
 
